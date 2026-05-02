@@ -1,0 +1,52 @@
+.daj-product-box-update {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+
+    .daj-product-box-info {
+        position: relative;
+        display: flex;
+    }
+
+    .daj-product-box-info-inp {
+        padding: 5px;
+    }
+
+    .daj-product-box-body {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 5px;
+        padding: 3px;
+        background: #fff;
+        border: 1px solid;
+        width: 96%;
+        margin-top: 30px;
+        border-radius: 4px;
+    }
+
+    .daj-product-box-opt {
+        display: flex;
+        width: 95%;
+        padding: 5px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+            background: #dcdcdc;
+        }
+    }
+
+    .daj-product-box-update-btn {
+        display: flex;
+        padding: 5px 10px;
+        background: #000;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}

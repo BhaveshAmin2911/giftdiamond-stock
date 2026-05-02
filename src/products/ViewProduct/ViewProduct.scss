@@ -1,0 +1,220 @@
+.daj-product-history-con td {
+    border: 1px solid;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+
+.daj-view-product-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .daj-product-content-form {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+        border: 1px solid;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .daj-view-product-body {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+        gap: 15px;
+
+    }
+
+    .daj-product-body-center {
+        .daj-product-details {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 25px;
+        }
+    }
+
+    .daj-product-body-top {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 20px;
+
+        .daj-product-current-data {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .daj-casting-box,
+        .daj-note-editor,
+        .daj-deadline-editor,
+        .daj-final-box {
+            &:hover .daj-product-detail-editor {
+                display: flex;
+            }
+        }
+
+        .daj-product-current-detail {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .daj-product-detail-label {
+            font-size: 16px;
+            opacity: 0.7;
+        }
+
+        .daj-update-note-submit {
+            display: flex;
+            background-color: #000;
+            color: #fff;
+            padding: 7px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .daj-product-detail-value {
+            font-size: 18px;
+        }
+
+        .daj-product-urgent-timeline {
+            display: flex;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 10px;
+            cursor: pointer;
+        }
+
+        .daj-product-urgent-cancle-btn {
+            display: flex;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .daj-product-detail-editor {
+            display: none;
+            font-size: 14px;
+            text-decoration: underline;
+            padding-left: 7px;
+            border: 1px solid;
+            padding: 2px 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .daj-view-product-image {
+            display: block;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid;
+        }
+
+        .daj-product-image-update-btn {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #000;
+            text-decoration: none;
+            border: 1px solid;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .daj-product-image-con {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        .daj-product-img-updater {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .daj-product-image-update {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 1px solid;
+            border-radius: 4px;
+            width: 130px;
+            height: 130px;
+        }
+
+        .daj-product-image-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .daj-product-history-img {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+    }
+
+    .daj-view-product-footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 10px;
+        gap: 10px;
+
+        .daj-product-submit {
+            display: block;
+            background: #000;
+            color: #fff;
+            border-radius: 4px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+    }
+
+    @media(max-width: 768px) {
+        .daj-product-content-form {
+            width: 90%;
+        }
+    }
+
+    @media(max-width: 576px) {
+
+        .daj-product-box-update .daj-product-box-info-inp {
+            width: 90px;
+        }
+
+        .daj-product-content-form {
+            width: 98%;
+            padding: 5px;
+        }
+
+        .daj-product-body-top .daj-product-image-con {
+            flex-direction: column;
+        }
+    }
+
+}

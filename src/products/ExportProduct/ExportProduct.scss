@@ -1,0 +1,187 @@
+.daj-product-list-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+
+    .daj-print-sell-export {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .daj-print-export,
+    .daj-sell-export {
+        background-color: #000;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .daj-produt-switcher {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        .daj-produt-switcher-inner {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #dcdcdc;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .daj-produt-switcher-btns {
+            background-color: #fff;
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s linear;
+
+            &.daj-active-switcher {
+                background-color: #000;
+                color: #fff;
+            }
+        }
+    }
+
+    .daj-product-list-header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    // .daj-product-list-header-btn {
+    //     display: flex;
+    //     flex-direction: row;
+    //     align-items: center;
+    //     gap: 10px;
+    // }
+
+
+    .daj-product-list-header-con {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .daj-product-search-con {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .daj-product-search-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .daj-product-search-inp {
+            padding: 5px;
+
+            &::placeholder {
+                opacity: 0.4;
+            }
+        }
+
+        .daj-product-search-btn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 10px;
+            background: #000;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .daj-karigar-search {
+            padding: 5px;
+            min-width: 120px;
+        }
+    }
+
+
+    .daj-product-list-header-txt {}
+
+    .daj-add-product-btn {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background: #fff;
+        border: 1px solid;
+        padding: 7px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: black;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+}
+
+.daj-product-list-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    overflow: auto;
+
+    .daj-product-table {
+
+        td,
+        th {
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+        }
+    }
+
+    .daj-product-table-head {}
+
+    .daj-product-table-body {}
+
+    .daj-table-img-shell {}
+
+    .daj-product-img {
+        width: 100px;
+        height: auto;
+    }
+
+    .daj-table-action-shell {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .daj-table-action {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid;
+        padding: 5px;
+        color: black;
+        border-radius: 4px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+}

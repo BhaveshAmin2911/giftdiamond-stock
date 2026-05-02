@@ -1,0 +1,51 @@
+.daj-customer-order-con {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .daj-customer-order-header {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .daj-order-table {
+        width: max-content;
+
+        td,
+        th {
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+    }
+
+    .daj-product-table-head {
+        .daj-table-header-cell {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+
+            .daj-product-order-icon {
+                transition: 0.2s linear;
+
+                &.daj-active-icon {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .daj-oder-detail-view {
+        display: flex;
+        background: #000;
+        color: #fff;
+        border-radius: 4px;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+}

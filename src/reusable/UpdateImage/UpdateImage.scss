@@ -1,0 +1,37 @@
+.daj-product-img-updater {
+
+    .daj-update-img-outer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid;
+        border-radius: 4px;
+        width: 150px;
+        height: 150px;
+    }
+
+    img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    #daj-product-update-img-inp {
+        display: none;
+    }
+
+    .daj-img-placeholder {}
+
+    .daj-update-product-img {}
+
+    .daj-product-image-submit-btn {
+        padding: 5px 10px;
+        background-color: #fff;
+        color: #000;
+        text-decoration: none;
+        border: 1px solid;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}

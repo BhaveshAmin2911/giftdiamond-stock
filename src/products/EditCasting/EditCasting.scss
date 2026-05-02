@@ -1,0 +1,141 @@
+ .daj-edit-casting-content {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+
+     .daj-edit-product-header {}
+
+     .daj-product-child-con {
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+
+
+         table {
+             td {
+                 border: 1px solid;
+                 border-radius: 2px;
+                 min-width: 100px;
+                 padding: 5px;
+             }
+         }
+
+         .daj-product-child-list {}
+
+         .daj-product-inner-detail {}
+
+         .daj-inner-product-selection {}
+     }
+
+     .daj-product-content-form {
+         display: flex;
+         flex-direction: column;
+         width: 70%;
+         border: 1px solid;
+         border-radius: 8px;
+         padding: 20px;
+     }
+
+     .daj-edit-product-body {
+         display: flex;
+         flex-direction: column;
+         align-items: start;
+         width: 100%;
+         gap: 15px;
+
+     }
+
+     .daj-product-body-top {
+         display: flex;
+         flex-direction: row;
+         align-items: flex-start;
+         justify-content: space-between;
+         width: 100%;
+         gap: 20px;
+
+         .daj-edit-product-image {
+             display: block;
+             width: 150px;
+             height: 150px;
+             object-fit: cover;
+             border-radius: 4px;
+         }
+     }
+
+     .daj-product-body-bottom {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+         gap: 20px;
+
+         .daj-product-next-status {
+             display: flex;
+             flex-direction: column;
+             gap: 10px;
+         }
+
+         .daj-product-status-header {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             flex-wrap: wrap;
+             width: 100%;
+             gap: 10px;
+         }
+
+         .daj-product-status-con {
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 5px;
+         }
+
+         .daj-product-status-con-txt {}
+
+         .daj-status-con-drp {
+             min-width: 150px;
+             padding: 5px;
+             cursor: pointer;
+         }
+
+         .daj-product-status-con-txt {}
+
+         .daj-product-status-body {
+             display: flex;
+             flex-direction: row;
+             justify-content: flex-start;
+             align-items: flex-start;
+             gap: 25px;
+         }
+     }
+
+     .daj-edit-product-footer {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: flex-end;
+         padding: 10px;
+         gap: 10px;
+
+         .daj-product-submit {
+             display: block;
+             background: #000;
+             color: #fff;
+             border-radius: 4px;
+             padding: 10px 15px;
+             cursor: pointer;
+         }
+     }
+
+     @media(max-width: 768px) {
+         .daj-product-content-form {
+             width: 90%;
+         }
+     }
+
+     @media(max-width: 576px) {
+         .daj-product-child-con table td {
+             min-width: 80px;
+         }
+     }
+ }

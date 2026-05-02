@@ -1,0 +1,392 @@
+ .daj-edit-product-content {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+
+     .daj-edit-product-header {}
+
+     .daj-product-content-form {
+         display: flex;
+         flex-direction: column;
+         width: 70%;
+         border: 1px solid;
+         border-radius: 8px;
+         padding: 20px;
+     }
+
+     .daj-edit-product-body {
+         display: flex;
+         flex-direction: column;
+         align-items: start;
+         width: 100%;
+         gap: 15px;
+
+     }
+
+     .daj-product-body-top {
+         display: flex;
+         flex-direction: row;
+         align-items: flex-start;
+         justify-content: space-between;
+         width: 100%;
+         gap: 20px;
+
+         .daj-edit-product-image {
+             display: block;
+             width: 150px;
+             height: 150px;
+             object-fit: cover;
+             border-radius: 4px;
+         }
+
+         .daj-edit-product-status {}
+
+         .daj-product-history-img {
+             display: flex;
+             flex-direction: row;
+             gap: 20px;
+         }
+
+         .daj-box-update-con {
+             display: flex;
+             flex-direction: column;
+             gap: 10px;
+         }
+
+         .daj-box-casting-update,
+         .daj-box-final-update {
+             position: relative;
+             display: flex;
+             flex-direction: column;
+             gap: 5px;
+         }
+     }
+
+     .daj-edit-product-note {
+         display: flex;
+         flex-direction: row;
+         justify-content: flex-start;
+         gap: 6px;
+     }
+
+     .daj-product-note-head {}
+
+     .daj-product-note-txt {}
+
+     .daj-product-body-bottom {
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+
+         .daj-product-next-status {
+             display: flex;
+             flex-direction: column;
+             gap: 10px;
+         }
+
+         .daj-product-status-header {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             flex-wrap: wrap;
+             width: 100%;
+             gap: 10px;
+         }
+
+         .daj-product-status-con {
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 5px;
+         }
+
+         .daj-product-status-con-txt {}
+
+         .daj-status-con-drp {
+             min-width: 150px;
+             padding: 5px;
+             cursor: pointer;
+         }
+
+         .daj-product-status-con-txt {}
+
+         .daj-product-status-body {
+             display: flex;
+             flex-wrap: wrap;
+             flex-direction: row;
+             justify-content: flex-start;
+             align-items: flex-start;
+             gap: 25px;
+         }
+
+         .daj-casting-weight-quantity {
+             display: flex;
+             flex-direction: column;
+             justify-content: flex-start;
+             gap: 10px;
+             align-items: flex-start;
+         }
+
+         .daj-casting-weight-value {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             justify-content: flex-start;
+             gap: 5px;
+         }
+
+         .daj-casting-data {
+             display: flex;
+             flex-direction: column;
+             gap: 10px;
+         }
+
+         .daj-casting-data-con {
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 5px;
+         }
+
+         .daj-product-select-box {
+             display: flex;
+             flex-direction: column;
+             gap: 5px;
+
+             .daj-product-box-txt {}
+
+             .daj-product-box-inp {
+                 padding: 3px;
+             }
+
+             .daj-product-box-list {
+                 display: flex;
+                 flex-direction: column;
+                 border: 1px solid;
+                 border-radius: 2px;
+                 padding: 5px;
+             }
+
+             .daj-product-box-opt {
+                 padding: 5px;
+                 border-radius: 2px;
+                 cursor: pointer;
+
+                 &:hover {
+                     background-color: #dcdcdc;
+                 }
+             }
+         }
+
+         .daj-product-pechchaki-track{
+            margin-top: 20px;
+         }
+
+         .daj-product-quantity-track {
+             display: flex;
+             flex-direction: row;
+             align-items: flex-start;
+             gap: 5px;
+
+             .daj-product-quantity-track-inp {
+                 width: 80px;
+             }
+         }
+
+         .daj-casting-data-txt {}
+
+         .daj-casting-data-inp {}
+
+         .daj-product-status-next {}
+
+         .daj-setting-data-con {
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start;
+             gap: 10px;
+
+             .daj-setting-data-header {}
+
+             .daj-setting-data-body {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 10px;
+             }
+
+             .daj-setting-data-option {
+                 display: flex;
+                 flex-direction: row;
+                 align-items: center;
+                 gap: 5px;
+             }
+
+             .daj-setting-data-box {}
+
+             .daj-setting-data-txt {
+                 white-space: nowrap;
+             }
+
+             .daj-setting-data-inp {}
+         }
+
+
+         .daj-product-final-stage {
+             display: flex;
+             flex-wrap: wrap;
+             flex-direction: row;
+             align-items: flex-start;
+             justify-content: flex-start;
+             gap: 20px;
+             padding-top: 10px;
+
+             .daj-product-final-image {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 5px;
+             }
+
+             .daj-final-image-header {}
+
+             .daj-final-image-txt {}
+
+             .daj-final-image-con {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: center;
+                 justify-content: center;
+                 padding: 10px;
+                 width: 150px;
+                 height: 150px;
+                 border: 1px solid;
+                 border-radius: 4px;
+                 cursor: pointer;
+             }
+
+             #daj-product-final-image-inp {
+                 display: none;
+             }
+
+             .daj-product-extra-cost {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 10px;
+             }
+
+             .daj-product-color-select {
+                 display: flex;
+                 flex-direction: column;
+                 gap: 5px;
+
+                 select {
+                     padding: 3px;
+                 }
+             }
+
+             .daj-extra-cost-con,
+             .daj-product-lariyaPin-con {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 5px;
+             }
+
+             .daj-product-extra-cost-txt {}
+
+             .daj-product-extra-cost-inp {}
+
+             .daj-extra-cost-con {}
+
+             .daj-extra-cost-val-txt {}
+
+             .daj-extra-cost-val-inp {}
+         }
+     }
+
+     .daj-edit-product-footer {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: flex-end;
+         padding: 10px;
+         gap: 10px;
+
+         .daj-product-submit {
+             display: block;
+             background: #000;
+             color: #fff;
+             border-radius: 4px;
+             padding: 10px 15px;
+             cursor: pointer;
+         }
+     }
+
+     .daj-show-casting-list {
+         position: absolute;
+         top: 0;
+         left: 0;
+         background: #fff;
+         width: 100%;
+         height: 100%;
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+
+         .daj-show-new-products {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: center;
+             border: 1px solid;
+             border-radius: 4px;
+             padding: 25px;
+             gap: 10px;
+         }
+
+         .daj-show-new-product-table {
+             td {
+                 padding: 5px;
+                 min-width: 100px;
+                 border: 1px solid;
+                 border-radius: 2px;
+             }
+         }
+
+         .daj-close-casting-list {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             justify-content: center;
+             padding: 10px 25px;
+             background: #000;
+             color: #fff;
+             border: none;
+             border-radius: 4px;
+             cursor: pointer;
+
+         }
+     }
+
+     @media(max-width: 768px) {
+         .daj-product-content-form {
+             width: 90%;
+         }
+
+         .daj-product-body-bottom .daj-setting-data-con {
+
+             .daj-setting-data-inp,
+             .daj-setting-data-rate {
+                 width: 100px;
+             }
+         }
+     }
+
+     @media(max-width: 576px) {
+         .daj-show-casting-list .daj-show-new-product-table td {
+             min-width: 70px;
+         }
+     }
+ }

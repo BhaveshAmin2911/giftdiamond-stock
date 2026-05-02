@@ -1,0 +1,98 @@
+.daj-reprocess-product {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .daj-reprocess-sku {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+
+        button {
+            padding: 5px 10px;
+            background-color: #000;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 5px;
+        }
+    }
+
+    .daj-product-body-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .daj-product-old-data {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .daj-product-quantity-data {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .daj-product-reprocess-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+
+            .daj-setting-karigar-con {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 5px;
+            }
+
+            .daj-setting-karigar-drp {
+                display: flex;
+                padding: 5px;
+                min-width: 100px;
+            }
+
+            .daj-setting-quantity,
+            .daj-product-customer {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .daj-product-confirmation {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+            }
+
+            .daj-product-reprocess-submit {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: end;
+                width: 100%;
+
+                button {
+                    padding: 5px 10px;
+                    background-color: #000;
+                    color: #fff;
+                    cursor: pointer;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+
+
+}
