@@ -6,6 +6,7 @@ import { setBoxes } from "../slices/boxesSlice";
 import { setSettingTypes } from "../slices/settingTypeSlice";
 import { setWorkTypes } from "../slices/workTypeSlice";
 import { setuserData } from "../slices/authSlice";
+import { setPolish } from "../slices/polishSlice";
 
 export const loadMasterData = async (dispatch) => {
 
@@ -18,10 +19,11 @@ export const loadMasterData = async (dispatch) => {
         dispatch(setuserData({ 'user': res?.data?.user, 'quote': res?.data?.quote }));
         dispatch(setKarigars(data?.karigars));
         dispatch(setColors(data?.colors));
+        dispatch(setPolish(data?.polish));
         dispatch(setBoxes(data?.boxes));
         dispatch(setCategory(data?.categories));
-        dispatch(setWorkTypes(data?.work_types));
-        dispatch(setSettingTypes(data?.setting_types));
+        // dispatch(setWorkTypes(data?.work_types));
+        // dispatch(setSettingTypes(data?.setting_types));
       }, 800);
     } else {
       localStorage.clear();

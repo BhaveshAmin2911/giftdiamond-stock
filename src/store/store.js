@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import karigarReducer from "./slices/karigarSlice";
 import customerReducer from "./slices/customerSlice";
 import colorReducer from "./slices/colorSlice";
+import polishReducer from "./slices/polishSlice";
 import boxesReducer from "./slices/boxesSlice";
 import categoryReducer from "./slices/categorySlice";
 import workTypeReducer from "./slices/workTypeSlice";
@@ -16,6 +17,7 @@ export const store = configureStore({
     customers: customerReducer,
     category: categoryReducer,
     colors: colorReducer,
+    polish: polishReducer,
     boxes: boxesReducer,
     workTypes: workTypeReducer,
     settingTypes: settingTypeReducer

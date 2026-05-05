@@ -19,6 +19,8 @@ function ProductList() {
     const workTypes = useSelector(state => state.workTypes.list);
     const karigars = useSelector(state => state.karigars.list);
     const categories = useSelector(state => state.category.list);
+    const colors = useSelector(state => state.colors.list);
+    const polish_array = useSelector(state => state.polish.list);
     const userData = useSelector(state => state.auth.data);
 
     const location = useLocation();
@@ -208,12 +210,10 @@ function ProductList() {
                             <th className="p-3">SKU</th>
                             <th className="p-3">Image</th>
                             <th className="p-3">Category</th>
-                            {/* <th className="p-3">Status</th> */}
-                            <th className="p-3">Stage</th>
-                            {userData.user.role != 'karigar' &&
-                                <th className="p-3">Karigar</th>
-                            }
-                            <th className="p-3">Customer Name</th>
+                            <th className="p-3">Color</th>
+                            <th className="p-3">Polish</th>
+                            <th className="p-3">Code</th>
+                            <th className="p-3">Design No</th>
                             <th className="p-3" onClick={() => { settime_order(!time_order) }}>
                                 <div className="daj-table-header-cell">
                                     <span>Update</span>
@@ -225,14 +225,8 @@ function ProductList() {
                                     </svg>
                                 </div>
                             </th>
-                            <th className="p-3">Net Weight</th>
-                            <th className="p-3">Gross Weight</th>
-                            {userData.user.role != 'karigar' &&
-                                <th className="p-3">Making Cost</th>
-                            }
                             <th className="p-3">Note</th>
-                            <th className="p-3">Casting Box</th>
-                            <th className="p-3">Final Box</th>
+                            <th className="p-3">Box</th>
                             {userData.user.role != 'karigar' &&
                                 <th className="p-3">Action</th>
                             }
@@ -243,58 +237,28 @@ function ProductList() {
                             let stage = 'office';
                             var print_select = false;
                             var category = '-';
+                            var color = '-';
+                            var polish = '-';
                             var count = 0;
 
-                            let get_idx = deadline_data.findIndex((data) => data.id == p.current_stage);
-                            if (p?.updated_at && (get_idx > -1)) {
-
-                                if (p?.urgent == 1 && p?.urgent_time) {
-
-                                    const urDate = p.urgent_time;
-                                    const starturDate = new Date(urDate.replace(" ", "T"));
-                                    const currentDate = new Date();
-                                    const diffurMs = starturDate - currentDate;
-                                    const diffurDays = Math.floor(diffurMs / (1000 * 60 * 60 * 24));
-
-                                    const dbDate = p.updated_at;
-                                    const startDate = new Date(dbDate.replace(" ", "T"));
-                                    const currentDate1 = new Date();
-                                    const diffMs = currentDate1 - startDate;
-                                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-                                    let check_total_day = ((diffurDays - 1) / 2);
-
-                                    if (check_total_day < 2) {
-                                        count = 100;
-                                    } else {
-                                        count = Math.ceil((diffDays * 100) / check_total_day);
-                                    }
-                                } else {
-                                    const dbDate = p.updated_at;
-                                    const startDate = new Date(dbDate.replace(" ", "T"));
-                                    const currentDate = new Date();
-                                    const diffMs = currentDate - startDate;
-                                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-                                    let total_day = deadline_data[get_idx]?.day ? deadline_data[get_idx].day : 5;
-                                    count = Math.ceil((diffDays * 100) / total_day);
-                                }
-
-                            }
-
-                            let idx = workTypes.findIndex((wt) => wt.id == p.current_stage);
-                            if (idx > -1) {
-                                stage = workTypes[idx].work_name;
-                            }
-
                             let c_idx = categories.findIndex((kg) => kg.id == p.category_id);
-
                             if (c_idx > -1) {
                                 category = categories[c_idx].name;
                             }
 
-                            let p_idx = select_print.findIndex((p_data) => p_data?.id == p?.id);
+                            let clr_idx = colors.findIndex((kg) => kg.id == p.color_id);
+                            if (clr_idx > -1) {
+                                color = colors[c_idx].name;
+                            }
 
+                            let pls_idx = polish_array.findIndex((kg) => kg.id == p.polish_id);
+                            if (pls_idx > -1) {
+                                polish = polish_array[pls_idx].name;
+                            } else {
+                                polish = "White";
+                            }
+
+                            let p_idx = select_print.findIndex((p_data) => p_data?.id == p?.id);
                             if (p_idx > -1) {
                                 print_select = true;
                             }
@@ -306,32 +270,22 @@ function ProductList() {
                                             <input type="checkbox" checked={print_select} readOnly />
                                         </td>
                                     }
-                                    <td className="p-3">{p.sku + "-" + p.production_run}</td>
+                                    <td className="p-3">{p.sku}</td>
                                     <td className="daj-table-img-shell">
                                         <img className="daj-product-img" src={p.image} />
                                     </td>
                                     <td className="p-3">{category}</td>
-                                    {/* <td className="p-3">{p.status}</td> */}
-                                    <td className="p-3">{stage}</td>
-                                    {userData.user.role != 'karigar' &&
-                                        <td className="p-3">{p.current_karigar_id ? p.current_karigar_id : '-'}</td>
-                                    }
-                                    {/* <td className="p-3">{p.production_run}</td> */}
-                                    <td className="p-3">{p.customer_name}</td>
+                                    <td className="p-3">{color}</td>
+                                    <td className="p-3">{polish}</td>
+                                    <td className="p-3">{p.code}</td>
+                                    <td className="p-3">{p.design_no}</td>
                                     <td className="p-3" style={{ background: `rgb(255 0 0 / ${count}%)` }}>{formatDateTime(p.updated_at)}</td>
-                                    <td className="p-3">{(p.net_weight_with_margin.toFixed(2) + 0) || "-"}</td>
-                                    <td className="p-3">{p.gross_weight || "-"}</td>
-                                    {userData.user.role != 'karigar' &&
-                                        <td className="p-3">₹ {Math.round((p.total_labour_with_margin) / 10) * 10}</td>
-                                    }
                                     <td className="p-3">{p?.note}</td>
                                     <td className="p-3">{p?.casting_box_name}</td>
-                                    <td className="p-3">{p?.final_box_name}</td>
                                     {userData.user.role != 'karigar' &&
                                         <td className="p-3">
                                             <div className="daj-table-action-shell">
                                                 <Link to={`/products/view/${p.id}`} className="daj-table-action" > View </Link>
-                                                <Link to={`/products/edit/${p.id}`} className="daj-table-action" > Edit </Link>
                                             </div>
                                         </td>
                                     }
