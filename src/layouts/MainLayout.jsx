@@ -17,8 +17,6 @@ function MainLayout() {
 
     let menu_array = [
         { 'path': '/register', 'name': 'Add Users', 'access': ['admin'] },
-        { 'path': '/all/products', 'name': 'Product List', 'access': ['admin', 'manager', 'staff'] },
-        { 'path': '/products/casting', 'name': 'Casting List', 'access': ['admin', 'manager', 'staff'] },
         { 'path': '/products/process', 'name': 'Process List', 'access': ['admin', 'manager', 'staff', 'karigar'] },
         { 'path': '/export-product', 'name': 'Export', 'access': ['admin', 'manager', 'staff'] },
         { 'path': '/product/scan', 'name': 'Scan with Gun', 'access': ['admin', 'manager', 'staff'] },

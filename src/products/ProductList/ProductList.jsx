@@ -7,10 +7,11 @@ import { useSelector } from "react-redux";
 function ProductList() {
     const [products, setProducts] = useState([]);
     const [search_val, setsearch_val] = useState('');
+    const [p_code, setp_code] = useState('');
     const [search_btn, setsearch_btn] = useState(true);
     const [karigar_filter, setkarigar_filter] = useState('');
     const [category_filter, setcategory_filter] = useState('');
-    const [status_filter, setstatus_filter] = useState('');
+    const [color_filter, setcolor_filter] = useState('');
     const [loading, setloading] = useState(false);
     const [select_print, setselect_print] = useState([]);
     const [time_order, settime_order] = useState(false);
@@ -32,32 +33,7 @@ function ProductList() {
         if (!loading) {
             fetchProducts();
         }
-    }, [karigar_filter, status_filter, search_btn, category_filter, time_order]);
-
-    /** Set browse in path of url if not */
-    useEffect(() => {
-        setloading(true);
-
-        const queryParams = new URLSearchParams(location.search);
-        const newFilterArgs = {};
-        Array.from(queryParams?.entries()).map(([key, value]) => {
-            newFilterArgs[key] = value;
-        });
-
-        if (newFilterArgs?.search) {
-            setsearch_val(newFilterArgs.search);
-        }
-        if (newFilterArgs?.karigar) {
-            setkarigar_filter(newFilterArgs.karigar);
-        }
-        if (newFilterArgs?.status) {
-            setstatus_filter(newFilterArgs.status);
-        }
-        if (newFilterArgs?.category) {
-            setcategory_filter(newFilterArgs.category);
-        }
-        setloading(false);
-    }, [])
+    }, [karigar_filter, color_filter, search_btn, category_filter, time_order]);
 
     const fetchProducts = async () => {
         setloading(true);
@@ -65,13 +41,14 @@ function ProductList() {
         try {
             const formData = new FormData();
             formData.append("search", search_val);
+            formData.append("product_code", p_code);
             if (userData.user.role == 'karigar' && userData.user.role_id) {
                 formData.append("karigar_id", userData.user.role_id);
             } else {
                 formData.append("karigar_id", karigar_filter);
             }
             formData.append("category_id", category_filter);
-            formData.append("current_stage", status_filter);
+            formData.append("color", color_filter);
             formData.append("quantity_status", 'process');
 
             if (time_order) {
@@ -80,23 +57,6 @@ function ProductList() {
 
             formData.append("status", 'in_progress');
             formData.append("per_page", 300);
-
-            var newdata = '&';
-            if (category_filter) {
-                newdata += `category=${category_filter}`;
-            }
-            if (status_filter) {
-                newdata += `status=${status_filter}`;
-            }
-            if (karigar_filter) {
-                newdata += `karigar=${karigar_filter}`;
-            }
-            if (search_val) {
-                newdata += `search=${search_val}`;
-            }
-
-            const querystring = new URLSearchParams(newdata).toString();
-            history(`/products/process?${querystring}`);
 
             const res = await api.post("/products/list.php", formData);
             if (res.data.status) {
@@ -154,6 +114,7 @@ function ProductList() {
                     <div className="daj-product-search-con">
                         <div className="daj-product-search-bar">
                             <input className="daj-product-search-inp" type="search" onKeyDown={(e) => handleKeyDown(e)} value={search_val} placeholder="Search bar" onChange={(e) => setsearch_val(e.target.value)} />
+                            <input className="daj-product-search-inp" type="search" onKeyDown={(e) => handleKeyDown(e)} value={p_code} placeholder="Product Code" onChange={(e) => setp_code(e.target.value)} />
                             <span className="daj-product-search-btn" onClick={() => { setsearch_btn(!search_btn) }}>{'>'}</span>
                         </div>
                         {userData.user.role != 'karigar' && karigars?.length > 0 &&
@@ -176,13 +137,12 @@ function ProductList() {
                                 })}
                             </select>
                         }
-                        {workTypes?.length > 0 &&
-                            <select className="daj-karigar-search" value={status_filter} onChange={(e) => setstatus_filter(e.target.value)}>
-                                <option value={''}>All Status</option>
-                                <option value={0}>office</option>
-                                {workTypes.map((k_data, index) => {
+                        {colors?.length > 0 &&
+                            <select className="daj-karigar-search" value={color_filter} onChange={(e) => setcolor_filter(e.target.value)}>
+                                <option value={''}>All Colors</option>
+                                {colors.map((k_data, index) => {
                                     return (
-                                        <option value={k_data.id} key={index}>{k_data.work_name}</option>
+                                        <option value={k_data.id} key={index}>{k_data.name}</option>
                                     );
                                 })}
                             </select>
@@ -225,6 +185,7 @@ function ProductList() {
                                     </svg>
                                 </div>
                             </th>
+                            <th className="p-3">Quantity</th>
                             <th className="p-3">Note</th>
                             <th className="p-3">Box</th>
                             {userData.user.role != 'karigar' &&
@@ -243,17 +204,18 @@ function ProductList() {
 
                             let c_idx = categories.findIndex((kg) => kg.id == p.category_id);
                             if (c_idx > -1) {
-                                category = categories[c_idx].name;
+                                category = categories[c_idx]?.name;
                             }
+
 
                             let clr_idx = colors.findIndex((kg) => kg.id == p.color_id);
                             if (clr_idx > -1) {
-                                color = colors[c_idx].name;
+                                color = colors[clr_idx]?.name;
                             }
 
                             let pls_idx = polish_array.findIndex((kg) => kg.id == p.polish_id);
                             if (pls_idx > -1) {
-                                polish = polish_array[pls_idx].name;
+                                polish = polish_array[pls_idx]?.name;
                             } else {
                                 polish = "White";
                             }
@@ -280,12 +242,13 @@ function ProductList() {
                                     <td className="p-3">{p.code}</td>
                                     <td className="p-3">{p.design_no}</td>
                                     <td className="p-3" style={{ background: `rgb(255 0 0 / ${count}%)` }}>{formatDateTime(p.updated_at)}</td>
+                                    <td className="p-3">{p?.ready_quantity}</td>
                                     <td className="p-3">{p?.note}</td>
-                                    <td className="p-3">{p?.casting_box_name}</td>
+                                    <td className="p-3">{p?.box_name}</td>
                                     {userData.user.role != 'karigar' &&
                                         <td className="p-3">
                                             <div className="daj-table-action-shell">
-                                                <Link to={`/products/view/${p.id}`} className="daj-table-action" > View </Link>
+                                                <Link to={`/products/edit/${p.id}`} className="daj-table-action" state={{ 'category': p.category_id, 'karigar': p.karigar_id, 'PR': p.production_run }}> Edit </Link>
                                             </div>
                                         </td>
                                     }

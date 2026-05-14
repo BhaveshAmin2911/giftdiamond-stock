@@ -12,7 +12,11 @@ const CreateProduct = () => {
     const categories = useSelector(state => state.category.list);
     const colors = useSelector(state => state.colors.list);
     const polish = useSelector(state => state.polish.list);
-    
+
+    useEffect(() => {
+        add_multi_product();
+    }, [])
+
     const price_diff = [
         { id: 2, min: 0, max: 2000 },
         { id: 4, min: 2000, max: 4000 },
@@ -34,27 +38,37 @@ const CreateProduct = () => {
     const navigate = useNavigate();
 
     const [product_img, setproduct_img] = useState();
+    const [product_id, setproduct_id] = useState([]);
     const [select_category, setselect_category] = useState();
     const [select_karigar, setselect_karigar] = useState();
+
     const [select_color, setselect_color] = useState();
     const [select_polish, setselect_polish] = useState(2);
-    const [product_note, setproduct_note] = useState();
+    const [product_note, setproduct_note] = useState('');
     const [product_quantity, setproduct_quantity] = useState();
     const [product_code, setproduct_code] = useState();
     const [design_number, setdesign_number] = useState();
+    const [product_array, setproduct_array] = useState([]);
+    const [box_loading, setbox_loading] = useState(false);
 
-    const [select_method, setselect_method] = useState();
+    const [select_method, setselect_method] = useState('new_product');
     const [btn_loading, setbtn_loading] = useState(false);
 
-    const get_sku = () => {
+    const get_sku = (select_karigar, select_color, select_polish, select_category, product_code) => {
         let clr_idx = colors?.findIndex((data) => data?.id == select_color);
         let pls_idx = polish?.findIndex((data) => data?.id == select_polish);
         let cat_idx = categories?.findIndex((data) => data?.id == select_category);
-
+        var kargar_name = select_karigar;
         if (clr_idx == -1 || pls_idx == -1 || cat_idx == -1) {
             alert("Somthing went wrong !");
 
             return;
+        }
+
+        let kargar_idx = karigars.findIndex((data) => data?.id == select_karigar)
+
+        if (kargar_idx > -1 && karigars[kargar_idx]?.code) {
+            kargar_name = karigars[kargar_idx].code;
         }
 
         let clr_code = colors[clr_idx]?.code ? colors[clr_idx].code : 'NaN';
@@ -64,62 +78,86 @@ const CreateProduct = () => {
         const match = price_diff.find(item => product_code >= item.min && product_code < item.max);
         let price_code = match ? match.id : 0;
 
-        return select_karigar + price_code + clr_code + cat_code + pls_code;
+        return kargar_name + price_code + cat_code + pls_code + clr_code;
+    }
+
+    const get_box_sku = () => {
+        let cat_idx = categories?.findIndex((data) => data?.id == select_category);
+        let cat_code = categories[cat_idx]?.code ? categories[cat_idx].code : 'NaN';
+        var kargar_name = select_karigar;
+
+        let kargar_idx = karigars.findIndex((data) => data?.id == select_karigar)
+
+        if (kargar_idx > -1 && karigars[kargar_idx]?.code) {
+            kargar_name = karigars[kargar_idx].code;
+        }
+
+        const match = price_diff.find(item => product_array[0].code >= item.min && product_array[0].code < item.max);
+        let price_code = match ? match.id : 0;
+
+        return kargar_name + price_code + cat_code;
     }
 
     const submit_product = async () => {
-        if (!product_img) {
-            alert('Insert Image');
-            return;
-        }
+        let current_array = [...product_array];
+
         if (!select_category) {
             alert('Select Category');
             return;
         }
+
         if (!select_karigar) {
             alert('Select Karigar');
             return;
         }
-        if (!select_color) {
-            alert('Select Color');
-            return;
-        }
-        if (!select_polish) {
-            alert('Select Polish');
-            return;
-        }
-        if (!product_quantity) {
-            alert('Enter Product Quantity');
-            return;
-        }
-        if (!product_code) {
-            alert('Enter Product Code');
-            return;
-        }
-
-        setbtn_loading(true);
-
-        let sku = get_sku();
 
         const formData = new FormData();
-        formData.append("sku", sku);
-        formData.append("category", select_category);
-        formData.append("karigar", select_karigar);
-        formData.append("color", select_color);
-        formData.append("polish", select_polish);
-        formData.append("quantity", product_quantity);
-        formData.append("code", product_code);
-        formData.append("design_no", design_number);
-        formData.append("product_note", product_note);
-        formData.append("image", product_img);
+        if (current_array?.length > 0) {
+            current_array.map((product, index) => {
+                if (!product?.image) {
+                    alert('Insert Image');
+                    return;
+                }
+                if (!product?.color) {
+                    alert('Select Color');
+                    return;
+                }
+                if (!product?.polish) {
+                    alert('Select Polish');
+                    return;
+                }
+                if (!product?.quantity) {
+                    alert('Enter Product Quantity');
+                    return;
+                }
+                if (!product?.code) {
+                    alert('Enter Product Code');
+                    return;
+                }
 
-        let result = await api.post("/products/create.php", formData);
+                let sku = get_sku(select_karigar, product?.color, product?.polish, select_category, product?.code);
+                let new_obj = Object.assign({}, current_array[index], { 'sku': sku, 'image_index': index });
+                current_array[index] = new_obj;
 
-        if (result.data.status) {
-            navigate('/products/process');
-        } else {
-            let message = result?.data?.message ? result?.data?.message : 'Something Wrong Product can not Create';
-            alert(message);
+                formData.append("images[]", product?.image);
+            })
+
+            setbtn_loading(true);
+
+
+            formData.append("category", select_category);
+            formData.append("karigar", select_karigar);
+            formData.append("product_array", JSON.stringify(current_array));
+
+            let result = await api.post("/products/create.php", formData);
+
+            if (result.data.status) {
+                setselect_method('box_select');
+                setproduct_id(result.data.products);
+            } else {
+                let message = result?.data?.message ? result?.data?.message : 'Something Wrong Product can not Create';
+                alert(message);
+            }
         }
 
         setbtn_loading(false);
@@ -130,23 +168,6 @@ const CreateProduct = () => {
             <div className='daj-product-content-form'>
                 <div className="daj-add-product-body">
                     <div className='daj-add-product-main-data'>
-                        <div className='daj-add-product-img-con'>
-                            <span className="daj-add-product-img-txt">Product Image</span>
-                            <label className="daj-add-product-img" htmlFor="daj-add-product-img-inp"
-                                onDragOver={(e) => { e.preventDefault(); }}
-                                onDrop={(e) => {
-                                    e.preventDefault(); setproduct_img(e.dataTransfer.files[0]);
-                                }}>
-                                {product_img ?
-                                    <img src={window.URL.createObjectURL(product_img)} width='150px' />
-                                    :
-                                    <span className="daj-img-placeholder">Upload Image</span>
-                                }
-                                <input id="daj-add-product-img-inp"
-                                    type="file"
-                                    onChange={(e) => { setproduct_img(e.target.files[0]) }} />
-                            </label>
-                        </div>
                         <div className='daj-add-product-form'>
                             <div className='daj-product-data-right'>
                                 <div className='daj-product-info-form'>
@@ -173,60 +194,31 @@ const CreateProduct = () => {
                                         }
                                     </select>
                                 </div>
-                                <div className='daj-product-info-form'>
-                                    <span className='daj-product-info-header'>Color</span>
-                                    <select className='daj-product-info-body' value={select_color} onChange={(e) => setselect_color(e.target.value)}>
-                                        <option value={''} >None</option>
-                                        {colors.map((category, index) => {
-                                            return (
-                                                <option value={category.id} key={index}>{category.name}</option>
-                                            );
-                                        })
-                                        }
-                                    </select>
-                                </div>
-                                <div className='daj-product-info-form'>
-                                    <span className='daj-product-info-header'>Polish</span>
-                                    <select className='daj-product-info-body' value={select_polish} onChange={(e) => setselect_polish(e.target.value)}>
-                                        {polish.map((category, index) => {
-                                            return (
-                                                <option value={category.id} key={index}>{category.name}</option>
-                                            );
-                                        })
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div className='daj-product-data-left'>
-                                <div className="daj-add-product-price">
-                                    <span className="daj-add-product-price-txt">Price Code</span>
-                                    <input type="text" className="daj-add-product-price-inp" value={product_code} onChange={(e) =>
-                                        setproduct_code(e.target.value.trim())
-                                    } />
-                                </div>
-                                <div className="daj-add-product-design">
-                                    <span className="daj-add-product-design-txt">Design Code</span>
-                                    <input type="text" className="daj-add-product-design-inp" value={design_number} onChange={(e) =>
-                                        setdesign_number(e.target.value.trim())
-                                    } />
-                                </div>
-                                <div className="daj-add-product-quantity">
-                                    <span className="daj-add-product-quantity-txt">Quantity</span>
-                                    <input type="text" className="daj-add-product-quantity-inp" value={product_quantity} onChange={(e) =>
-                                        setproduct_quantity(e.target.value.trim())
-                                    } />
-                                </div>
-                                <div className="daj-add-product-note">
-                                    <span className="daj-add-product-note-txt">Note</span>
-                                    <textarea className="daj-add-product-note-inp" rows={2} value={product_note} onChange={(e) =>
-                                        setproduct_note(e.target.value.trim())
-                                    } />
-                                </div>
                             </div>
                         </div>
                     </div>
+                    {product_array?.length > 0 &&
+                        <>
+                            <hr className='daj-add-more-product-hr' />
+                            {product_array.map((pr_data, index) => {
+                                return (
+                                    <>
+                                        {create_multi_product(pr_data, index)}
+                                        {(index + 1) < product_array?.length &&
+                                            <hr className='daj-add-more-product-hr' />
+                                        }
+                                    </>
+                                );
+                            })}
+                        </>
+                    }
                 </div>
                 <div className='daj-add-product-footer'>
+                    {btn_loading ?
+                        <button className='daj-product-submit'>Loading ...</button>
+                        :
+                        <button className='daj-product-submit' onClick={() => { add_multi_product() }}>Add More Product</button>
+                    }
                     {btn_loading ?
                         <button className='daj-product-submit'>Loading ...</button>
                         :
@@ -237,10 +229,220 @@ const CreateProduct = () => {
         );
     }
 
+    const add_multi_product = () => {
+        let new_obj = {};
+        let current_array = [...product_array];
+
+        let polish = current_array?.[0]?.polish ? current_array[0].polish : 2;
+        let code = current_array?.[0]?.code ? current_array[0].code : '';
+        let design_no = current_array?.[0]?.design_no ? current_array[0].design_no : '';
+
+        Object.assign(new_obj, { 'image': '', 'color': '', 'polish': polish, 'code': code, 'design_no': design_no, 'quantity': '', 'note': '' });
+        current_array.push(new_obj);
+
+        setproduct_array(current_array);
+    }
+
+    const handle_multi_product = (type, index, value) => {
+        let current_data = [...product_array];
+
+        current_data[index][type] = value;
+
+        setproduct_array(current_data);
+    }
+
+    const create_multi_product = (pr_data, index) => {
+        return (
+            <div className='daj-add-product-main-data' key={index}>
+                <div className='daj-add-product-form'>
+                    <div className='daj-product-data-right'>
+                        <div className='daj-add-product-img-con'>
+                            <span className="daj-add-product-img-txt">Image</span>
+                            <label className="daj-add-product-img" htmlFor={"daj-add-product-img-inp" + index}
+                                onDragOver={(e) => { e.preventDefault(); }}
+                                onDrop={(e) => {
+                                    e.preventDefault(); handle_multi_product('image', index, e.dataTransfer.files[0]);
+                                }}>
+                                {pr_data?.image ?
+                                    <img src={window.URL.createObjectURL(pr_data?.image)} width='100px' />
+                                    :
+                                    <span className="daj-img-placeholder">Upload Image</span>
+                                }
+                                <input id={"daj-add-product-img-inp" + index}
+                                    className='daj-add-product-img-inp'
+                                    type="file"
+                                    onChange={(e) => { handle_multi_product('image', index, e.target.files[0]) }} />
+                            </label>
+                        </div>
+                        <div className='daj-product-info-form'>
+                            <span className='daj-product-info-header'>Color</span>
+                            <select className='daj-product-info-body' value={pr_data?.color} onChange={(e) => handle_multi_product('color', index, e.target.value)}>
+                                <option value={''} >None</option>
+                                {colors.map((category, index) => {
+                                    return (
+                                        <option value={category.id} key={index}>{category.name}</option>
+                                    );
+                                })
+                                }
+                            </select>
+                        </div>
+                        <div className='daj-product-info-form'>
+                            <span className='daj-product-info-header'>Polish</span>
+                            <select className='daj-product-info-body' value={pr_data?.polish} onChange={(e) => handle_multi_product('polish', index, e.target.value)}>
+                                {polish.map((category, index) => {
+                                    return (
+                                        <option value={category.id} key={index}>{category.name}</option>
+                                    );
+                                })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div className='daj-product-data-left'>
+                        <div className="daj-add-product-price">
+                            <span className="daj-add-product-price-txt">Price Code</span>
+                            <input type="text" className="daj-add-product-price-inp" value={pr_data?.code} onChange={(e) =>
+                                handle_multi_product('code', index, e.target.value.trim())
+                            } />
+                        </div>
+                        <div className="daj-add-product-design">
+                            <span className="daj-add-product-design-txt">Design Code</span>
+                            <input type="text" className="daj-add-product-design-inp" value={pr_data?.design_no} onChange={(e) =>
+                                handle_multi_product('design_no', index, e.target.value.trim())
+                            } />
+                        </div>
+                        <div className="daj-add-product-quantity">
+                            <span className="daj-add-product-quantity-txt">Quantity</span>
+                            <input type="text" className="daj-add-product-quantity-inp" value={pr_data?.quantity} onChange={(e) =>
+                                handle_multi_product('quantity', index, e.target.value.trim())
+                            } />
+                        </div>
+                        <div className="daj-add-product-note">
+                            <span className="daj-add-product-note-txt">Note</span>
+                            <textarea className="daj-add-product-note-inp" rows={2} value={pr_data?.note} onChange={(e) =>
+                                handle_multi_product('note', index, e.target.value.trim())
+                            } />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const BoxSelect = () => {
+        const [box_array, setbox_array] = useState([]);
+        const [select_box, setselect_box] = useState();
+        const [new_box, setnew_box] = useState();
+
+        const get_box = async () => {
+            let sku = get_box_sku() ? get_box_sku('box') : '';
+
+            const formData = new FormData();
+            formData.append("prefix", sku);
+
+            let result = await api.post("/boxes/find-box.php", formData);
+
+            if (result?.data?.status) {
+                let new_box = { 'id': 0, 'name': result?.data?.next_box }
+                setnew_box(new_box);
+
+                if (result?.data?.boxes?.length > 0) {
+                    setbox_array(result?.data?.boxes);
+                } else {
+                    setbox_array(Array(new_box));
+                }
+            }
+        }
+
+        const submit_product_box = async (type) => {
+            if (!select_box && type != 'new_box') {
+                alert("Select Box for Product or Assign New Box");
+
+                return;
+            }
+
+            setbox_loading(true);
+
+            const formData = new FormData();
+            if (type == 'new_box' || select_box == 0) {
+                let txt = "Are you Sure to Asssign New Box : " + new_box?.name;
+                if (window.confirm(txt) == true) {
+                    formData.append("new_box", new_box?.name);
+                } else {
+                    return;
+                }
+            } else {
+                formData.append("box_id", select_box);
+            }
+
+            formData.append("product_id", JSON.stringify(product_id));
+
+            let result = await api.post("/boxes/update-box.php", formData);
+            if (result?.data?.status) {
+                let txt = "Want to Print Label";
+                if (window.confirm(txt) == true) {
+                    await print_all_label();
+                } else {
+                    navigate('/products/process');
+                }
+            }
+
+            setbox_loading(false);
+        }
+
+        const print_all_label = async () => {
+            const formData = new FormData();
+
+            formData.append("product_id", JSON.stringify(product_id));
+            let result = await api.post("/label/create-label.php", formData);
+            if (result?.data?.status) {
+                navigate('/products/process');
+            } else {
+                alert('can not print label !');
+                navigate('/products/process');
+            }
+
+        }
+
+        useEffect(() => {
+            get_box();
+        }, [])
+
+        return (
+            <div className='daj-new-product-box'>
+                <div className='daj-product-box-select'>
+                    <span className='daj-product-box-select-header'>Select Box</span>
+                    <select className='daj-product-box-select-body' value={select_box} onChange={(e) => setselect_box(e.target.value)}>
+                        <option value={''}>None</option>
+                        {box_array.map((box, index) => {
+                            return (
+                                <option value={box?.id} key={index}>{box?.name}</option>
+                            );
+                        })
+                        }
+                    </select>
+                </div>
+                <div className='daj-new-product-box-footer'>
+                    {box_loading ?
+                        <>
+                            <button>Loading ...</button>
+                            <button>Loading ...</button>
+                        </>
+                        :
+                        <>
+                            <button onClick={() => submit_product_box('new_box')}>New Box</button>
+                            <button onClick={() => submit_product_box()}>Submit</button>
+                        </>
+                    }
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="daj-add-product-content">
             <h2 className="daj-add-product-header">Create product page</h2>
-            {!select_method &&
+            {/* {!select_method &&
                 <div className='daj-product-insert-method'>
                     <div className='daj-insert-method-opt' onClick={() => { setselect_method('new_product') }}>
                         <span>New Product</span>
@@ -249,9 +451,10 @@ const CreateProduct = () => {
                         <span>Restock Product</span>
                     </div>
                 </div>
-            }
+            } */}
             {select_method == 'new_product' && create_product()}
-            {select_method == 'restock_product' && <ReStockProduct />}
+            {/* {select_method == 'restock_product' && <ReStockProduct />} */}
+            {select_method == 'box_select' && <BoxSelect />}
         </div>
     );
 }

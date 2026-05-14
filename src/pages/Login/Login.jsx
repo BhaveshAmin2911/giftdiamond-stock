@@ -11,7 +11,7 @@ function Login() {
     const dispatch = useDispatch();
 
     const [loading, setloading] = useState(false);
-    const [searchParams] = useSearchParams();
+    // const [searchParams] = useSearchParams();
 
     const [form, setForm] = useState({
         email: "",
@@ -27,20 +27,20 @@ function Login() {
         }
     }, []);
 
-    useEffect(() => {
-        const token = localStorage.getItem("daj-token");
-        const magicToken = searchParams.get("token");
+    // useEffect(() => {
+    //     const token = localStorage.getItem("daj-token");
+    //     const magicToken = searchParams.get("token");
 
-        if (token) {
-            navigate("/");
-            return;
-        }
+    //     if (token) {
+    //         navigate("/");
+    //         return;
+    //     }
 
-        if (magicToken) {
-            magicLogin(magicToken);
-        }
+    //     if (magicToken) {
+    //         magicLogin(magicToken);
+    //     }
 
-    }, []);
+    // }, []);
 
     const magicLogin = async (token) => {
         try {

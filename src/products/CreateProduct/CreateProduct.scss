@@ -35,12 +35,57 @@
          padding: 20px;
      }
 
+     .daj-new-product-box {
+         display: flex;
+         flex-direction: column;
+         width: 70%;
+         border: 1px solid;
+         border-radius: 8px;
+         gap: 20px;
+         padding: 20px;
+
+         .daj-product-box-select {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             justify-content: flex-start;
+             gap: 5px;
+
+             .daj-product-box-select-body {
+                 padding: 3px;
+             }
+         }
+
+         .daj-new-product-box-footer {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             justify-content: flex-end;
+             gap: 10px;
+
+             button {
+                 display: block;
+                 background: #000;
+                 color: #fff;
+                 border-radius: 4px;
+                 padding: 10px 15px;
+                 cursor: pointer;
+             }
+         }
+     }
+
+
      .daj-add-product-body {
          display: flex;
-         flex-direction: row;
+         flex-direction: column;
          align-items: start;
          width: 100%;
          gap: 15px;
+     }
+
+     .daj-add-more-product-hr {
+         width: 100%;
+         border: 1px solid;
      }
 
      .daj-add-product-main-data {
@@ -66,13 +111,13 @@
              justify-content: center;
              border: 1px solid;
              border-radius: 4px;
-             padding: 15px;
+             padding: 5px;
              min-width: 100px;
              min-height: 100px;
              cursor: pointer;
          }
 
-         #daj-add-product-img-inp {
+         .daj-add-product-img-inp {
              display: none;
          }
 
@@ -156,7 +201,9 @@
      }
 
      @media(max-width: 768px) {
-         .daj-product-content-form {
+
+         .daj-product-content-form,
+         .daj-new-product-box {
              width: 90%;
          }
      }
@@ -186,6 +233,7 @@
              .daj-add-product-form {
                  flex-direction: column;
                  width: 100%;
+                 min-width: 100px;
              }
 
              .daj-product-data-right,

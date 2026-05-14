@@ -23,7 +23,6 @@ const OrderList = () => {
 
     const get_order_data = async () => {
         const res = await api.get("/order/order-list.php");
-        console.log(res);
 
         if (res?.data?.status && res?.data?.data?.length > 0) {
             setorder_list(res.data.data);

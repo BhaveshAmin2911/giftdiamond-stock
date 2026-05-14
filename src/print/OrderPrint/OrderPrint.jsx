@@ -14,11 +14,13 @@ const OrderPrint = () => {
     sessionStorage.removeItem(key);
 
     const [product_list, setproduct_list] = useState([]);
+    const [prd_quant, setprd_quant] = useState([]);
     const [get_print, setget_print] = useState(false);
 
     useEffect(() => {
         if (product_array?.length > 0) {
             get_product(product_array);
+            setprd_quant(product_array);
         }
     }, [product_array])
 
@@ -30,8 +32,10 @@ const OrderPrint = () => {
     }, [get_print])
 
     const get_product = async (pr_array) => {
+        let id_array = pr_array.map(pr => pr.id);
+
         const formData = new FormData();
-        formData.append("product_ids", JSON.stringify(pr_array));
+        formData.append("product_ids", JSON.stringify(id_array));
 
         const res = await api.post("/products/products-billing.php", formData);
 
@@ -45,45 +49,81 @@ const OrderPrint = () => {
 
     return (
         <div className="daj-print-order-con">
-            <table border="1" cellSpacing="0" cellPadding="7">
+            <table border="1" cellSpacing="0" cellPadding="3">
                 <tbody>
-                    {product_list.length > 0 && product_list.map((product, index) => {
-                        let polki_a = product?.settings?.polki_a ? Number(product.settings.polki_a) : 0;
-                        let polki_b = product?.settings?.polki_b ? Number(product.settings.polki_b) : 0;
-                        let total_polki = polki_a + polki_b;
-                        return (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td className="daj-order-print-image">
-                                    <img src={product?.image} />
-                                </td>
-                                <td>
-                                    <table border="1" cellSpacing="0" cellPadding="2" width='380'>
-                                        <tr>
-                                            <td width='50%'>SKU</td>
-                                            <td>{product?.sku}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Net Weight</td>
-                                            <td>{product?.net_weight.toFixed(2) + 0 + ' grm'}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gross Weight</td>
-                                            <td>{product?.gross_weight + ' grm'}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>LP</td>
-                                            <td>{'₹ ' + (Math.round((product?.total_labour) / 10) * 10)}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Polki</td>
-                                            <td>{total_polki}</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        );
-                    })}
+                    {
+                        Array.from({ length: Math.ceil(product_list.length / 3) }).map((_, rowIndex) => {
+
+                            const rowItems = product_list.slice(rowIndex * 3, rowIndex * 3 + 3);
+
+                            return (
+                                <tr key={rowIndex}>
+
+                                    {rowItems.map((product, index) => {
+                                        let q_idx = prd_quant.findIndex((data) => data?.id == product?.id);
+                                        var quantity = 1;
+
+                                        if (q_idx > -1) {
+                                            quantity = prd_quant[q_idx]?.quantity;
+                                        }
+
+                                        let polki_a = product?.settings?.polki_a
+                                            ? Number(product.settings.polki_a)
+                                            : 0;
+
+                                        let polki_b = product?.settings?.polki_b
+                                            ? Number(product.settings.polki_b)
+                                            : 0;
+
+                                        let total_polki = polki_a + polki_b;
+
+                                        return (
+                                            <td key={index}>
+
+                                                <table border="1" cellSpacing="0" cellPadding="1">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{rowIndex * 3 + index + 1}</td>
+                                                            <td className="daj-order-print-image">
+                                                                <img src={product?.image} />
+                                                            </td>
+                                                            <td>
+                                                                <table
+                                                                    border="1"
+                                                                    cellSpacing="0"
+                                                                    cellPadding="1"
+                                                                    width="100"
+                                                                >
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colSpan="2" width="50%" style={{ textAlign: 'center' }}>{product?.category}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="50%">SKU</td>
+                                                                            <td>{product?.sku}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Code</td>
+                                                                            <td>{product?.code}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Quantity</td>
+                                                                            <td>{quantity}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        );
+                                    })
+                                    }
+                                </tr>
+                            );
+                        })
+                    }
                 </tbody>
             </table>
         </div>

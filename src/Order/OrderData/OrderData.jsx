@@ -38,8 +38,6 @@ const OrderData = () => {
             let ad_array = p_array.filter((product) => product.type == "AD");
             let polki_array = p_array.filter((product) => product.type != "AD");
 
-            console.log(polki_array);
-
             setproduct_list(polki_array);
             setad_product(ad_array);
             total_bill(polki_array);

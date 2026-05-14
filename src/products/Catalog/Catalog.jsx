@@ -8,16 +8,18 @@ const Catalog = () => {
     const [search_val, setsearch_val] = useState('');
     const [search_btn, setsearch_btn] = useState(true);
     const [category_filter, setcategory_filter] = useState('');
+    const [color_filter, setcolor_filter] = useState('');
     const [type_filter, settype_filter] = useState('polki');
     const [selection, setselection] = useState([]);
     const [loading, setloading] = useState(false);
     const [select_all, setselect_all] = useState(false);
 
     const categories = useSelector(state => state.category.list);
+    const colors = useSelector(state => state.colors.list);
 
     useEffect(() => {
         fetchProducts();
-    }, [search_btn, category_filter, type_filter]);
+    }, [search_btn, category_filter, color_filter]);
 
     const shareSelectedImages = async () => {
 
@@ -41,32 +43,31 @@ const Catalog = () => {
                 const canvas = document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
 
+                // Dynamic values
+                const fontSize = Math.max(28, img.width * 0.03);
+                const padding = fontSize * 2;
+
                 canvas.width = img.width;
-                canvas.height = img.height + 80;
+                canvas.height = img.height + padding;
 
                 ctx.drawImage(img, 0, 0);
 
-                // background for text
+                // Bottom white background
                 ctx.fillStyle = "white";
-                ctx.fillRect(0, img.height, canvas.width, 80);
+                ctx.fillRect(0, img.height, canvas.width, padding);
 
-                // text
+                // Text styling
                 ctx.fillStyle = "black";
-                ctx.font = "28px Arial";
+                ctx.font = `${fontSize}px Arial`;
 
                 const sku = checkbox.sku;
-                if (checkbox?.type == "AD") {
-                    var lp = checkbox.total_labour;
-                    var net = checkbox.net_weight.toFixed(2);
-                    ctx.fillText("Weight: " + net, 500, img.height + 40);
-                } else {
-                    var lp = (Math.round((checkbox.total_labour_with_margin) / 10) * 10);
-                    var net = checkbox.net_weight_with_margin.toFixed(2);
-                    ctx.fillText("Net: " + net, 500, img.height + 40);
-                }
+                const lp = checkbox.code;
+                const net = checkbox.design_no;
 
-                ctx.fillText("SKU: " + sku, 20, img.height + 40);
-                ctx.fillText("LP: " + lp, 250, img.height + 40);
+                // Dynamic text positions
+                ctx.fillText(`SKU: ${sku}`, img.width * 0.03, img.height + fontSize + 5);
+                ctx.fillText(`Code: ${lp}`, img.width * 0.35, img.height + fontSize + 5);
+                ctx.fillText(`Ds_no: ${net}`, img.width * 0.65, img.height + fontSize + 5);
 
                 const newBlob = await new Promise(resolve =>
                     canvas.toBlob(resolve, "image/jpeg", 0.95)
@@ -107,9 +108,8 @@ const Catalog = () => {
             const formData = new FormData();
             formData.append("search", search_val);
             formData.append("quantity_status", 'ready');
-            formData.append("status", 'completed');
             formData.append("category_id", category_filter);
-            formData.append("product_type", type_filter);
+            formData.append("color", color_filter);
             formData.append("per_page", 300);
 
             const res = await api.post("/products/list.php", formData);
@@ -170,7 +170,7 @@ const Catalog = () => {
                         </div>
                         {categories?.length > 0 &&
                             <select className="daj-catalog-category-filter" value={category_filter} onChange={(e) => setcategory_filter(e.target.value)}>
-                                <option value={''}>All</option>
+                                <option value={''}>All Category</option>
                                 {categories.map((k_data, index) => {
                                     return (
                                         <option value={k_data.id} key={index}>{k_data.name}</option>
@@ -178,11 +178,16 @@ const Catalog = () => {
                                 })}
                             </select>
                         }
-                        <select className="daj-catalog-type-filter" value={type_filter} onChange={(e) => settype_filter(e.target.value)}>
-                            <option value={''}>All Type</option>
-                            <option value={'polki'}>Monzonite Jewellery</option>
-                            <option value={'AD'}>AD jewellery</option>
-                        </select>
+                        {colors?.length > 0 &&
+                            <select className="daj-catalog-category-filter" value={color_filter} onChange={(e) => setcolor_filter(e.target.value)}>
+                                <option value={''}>All Colors</option>
+                                {colors.map((k_data, index) => {
+                                    return (
+                                        <option value={k_data.id} key={index}>{k_data.name}</option>
+                                    );
+                                })}
+                            </select>
+                        }
                         <button className="daj-catalog-select-all" onClick={() => { select_all_product() }}>{select_all ? 'UnSelect All' : 'Select All'}</button>
                     </div>
                 </div>
@@ -201,18 +206,10 @@ const Catalog = () => {
                                 <img className="daj-product-img" src={p.image} draggable />
                             </div>
                             <div className="daj-catalog-product-data">
-                                <span className="daj-catalog-product-info">SKU : {p.sku + "-" + p.production_run}</span>
-                                {p.type == "AD" ?
-                                    <>
-                                        <span className="daj-catalog-product-info">LBR : {(Math.round((p.total_labour) / 10) * 10)}</span>
-                                        <span className="daj-catalog-product-info">Weight : {Number(p?.net_weight)?.toFixed(2) || "-"}</span>
-                                    </>
-                                    :
-                                    <>
-                                        <span className="daj-catalog-product-info">LP : {(Math.round((p.total_labour_with_margin) / 10) * 10)}</span>
-                                        <span className="daj-catalog-product-info">Net : {p.net_weight_with_margin.toFixed(2) || "-"}</span>
-                                    </>
-                                }
+                                <span className="daj-catalog-product-info">SKU : {p.sku}</span>
+                                <span className="daj-catalog-product-info">SP : {p.code}</span>
+                                <span className="daj-catalog-product-info">Design No : {p.design_no}</span>
+                                <span className="daj-catalog-product-info">Box : {p.box_name}</span>
                             </div>
                         </div>
                     );

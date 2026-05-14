@@ -12,7 +12,6 @@ const GenerateOrder = () => {
     const product_array = JSON.parse(sessionStorage.getItem(key));
     const customers = useSelector(state => state.customers.list);
 
-
     // remove after use
     sessionStorage.removeItem(key);
 
@@ -20,6 +19,7 @@ const GenerateOrder = () => {
     const [selected_customer, setselected_customer] = useState();
     const [loading, setloading] = useState(false);
     const [ad_product, setad_product] = useState([]);
+    const [prd_quant, setprd_quant] = useState([]);
     const [total_order, settotal_order] = useState({ 'net_weight': 0, 'gross_weight': 0, 'LP': 0 });
     const dispatch = useDispatch();
 
@@ -30,6 +30,7 @@ const GenerateOrder = () => {
     useEffect(() => {
         if (product_array?.length > 0) {
             get_product(product_array);
+            setprd_quant(product_array);
         }
     }, [product_array])
 
@@ -50,8 +51,10 @@ const GenerateOrder = () => {
 
 
     const get_product = async (pr_array) => {
+        let id_array = pr_array.map(pr => pr.id);
+
         const formData = new FormData();
-        formData.append("product_ids", JSON.stringify(pr_array));
+        formData.append("product_ids", JSON.stringify(id_array));
 
         const res = await api.post("/products/products-billing.php", formData);
 
@@ -62,8 +65,8 @@ const GenerateOrder = () => {
             let polki_array = p_array.filter((product) => product.type != "AD");
 
             setproduct_list(polki_array);
-            setad_product(ad_array);
-            total_bill(polki_array);
+            // setad_product(ad_array);
+            // total_bill(polki_array);
         }
     }
 
@@ -163,48 +166,85 @@ const GenerateOrder = () => {
                 </div>
             </div>
             <hr className="daj-order-data-separater" />
-            <table border="1" cellSpacing="0" cellPadding="7">
+            <table border="1" cellSpacing="0" cellPadding="3">
                 <tbody>
-                    {product_list.length > 0 && product_list.map((product, index) => {
-                        let polki_a = product?.settings?.polki_a ? Number(product.settings.polki_a) : 0;
-                        let polki_b = product?.settings?.polki_b ? Number(product.settings.polki_b) : 0;
-                        let total_polki = polki_a + polki_b;
-                        return (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td className="daj-order-print-image">
-                                    <img src={product?.image} />
-                                </td>
-                                <td>
-                                    <table border="1" cellSpacing="0" cellPadding="2" width='380'>
-                                        <tbody>
-                                            <tr>
-                                                <td width='50%'>SKU</td>
-                                                <td>{product?.sku + '-' + product?.production_run}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Net Weight</td>
-                                                <td>{product?.net_weight.toFixed(2) + 0 + ' grm'}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Gross Weight</td>
-                                                <td>{product?.gross_weight + ' grm'}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>LP</td>
-                                                <td>{'₹ ' + (Math.round((product?.total_labour) / 10) * 10)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Polki</td>
-                                                <td>{total_polki}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                    <tr>
+                    {
+                        Array.from({ length: Math.ceil(product_list.length / 3) }).map((_, rowIndex) => {
+
+                            const rowItems = product_list.slice(rowIndex * 3, rowIndex * 3 + 3);
+
+                            return (
+                                <tr key={rowIndex}>
+
+                                    {rowItems.map((product, index) => {
+
+                                        let q_idx = prd_quant.findIndex((data) => data?.id == product?.id);
+                                        var quantity = 1;
+
+                                        if (q_idx > -1) {
+                                            quantity = prd_quant[q_idx]?.quantity;
+                                        }
+
+                                        let polki_a = product?.settings?.polki_a
+                                            ? Number(product.settings.polki_a)
+                                            : 0;
+
+                                        let polki_b = product?.settings?.polki_b
+                                            ? Number(product.settings.polki_b)
+                                            : 0;
+
+                                        let total_polki = polki_a + polki_b;
+
+                                        return (
+                                            <td key={index}>
+
+                                                <table border="1" cellSpacing="0" cellPadding="1">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{rowIndex * 3 + index + 1}</td>
+                                                            <td className="daj-order-print-image">
+                                                                <img src={product?.image} />
+                                                            </td>
+                                                            <td>
+                                                                <table
+                                                                    border="1"
+                                                                    cellSpacing="0"
+                                                                    cellPadding="1"
+                                                                    width="100"
+                                                                >
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colSpan="2" width="50%" style={{ textAlign: 'center' }}>{product?.category}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="50%">SKU</td>
+                                                                            <td>{product?.sku}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Code</td>
+                                                                            <td>{product?.code}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Quantity</td>
+                                                                            <td>{quantity}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        );
+                                    })
+                                    }
+                                </tr>
+                            );
+                        })
+                    }
+                </tbody>
+            </table>
+            {/* <tr>
                         <td colSpan={2} className="daj-customer-bill-total">Order Total</td>
                         <td>
                             <table border="1" cellSpacing="0" cellPadding="8" width='400'>
@@ -224,43 +264,7 @@ const GenerateOrder = () => {
                                 </tbody>
                             </table>
                         </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr className="daj-order-data-separater" />
-            <table border="1" cellSpacing="0" cellPadding="7">
-                <tbody>
-                    {ad_product.length > 0 && ad_product.map((product, index) => {
-
-                        return (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td className="daj-order-print-image">
-                                    <img src={product?.image} />
-                                </td>
-                                <td>
-                                    <table border="1" cellSpacing="0" cellPadding="2" width='380'>
-                                        <tbody>
-                                            <tr>
-                                                <td width='50%'>SKU</td>
-                                                <td>{product?.sku + '-' + product?.production_run}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Weight</td>
-                                                <td>{product?.gross_weight + ' grm'}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>LBR</td>
-                                                <td>{product?.total_lbr}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                    </tr> */}
             <div className="daj-bill-confirm-export">
                 <button className="daj-bill-confirm-export-btn" onClick={() => { final_bill() }}>Generate Bill</button>
             </div>
