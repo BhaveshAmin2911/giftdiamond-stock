@@ -81,6 +81,14 @@ const EditProduct = () => {
         let pls_idx = polish?.findIndex((data) => data?.id == select_polish);
         let cat_idx = categories?.findIndex((data) => data?.id == select_category);
 
+        var kargar_name = select_karigar;
+
+        let kargar_idx = karigars.findIndex((data) => data?.id == select_karigar)
+
+        if (kargar_idx > -1 && karigars[kargar_idx]?.code) {
+            kargar_name = karigars[kargar_idx].code;
+        }
+
         if (clr_idx == -1 || pls_idx == -1 || cat_idx == -1) {
             alert("Somthing went wrong !");
 
@@ -94,12 +102,19 @@ const EditProduct = () => {
         const match = price_diff.find(item => product_code >= item.min && product_code < item.max);
         let price_code = match ? match.id : 0;
 
-        return String(select_karigar) + String(price_code) + (cat_code) + pls_code + clr_code + production_run;
+        return String(kargar_name) + String(price_code) + (cat_code) + pls_code + clr_code + production_run;
     }
 
     const get_box_sku = () => {
         let cat_idx = categories?.findIndex((data) => data?.id == select_category);
         let cat_code = categories[cat_idx]?.code ? categories[cat_idx].code : 'NaN';
+        var kargar_name = select_karigar;
+
+        let kargar_idx = karigars.findIndex((data) => data?.id == select_karigar)
+
+        if (kargar_idx > -1 && karigars[kargar_idx]?.code) {
+            kargar_name = karigars[kargar_idx].code;
+        }
 
         const match = price_diff.find(item => product_array[0].code >= item.min && product_array[0].code < item.max);
         let price_code = match ? match.id : 0;

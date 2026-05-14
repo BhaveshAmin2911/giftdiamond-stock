@@ -140,14 +140,15 @@ const ExportProduct = () => {
             selection.map((product) => {
                 let box_name = product?.box_name ? 'B:' + product?.box_name : '';
                 let design_no = product?.design_no ? 'D:' + product?.design_no : '';
-                let label_box = design_no ? box_name + "/" + design_no : box_name;
 
                 let new_obj = {
                     "id": product?.id,
                     "sku": product?.sku,
                     "copies": 1,
                     "code": 'SP-' + product?.code,
-                    "box_name": label_box
+                    "box_name": box_name,
+                    "design_no": design_no,
+                    "copies": product?.r_quantity,
                 }
 
                 product_array.push(new_obj);
