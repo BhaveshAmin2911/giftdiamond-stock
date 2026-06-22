@@ -49,80 +49,73 @@ const OrderPrint = () => {
 
     return (
         <div className="daj-print-order-con">
-            <table border="1" cellSpacing="0" cellPadding="3">
+            <table border="0" cellSpacing="0" cellPadding="0">
                 <tbody>
-                    {
-                        Array.from({ length: Math.ceil(product_list.length / 3) }).map((_, rowIndex) => {
+                    {Array.from({ length: Math.ceil(product_list.length / 3) }).map((_, rowIndex) => {
+                        const rowItems = product_list.slice(rowIndex * 3, rowIndex * 3 + 3);
 
-                            const rowItems = product_list.slice(rowIndex * 3, rowIndex * 3 + 3);
+                        return (
+                            <tr key={rowIndex}>
 
-                            return (
-                                <tr key={rowIndex}>
+                                {rowItems.map((product, index) => {
+                                    let q_idx = prd_quant.findIndex((data) => data?.id == product?.id);
+                                    var quantity = 1;
 
-                                    {rowItems.map((product, index) => {
-                                        let q_idx = prd_quant.findIndex((data) => data?.id == product?.id);
-                                        var quantity = 1;
-
-                                        if (q_idx > -1) {
-                                            quantity = prd_quant[q_idx]?.quantity;
-                                        }
-
-                                        let polki_a = product?.settings?.polki_a
-                                            ? Number(product.settings.polki_a)
-                                            : 0;
-
-                                        let polki_b = product?.settings?.polki_b
-                                            ? Number(product.settings.polki_b)
-                                            : 0;
-
-                                        let total_polki = polki_a + polki_b;
-
-                                        return (
-                                            <td key={index}>
-
-                                                <table border="1" cellSpacing="0" cellPadding="1">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{rowIndex * 3 + index + 1}</td>
-                                                            <td className="daj-order-print-image">
-                                                                <img src={product?.image} />
-                                                            </td>
-                                                            <td>
-                                                                <table
-                                                                    border="1"
-                                                                    cellSpacing="0"
-                                                                    cellPadding="1"
-                                                                    width="100"
-                                                                >
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td colSpan="2" width="50%" style={{ textAlign: 'center' }}>{product?.category}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%">SKU</td>
-                                                                            <td>{product?.sku}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Code</td>
-                                                                            <td>{product?.code}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Quantity</td>
-                                                                            <td>{quantity}</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        );
-                                    })
+                                    if (q_idx > -1) {
+                                        quantity = prd_quant[q_idx]?.quantity;
                                     }
-                                </tr>
-                            );
-                        })
+
+                                    let polki_a = product?.settings?.polki_a
+                                        ? Number(product.settings.polki_a)
+                                        : 0;
+
+                                    let polki_b = product?.settings?.polki_b
+                                        ? Number(product.settings.polki_b)
+                                        : 0;
+
+                                    let total_polki = polki_a + polki_b;
+
+                                    return (
+                                        <td key={index} style={{ border: 'none' }}>
+
+                                            <table border="0" cellSpacing="2" cellPadding="2">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{rowIndex * 3 + index + 1}</td>
+                                                        <td className="daj-order-print-image" style={{ padding: '2px' }}>
+                                                            <img src={product?.image} />
+                                                        </td>
+                                                        <td style={{ padding: '0px', border: 'none' }}>
+                                                            <table border="0" cellSpacing="0" cellPadding="4" width="125" >
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td colSpan="2" width="50%" style={{ textAlign: 'center' }}>{product?.category}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="50%">SKU</td>
+                                                                        <td>{product?.sku}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Code</td>
+                                                                        <td>{product?.code}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Quantity</td>
+                                                                        <td>{quantity}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    );
+                                })
+                                }
+                            </tr>
+                        );
+                    })
                     }
                 </tbody>
             </table>

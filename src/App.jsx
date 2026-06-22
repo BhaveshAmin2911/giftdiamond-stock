@@ -27,6 +27,8 @@ import Catalog from "./products/Catalog/Catalog";
 import Catalogprint from "./print/CatalogPrint/CatalogPrint";
 import OrderList from "./Order/OrderList/OrderList";
 import OrderData from "./Order/OrderData/OrderData";
+import BoxPrint from "./print/Boxprint/BoxPrint";
+import BoxProduct from "./products/BoxProducts/BoxProducts";
 
 function App() {
   const dispatch = useDispatch();
@@ -63,6 +65,7 @@ function App() {
     { 'path': "/print/karigar", 'element': <KarigarPrint />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/print/order", 'element': <OrderPrint />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/print/bill", 'element': <BillPrint />, 'access': ['admin', 'manager', 'staff'] },
+    { 'path': "/print/box/:id", 'element': <BoxPrint />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/generate/order", 'element': <GenerateOrder />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/add/customer", 'element': <AddCustomer />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/product/scan", 'element': <BarcodeListener />, 'access': ['admin', 'manager', 'staff'] },
@@ -70,7 +73,8 @@ function App() {
     { 'path': "/product/catalog", 'element': <Catalog />, 'access': ['admin', 'manager', 'staff', 'customer'] },
     { 'path': "/print/catalog", 'element': <Catalogprint />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/order", 'element': <OrderList />, 'access': ['admin', 'manager'] },
-    { 'path': "/order/products", 'element': <OrderData />, 'access': ['admin', 'manager'] }
+    { 'path': "/order/products", 'element': <OrderData />, 'access': ['admin', 'manager'] },
+    { 'path': "/box-list", 'element': <BoxProduct />, 'access': ['admin', 'manager'] },
   ]
 
   if (user_data) {

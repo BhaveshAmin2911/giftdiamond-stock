@@ -49,18 +49,18 @@ export default function BarcodeListener() {
     }, [barcode])
 
     const get_product = async (barcode) => {
-        let scan_array = barcode?.split('-');
-        var pr = 1;
+        // let scan_array = barcode?.split('-');
+        // var pr = 1;
 
-        if (scan_array?.length > 0) {
-            pr = scan_array[(scan_array?.length - 1)];
-        }
+        // if (scan_array?.length > 0) {
+        //     pr = scan_array[(scan_array?.length - 1)];
+        // }
 
-        let sku = scan_array.slice(0, -1).join("-").trim();
+        // let sku = scan_array.slice(0, -1).join("-").trim();
 
         const formData = new FormData();
-        formData.append("sku", sku);
-        formData.append("production_run", pr);
+        formData.append("sku", barcode);
+        // formData.append("production_run", pr);
 
         const res = await api.post("/products/scan-product.php", formData);
         if (res.data?.status) {
@@ -120,9 +120,8 @@ export default function BarcodeListener() {
                     <tr>
                         <th className="p-3">SKU</th>
                         <th className="p-3">Image</th>
-                        <th className="p-3">Net Weight</th>
-                        <th className="p-3">Gross Weight</th>
-                        <th className="p-3">Making Cost</th>
+                        <th className="p-3">Code</th>
+                        <th className="p-3">Design No</th>
                         {/* <th className="p-3">Action</th> */}
                         <th className="p-3">Remove</th>
                     </tr>
@@ -135,9 +134,9 @@ export default function BarcodeListener() {
                                 <td className="daj-table-img-shell">
                                     <img className="daj-product-img" src={p.image} />
                                 </td>
-                                <td className="p-3">{p.net_weight.toFixed(2) || "-"}</td>
-                                <td className="p-3">{p.gross_weight || "-"}</td>
-                                <td className="p-3">₹ {(Math.round((p.total_labour) / 10) * 10)}</td>
+                                <td className="p-3">{p.code}</td>
+                                <td className="p-3">{p.design_no}</td>
+                                {/* <td className="p-3">₹ {(Math.round((p.total_labour) / 10) * 10)}</td> */}
                                 {/* <td className="p-3">
                                     <div className="daj-table-action-shell">
                                         <Link to={`/products/view/${p.id}`} className="daj-table-action" > View </Link>

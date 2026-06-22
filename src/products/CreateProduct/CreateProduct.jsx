@@ -12,10 +12,46 @@ const CreateProduct = () => {
     const categories = useSelector(state => state.category.list);
     const colors = useSelector(state => state.colors.list);
     const polish = useSelector(state => state.polish.list);
+    const size_list = useSelector(state => state.size.list);
 
     useEffect(() => {
         add_multi_product();
     }, [])
+
+    useEffect(() => {
+
+        // TAB CLOSE / REFRESH
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        // BACK BUTTON
+        window.history.pushState(null, "", window.location.href);
+
+        const handlePopState = () => {
+
+            const confirmLeave = window.confirm(
+                "Are you sure you want to leave this page?"
+            );
+
+            if (confirmLeave) {
+                window.history.back();
+            } else {
+                window.history.pushState(null, "", window.location.href);
+            }
+        };
+
+        window.addEventListener("popstate", handlePopState);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.removeEventListener("popstate", handlePopState);
+        };
+
+    }, []);
 
     const price_diff = [
         { id: 2, min: 0, max: 2000 },
@@ -54,11 +90,13 @@ const CreateProduct = () => {
     const [select_method, setselect_method] = useState('new_product');
     const [btn_loading, setbtn_loading] = useState(false);
 
-    const get_sku = (select_karigar, select_color, select_polish, select_category, product_code) => {
+    const get_sku = (select_karigar, select_color, select_polish, select_category, product_code, p_size = 2) => {
         let clr_idx = colors?.findIndex((data) => data?.id == select_color);
         let pls_idx = polish?.findIndex((data) => data?.id == select_polish);
         let cat_idx = categories?.findIndex((data) => data?.id == select_category);
         var kargar_name = select_karigar;
+        var size = p_size;
+
         if (clr_idx == -1 || pls_idx == -1 || cat_idx == -1) {
             alert("Somthing went wrong !");
 
@@ -75,10 +113,10 @@ const CreateProduct = () => {
         let pls_code = polish[pls_idx]?.code != "W" ? polish[pls_idx].code : '';
         let cat_code = categories[cat_idx]?.code ? categories[cat_idx].code : 'NaN';
 
-        const match = price_diff.find(item => product_code >= item.min && product_code < item.max);
+        const match = price_diff.find(item => product_code > item.min && product_code <= item.max);
         let price_code = match ? match.id : 0;
 
-        return kargar_name + price_code + cat_code + pls_code + clr_code;
+        return kargar_name + price_code + cat_code + size + pls_code + clr_code;
     }
 
     const get_box_sku = () => {
@@ -92,7 +130,7 @@ const CreateProduct = () => {
             kargar_name = karigars[kargar_idx].code;
         }
 
-        const match = price_diff.find(item => product_array[0].code >= item.min && product_array[0].code < item.max);
+        const match = price_diff.find(item => product_array[0].code > item.min && product_array[0].code <= item.max);
         let price_code = match ? match.id : 0;
 
         return kargar_name + price_code + cat_code;
@@ -135,8 +173,14 @@ const CreateProduct = () => {
                     return;
                 }
 
-                let sku = get_sku(select_karigar, product?.color, product?.polish, select_category, product?.code);
-                let new_obj = Object.assign({}, current_array[index], { 'sku': sku, 'image_index': index });
+                let sku = get_sku(select_karigar, product?.color, product?.polish, select_category, product?.code, product?.size);
+
+                var new_obj = Object.assign({}, current_array[index], { 'sku': sku, 'image_index': index });
+
+                if (!(current_array[index]?.size) && (select_category == 6)) {
+                    new_obj = Object.assign({}, new_obj, { 'size': 2 });
+                }
+
                 current_array[index] = new_obj;
 
                 formData.append("images[]", product?.image);
@@ -243,6 +287,13 @@ const CreateProduct = () => {
         setproduct_array(current_array);
     }
 
+    const remove_product = (index) => {
+        let current_array = [...product_array];
+        current_array.splice(index, 1);
+
+        setproduct_array(current_array);
+    }
+
     const handle_multi_product = (type, index, value) => {
         let current_data = [...product_array];
 
@@ -254,6 +305,7 @@ const CreateProduct = () => {
     const create_multi_product = (pr_data, index) => {
         return (
             <div className='daj-add-product-main-data' key={index}>
+                <div className='daj-remove-extra-product' onClick={() => { remove_product(index) }}>X</div>
                 <div className='daj-add-product-form'>
                     <div className='daj-product-data-right'>
                         <div className='daj-add-product-img-con'>
@@ -323,6 +375,19 @@ const CreateProduct = () => {
                                 handle_multi_product('note', index, e.target.value.trim())
                             } />
                         </div>
+                        {select_category == 6 &&
+                            <div className='daj-product-info-form'>
+                                <span className='daj-product-info-header'>Bangle Size</span>
+                                <select className='daj-product-info-body' value={pr_data?.size} onChange={(e) => handle_multi_product('size', index, e.target.value)}>
+                                    {size_list.map((p_size, index) => {
+                                        return (
+                                            <option value={p_size.id} key={index}>{p_size.size}</option>
+                                        );
+                                    })
+                                    }
+                                </select>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

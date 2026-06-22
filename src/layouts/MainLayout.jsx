@@ -21,7 +21,8 @@ function MainLayout() {
         { 'path': '/export-product', 'name': 'Export', 'access': ['admin', 'manager', 'staff'] },
         { 'path': '/product/scan', 'name': 'Scan with Gun', 'access': ['admin', 'manager', 'staff'] },
         { 'path': '/product/catalog', 'name': 'Catalog', 'access': ['admin', 'manager', 'staff', 'customer'] },
-        { 'path': '/order', 'name': 'Order', 'access': ['admin', 'manager'] }
+        { 'path': '/order', 'name': 'Order', 'access': ['admin', 'manager'] },
+        { 'path': '/box-list', 'name': 'Print Box', 'access': ['admin', 'manager'] }
     ]
 
     const check_outer_clcik = (event) => {

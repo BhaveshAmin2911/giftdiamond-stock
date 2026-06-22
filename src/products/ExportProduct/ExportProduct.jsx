@@ -139,7 +139,12 @@ const ExportProduct = () => {
 
             selection.map((product) => {
                 let box_name = product?.box_name ? 'B:' + product?.box_name : '';
-                let design_no = product?.design_no ? 'D:' + product?.design_no : '';
+                if (product?.size) {
+                    var design_no = product?.design_no ? 'D:' + product?.design_no : '';
+                    design_no = design_no + "/" + product?.size;
+                } else {
+                    var design_no = product?.design_no ? 'D:' + product?.design_no : '';
+                }                
 
                 let new_obj = {
                     "id": product?.id,
@@ -203,6 +208,7 @@ const ExportProduct = () => {
                                 <th className="p-3">Color</th>
                                 <th className="p-3">Polish</th>
                                 <th className="p-3">Update</th>
+                                <th className="p-3">Note</th>
                                 <th className="p-3">Quantity</th>
                                 {/* <th className="p-3">Action</th> */}
                             </tr>
@@ -238,6 +244,7 @@ const ExportProduct = () => {
                                         <td className="p-3">{color}</td>
                                         <td className="p-3">{polish}</td>
                                         <td className="p-3">{formatDateTime(p.updated_at)}</td>
+                                        <td className="p-3">{(p?.note ? p.note : '') + (p?.size ? p.size : '')}</td>
                                         <td className="p-3">
                                             <input type="number" max={p?.ready_quantity} min={1} value={p?.r_quantity ? p?.r_quantity : 1} onChange={(e) => { handle_quantity(p?.id, e.target.value) }} onBlur={() => { update_selection(p?.id) }} />
                                             <span>{' / ' + (p?.ready_quantity)}</span>

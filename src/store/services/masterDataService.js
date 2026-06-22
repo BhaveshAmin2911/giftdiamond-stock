@@ -7,6 +7,7 @@ import { setSettingTypes } from "../slices/settingTypeSlice";
 import { setWorkTypes } from "../slices/workTypeSlice";
 import { setuserData } from "../slices/authSlice";
 import { setPolish } from "../slices/polishSlice";
+import { setSize } from "../slices/sizeSlice";
 
 export const loadMasterData = async (dispatch) => {
 
@@ -22,6 +23,7 @@ export const loadMasterData = async (dispatch) => {
         dispatch(setPolish(data?.polish));
         dispatch(setBoxes(data?.boxes));
         dispatch(setCategory(data?.categories));
+        dispatch(setSize(data?.size));
         // dispatch(setWorkTypes(data?.work_types));
         // dispatch(setSettingTypes(data?.setting_types));
       }, 800);

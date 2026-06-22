@@ -1,0 +1,51 @@
+.daj-box-print-imgs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+
+    img {
+        width: 3cm;
+        height: 3cm;
+    }
+
+    .daj-box-pront-left-con {
+        .daj-box-print-imgs-con {
+            display: grid;
+            grid-template-columns: repeat(4, 3cm);
+        }
+
+        .daj-box-name-top {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 2cm;
+            letter-spacing: 5px;
+            font-size: 70px;
+            font-style: italic;
+            font-weight: 600;
+        }
+    }
+
+    .daj-box-pront-right-con {
+        height: 3cm;
+
+        .daj-box-name-right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-style: italic;
+            font-weight: 600;
+        }
+    }
+}

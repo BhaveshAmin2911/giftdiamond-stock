@@ -243,7 +243,7 @@ function ProductList() {
                                     <td className="p-3">{p.design_no}</td>
                                     <td className="p-3" style={{ background: `rgb(255 0 0 / ${count}%)` }}>{formatDateTime(p.updated_at)}</td>
                                     <td className="p-3">{p?.ready_quantity}</td>
-                                    <td className="p-3">{p?.note}</td>
+                                    <td className="p-3">{(p?.note ? p.note : '') + (p?.size ? p.size : '')}</td>
                                     <td className="p-3">{p?.box_name}</td>
                                     {userData.user.role != 'karigar' &&
                                         <td className="p-3">
