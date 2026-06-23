@@ -12,6 +12,8 @@ const EditProduct = () => {
     const categories = useSelector(state => state.category.list);
     const colors = useSelector(state => state.colors.list);
     const polish = useSelector(state => state.polish.list);
+    const size_list = useSelector(state => state.size.list);
+
     const location = useLocation();
 
     useEffect(() => {
@@ -172,6 +174,7 @@ const EditProduct = () => {
             })
 
             setbtn_loading(true);
+            
             formData.append("product_array", JSON.stringify(current_array));
 
             let result = await api.post("/products/update-product.php", formData);
@@ -353,6 +356,19 @@ const EditProduct = () => {
                                 handle_multi_product('note', index, e.target.value)
                             } />
                         </div>
+                        {select_category == 6 &&
+                            <div className='daj-product-info-form'>
+                                <span className='daj-product-info-header'>Bangle Size</span>
+                                <select className='daj-product-info-body' value={pr_data?.size} onChange={(e) => handle_multi_product('size', index, e.target.value)}>
+                                    {size_list.map((p_size, index) => {
+                                        return (
+                                            <option value={p_size.id} key={index}>{p_size.size}</option>
+                                        );
+                                    })
+                                    }
+                                </select>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -51,17 +51,12 @@ const OrderData = () => {
                 let q_idx = data_array.findIndex((data) => data?.id == p_data?.id);
                 var quantity = 1;
 
-                console.log(data_array);
-                console.log(q_idx);
-
                 if (q_idx > -1) {
                     quantity = Number(data_array[q_idx]?.quantity);
                 }
-                console.log(total_code);
 
                 let code = Number(p_data?.code);
                 total_code = total_code + Number(code * quantity);
-                console.log(total_code);
 
                 setorder_total(total_code);
             })

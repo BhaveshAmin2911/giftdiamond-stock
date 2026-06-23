@@ -17,8 +17,6 @@ const BoxProduct = () => {
         let result = await api.get("/boxes/list.php");
 
         if (result?.data?.status) {
-            console.log(result?.data?.data);
-
             setbox_list(result?.data?.data);
         }
     }

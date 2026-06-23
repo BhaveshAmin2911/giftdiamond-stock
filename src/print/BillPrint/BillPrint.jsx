@@ -136,8 +136,6 @@ const BillPrint = () => {
                                 {rowItems.map((product, index) => {
                                     let q_idx = prd_quant.findIndex((data) => data?.id == product?.id);
                                     var quantity = 1;
-                                    console.log(prd_quant);
-                                    console.log(product);
 
                                     if (q_idx > -1) {
                                         quantity = prd_quant[q_idx]?.quantity;
