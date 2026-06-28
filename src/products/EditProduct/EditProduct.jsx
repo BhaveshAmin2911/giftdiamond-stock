@@ -78,12 +78,13 @@ const EditProduct = () => {
     const [select_method, setselect_method] = useState('new_product');
     const [btn_loading, setbtn_loading] = useState(false);
 
-    const get_sku = (select_karigar, select_color, select_polish, select_category, product_code) => {
+    const get_sku = (select_karigar, select_color, select_polish, select_category, product_code, p_size = 2) => {
         let clr_idx = colors?.findIndex((data) => data?.id == select_color);
         let pls_idx = polish?.findIndex((data) => data?.id == select_polish);
         let cat_idx = categories?.findIndex((data) => data?.id == select_category);
 
         var kargar_name = select_karigar;
+        var size = p_size;
 
         let kargar_idx = karigars.findIndex((data) => data?.id == select_karigar)
 
@@ -104,7 +105,7 @@ const EditProduct = () => {
         const match = price_diff.find(item => product_code >= item.min && product_code < item.max);
         let price_code = match ? match.id : 0;
 
-        return String(kargar_name) + String(price_code) + (cat_code) + pls_code + clr_code + production_run;
+        return String(kargar_name) + String(price_code) + (cat_code) + size + pls_code + clr_code + production_run;
     }
 
     const get_box_sku = () => {
@@ -162,7 +163,8 @@ const EditProduct = () => {
                 }
 
                 if (product?.type == 'new') {
-                    let sku = get_sku(select_karigar, product?.color, product?.polish, select_category, product?.code);
+
+                    let sku = get_sku(select_karigar, product?.color, product?.polish, select_category, product?.code, product?.size);
                     var new_obj = Object.assign({}, current_array[index], { 'sku': sku, 'image_index': 'n' + index });
                     formData.append("images[n" + index + "]", product?.image);
                 } else {
@@ -174,7 +176,7 @@ const EditProduct = () => {
             })
 
             setbtn_loading(true);
-            
+
             formData.append("product_array", JSON.stringify(current_array));
 
             let result = await api.post("/products/update-product.php", formData);
