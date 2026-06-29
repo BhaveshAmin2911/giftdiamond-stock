@@ -62,12 +62,17 @@ const Catalog = () => {
 
                 const sku = checkbox.sku;
                 const lp = checkbox.code;
-                const net = checkbox.design_no;
+                const design_no = checkbox.design_no;
+                const size = checkbox.size;
 
                 // Dynamic text positions
                 ctx.fillText(`SKU: ${sku}`, img.width * 0.03, img.height + fontSize + 5);
                 ctx.fillText(`Code: ${lp}`, img.width * 0.35, img.height + fontSize + 5);
-                ctx.fillText(`Ds_no: ${net}`, img.width * 0.65, img.height + fontSize + 5);
+                if(checkbox.category_id == 6){
+                    ctx.fillText(`size: ${size}`, img.width * 0.65, img.height + fontSize + 5);
+                }else {
+                    ctx.fillText(`Ds_no: ${design_no}`, img.width * 0.65, img.height + fontSize + 5);
+                }
 
                 const newBlob = await new Promise(resolve =>
                     canvas.toBlob(resolve, "image/jpeg", 0.95)
@@ -110,7 +115,7 @@ const Catalog = () => {
             formData.append("quantity_status", 'ready');
             formData.append("category_id", category_filter);
             formData.append("color", color_filter);
-            formData.append("per_page", 300);
+            formData.append("per_page", 600);
 
             const res = await api.post("/products/list.php", formData);
             if (res.data.status) {
@@ -198,6 +203,8 @@ const Catalog = () => {
             </div>
             <div className="daj-product-list-body">
                 {products.length > 0 && products.map((p, index) => {
+                    console.log(p);
+                    
                     let idx = selection.findIndex((data) => data?.id == p?.id);
                     return (
                         <div className="daj-catalog-product-outer" onClick={() => handleSelect(p)} key={index}>
@@ -208,7 +215,11 @@ const Catalog = () => {
                             <div className="daj-catalog-product-data">
                                 <span className="daj-catalog-product-info">SKU : {p.sku}</span>
                                 <span className="daj-catalog-product-info">SP : {p.code}</span>
-                                <span className="daj-catalog-product-info">Design No : {p.design_no}</span>
+                                {p.category_id == 6 ?
+                                    <span className="daj-catalog-product-info">Size : {p.size}</span>
+                                    :
+                                    <span className="daj-catalog-product-info">Design No : {p.design_no}</span>
+                                }
                                 <span className="daj-catalog-product-info">Box : {p.box_name}</span>
                             </div>
                         </div>
