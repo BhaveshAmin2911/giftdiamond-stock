@@ -29,6 +29,9 @@ import OrderList from "./Order/OrderList/OrderList";
 import OrderData from "./Order/OrderData/OrderData";
 import BoxPrint from "./print/Boxprint/BoxPrint";
 import BoxProduct from "./products/BoxProducts/BoxProducts";
+import "./assests/scss/variable.scss";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
@@ -113,7 +116,17 @@ function App() {
         <div className="daj-mian-loading-con">
           <img src='https://app.dajdiamond.com/uploads/daj-main-loader.gif' />
           <span>Loadding ...</span>
-        </div>
+        </div> 
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          theme="colored"
+        />
       </>
     );
   }

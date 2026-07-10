@@ -5,6 +5,9 @@ import "./Login.scss";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { loadMasterData } from "../../store/services/masterDataService";
+import { FaUserCircle, FaEnvelope, FaLock } from "react-icons/fa";
+import giftdiamond from "../../assests/img/GiftDiamond-logo.webp";
+import { toast } from "react-toastify";
 
 function Login() {
     const navigate = useNavigate();
@@ -79,10 +82,10 @@ function Login() {
                 localStorage.setItem("daj-user", JSON.stringify(res.data.data));
 
                 loadMasterData(dispatch);
-
+                toast.success("Login Successful");
                 navigate("/");
             } else {
-                alert(res.data.message);
+                toast.error(res.data.message);
             }
         } catch (error) {
             alert("Login failed");
@@ -93,17 +96,53 @@ function Login() {
 
     return (
         <div className="daj-login-page">
-            <form onSubmit={handleSubmit} className="daj-login-form" >
-                <h2 className="daj-login-form-header">Login</h2>
-                <div className="daj-login-form-body">
-                    <input type="text" placeholder="User Name" className="daj-login-form-inp" onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                    <input type="password" placeholder="Password" className="daj-login-form-inp" onChange={(e) => setForm({ ...form, password: e.target.value })} />
-                    <label className="daj-login-remeber-me">
-                        <input type="checkbox" className="daj-login-remeber-inp" onChange={(e) => setForm({ ...form, remember: e.target.checked })} />
-                        <span className="daj-login-remeber-txt">Remember Me</span>
-                    </label>
-                    <button type="submit" className="daj-login-form-submit">{loading ? 'Loading ... ' : 'Login'}</button>
+            <div className="login-card-shadow"></div>
+
+            <form onSubmit={handleSubmit} className="daj-login-form">
+                <div className="avatar">
+                    <img src={giftdiamond} alt="DAJ Logo" className="avatar-img" />
                 </div>
+
+                <div className="input-group">
+                    <FaEnvelope className="icon" />
+                    <input
+                        type="text"
+                        placeholder="Email ID"
+                        onChange={(e) =>
+                            setForm({ ...form, email: e.target.value })
+                        }
+                    />
+                </div>
+
+                <div className="input-group">
+                    <FaLock className="icon" />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        onChange={(e) =>
+                            setForm({ ...form, password: e.target.value })
+                        }
+                    />
+                </div>
+
+                <div className="options-row">
+                    <label className="cursor">
+                        <input
+                            type="checkbox"
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    remember: e.target.checked,
+                                })
+                            }
+                        />
+                        Remember me
+                    </label>
+                </div>
+
+                <button type="submit" className="login-btn font-16 fw-600 cursor">
+                    {loading ? "Loading..." : "LOGIN"}
+                </button>
             </form>
         </div>
     );
