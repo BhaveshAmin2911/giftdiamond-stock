@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import './Dashboard.scss'
+import './Dashboard.css'
 
 const Dashboard = () => {
     const [time, settime] = useState('Good Morning');
@@ -23,15 +23,46 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="daj-main-dashbaord-con">
-            <div className="daj-dashbaord-morning">
-                <h4 className="daj-dashbaord-morning-head">{time}</h4>
-                <span className="daj-dashbaord-user-data">{userData.user.name}</span>
+        <div className="dashboard-page">
+
+            <div className="dashboard-container">
+
+                <div className="dashboard-header">
+
+                    <p className="dashboard-welcome">
+                        Welcome Back
+                    </p>
+
+                    <h1 className="dashboard-title">
+                        {time}
+                    </h1>
+
+                    <p className="dashboard-user">
+                        {userData?.user?.name}
+                    </p>
+
+                </div>
+
+                <div className="dashboard-quote-wrapper">
+
+                    <div className="dashboard-quote-line"></div>
+
+                    <div className="dashboard-quote-card">
+
+                        <p className="dashboard-quote-text">
+                            "{userData?.quote?.text}"
+                        </p>
+
+                        <p className="dashboard-quote-author">
+                            — {userData?.quote?.author}
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
-            <div className="daj-dashbaord-quote-con">
-                <h4 className="daj-dashbaord-quote-text">{userData?.quote?.text}</h4>
-                <span className="daj-dashbaord-quote-auth">{'- ' + userData?.quote?.author}</span>
-            </div>
+
         </div>
     );
 }

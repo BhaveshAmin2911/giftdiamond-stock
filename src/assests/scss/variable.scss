@@ -1,36 +1,37 @@
-@import "./main.scss";
+@use "./main";
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    /* Font family */
-    --default-font-family: 'Open Sans', sans-serif;
-    --title-font-family: "Montserrat", sans-serif;
+   /* Font family */
+   --default-font-family: 'Open Sans', sans-serif;
+   --title-font-family: "Montserrat", sans-serif;
 
-    /* ==========================
+   /* ==========================
        Brand Colors
     ========================== */
-    --primary-color: rgb(72 144 154);
-    --secondary-color: rgb(255 255 255);
+   --primary-color: rgb(72 144 154);
+   --secondary-color: rgb(255 255 255);
+   --primary-light-color: rgb(239 247 248);
 
-    /* ==========================
+   /* ==========================
        Common Colors
     ========================== */
-    --white-color: rgb(255 255 255);
-    --black-color: rgb(0 0 0);
+   --white-color: rgb(255 255 255);
+   --black-color: rgb(0 0 0);
 
-    /* ==========================
+   /* ==========================
        Text Colors
     ========================== */
-    --text-color: rgb(51 51 51);
-    --text-light-color: rgb(119 119 119);
-    --placeholder-color: rgb(160 160 160);
+   --text-color: rgb(51 51 51);
+   --text-light-color: rgb(119 119 119);
+   --placeholder-color: rgb(160 160 160);
 
-    /* ==========================
+   /* ==========================
        Border & Shadow
     ========================== */
-    --border-color: rgb(224 224 224);
-    --shadow-color: rgb(0 0 0 / 15%);
-    --overlay-color: rgb(72 144 154 / 15%);
+   --border-color: rgb(224 224 224);
+   --shadow-color: rgb(0 0 0 / 15%);
+   --overlay-color: rgb(72 144 154 / 15%);
 }

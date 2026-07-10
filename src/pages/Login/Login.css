@@ -1,0 +1,53 @@
+@reference "../../index.css";
+
+.login-page {
+    @apply min-h-screen bg-secondary flex items-center justify-center px-4 relative overflow-hidden;
+}
+
+.login-bg-card {
+    @apply absolute w-96 h-[430px] bg-primary-light rotate-[-8deg] rounded-md;
+}
+
+.login-card {
+    @apply relative z-10 w-full max-w-96 bg-white rounded-md shadow-xl px-7 py-8;
+}
+
+.login-logo {
+    @apply flex justify-center mb-8;
+}
+
+.logo-circle {
+    @apply size-32 rounded-full border-2 border-primary bg-white shadow-lg flex items-center justify-center overflow-hidden;
+}
+
+.logo-img {
+    @apply size-22 object-contain;
+}
+
+.input-group {
+    @apply flex items-center gap-3 border-b border-border pb-3 mb-6;
+}
+
+.input-icon {
+    @apply text-primary text-lg;
+}
+
+.login-input {
+    @apply w-full outline-none bg-transparent text-text placeholder:text-text-light;
+}
+
+.remember-box {
+    @apply mb-8;
+}
+
+.remember-label {
+    @apply flex items-center gap-2 cursor-pointer text-text-light;
+}
+
+.remember-checkbox {
+    @apply accent-primary size-4;
+}
+
+.login-btn {
+    @apply w-full h-12 rounded bg-primary text-white font-semibold font-title tracking-widest transition-all duration-300 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
-import "./Login.scss";
+import "./Login.css";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { loadMasterData } from "../../store/services/masterDataService";
@@ -95,40 +95,61 @@ function Login() {
     };
 
     return (
-        <div className="daj-login-page">
-            <div className="login-card-shadow"></div>
+        <div className="login-page">
 
-            <form onSubmit={handleSubmit} className="daj-login-form">
-                <div className="avatar">
-                    <img src={giftdiamond} alt="DAJ Logo" className="avatar-img" />
+            <div className="login-bg-card"></div>
+
+            <form
+                onSubmit={handleSubmit}
+                className="login-card">
+
+                <div className="login-logo">
+                    <div className="logo-circle">
+                        <img
+                            src={giftdiamond}
+                            alt="Gift Diamond"
+                            className="logo-img"
+                        />
+                    </div>
                 </div>
 
                 <div className="input-group">
-                    <FaEnvelope className="icon" />
+                    <FaEnvelope className="input-icon" />
+
                     <input
                         type="text"
                         placeholder="Email ID"
+                        className="login-input"
                         onChange={(e) =>
-                            setForm({ ...form, email: e.target.value })
+                            setForm({
+                                ...form,
+                                email: e.target.value,
+                            })
                         }
                     />
                 </div>
 
                 <div className="input-group">
-                    <FaLock className="icon" />
+                    <FaLock className="input-icon" />
+
                     <input
                         type="password"
                         placeholder="Password"
+                        className="login-input"
                         onChange={(e) =>
-                            setForm({ ...form, password: e.target.value })
+                            setForm({
+                                ...form,
+                                password: e.target.value,
+                            })
                         }
                     />
                 </div>
 
-                <div className="options-row">
-                    <label className="cursor">
+                <div className="remember-box">
+                    <label className="remember-label">
                         <input
                             type="checkbox"
+                            className="remember-checkbox"
                             onChange={(e) =>
                                 setForm({
                                     ...form,
@@ -140,10 +161,16 @@ function Login() {
                     </label>
                 </div>
 
-                <button type="submit" className="login-btn font-16 fw-600 cursor">
+                <button
+                    type="submit"
+                    className="login-btn"
+                    disabled={loading}
+                >
                     {loading ? "Loading..." : "LOGIN"}
                 </button>
+
             </form>
+
         </div>
     );
 }
