@@ -71,7 +71,7 @@ function App() {
     { 'path': "/product/scan", 'element': <BarcodeListener />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/casting/scan", 'element': <CastingScan />, 'access': ['admin', 'manager', 'staff'] },
     { 'path': "/product/catalog", 'element': <Catalog />, 'access': ['admin', 'manager', 'staff', 'customer'] },
-    { 'path': "/print/catalog", 'element': <Catalogprint />, 'access': ['admin', 'manager', 'staff'] },
+    { 'path': "/print/catalog", 'element': <Catalogprint />, 'access': ['admin', 'manager', 'staff', 'customer'] },
     { 'path': "/order", 'element': <OrderList />, 'access': ['admin', 'manager'] },
     { 'path': "/order/products", 'element': <OrderData />, 'access': ['admin', 'manager'] },
     { 'path': "/box-list", 'element': <BoxProduct />, 'access': ['admin', 'manager'] },

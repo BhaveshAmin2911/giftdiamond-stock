@@ -9,17 +9,22 @@ const Catalog = () => {
     const [search_btn, setsearch_btn] = useState(true);
     const [category_filter, setcategory_filter] = useState('');
     const [color_filter, setcolor_filter] = useState('');
+    const [size_filter, setsize_filter] = useState('');
     const [type_filter, settype_filter] = useState('polki');
     const [selection, setselection] = useState([]);
+    const [pagination_val, setpagination_val] = useState(1);
+    const [current_page, setcurrent_page] = useState(1);
+    const [total_page, settotal_page] = useState(0);
     const [loading, setloading] = useState(false);
     const [select_all, setselect_all] = useState(false);
 
     const categories = useSelector(state => state.category.list);
     const colors = useSelector(state => state.colors.list);
+    const size = useSelector(state => state.size.list);
 
     useEffect(() => {
         fetchProducts();
-    }, [search_btn, category_filter, color_filter]);
+    }, [search_btn, category_filter, color_filter, current_page, size_filter]);
 
     const shareSelectedImages = async () => {
 
@@ -68,9 +73,9 @@ const Catalog = () => {
                 // Dynamic text positions
                 ctx.fillText(`SKU: ${sku}`, img.width * 0.03, img.height + fontSize + 5);
                 ctx.fillText(`Code: ${lp}`, img.width * 0.35, img.height + fontSize + 5);
-                if(checkbox.category_id == 6){
+                if (checkbox.category_id == 6) {
                     ctx.fillText(`size: ${size}`, img.width * 0.65, img.height + fontSize + 5);
-                }else {
+                } else {
                     ctx.fillText(`Ds_no: ${design_no}`, img.width * 0.65, img.height + fontSize + 5);
                 }
 
@@ -106,7 +111,7 @@ const Catalog = () => {
 
     };
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (page = 1) => {
         setloading(true);
 
         try {
@@ -115,11 +120,14 @@ const Catalog = () => {
             formData.append("quantity_status", 'ready');
             formData.append("category_id", category_filter);
             formData.append("color", color_filter);
-            formData.append("per_page", 600);
+            formData.append("size", size_filter);
+            formData.append("per_page", 60);
+            formData.append("current_page", page);
 
             const res = await api.post("/products/list.php", formData);
             if (res.data.status) {
                 setProducts(res.data.data);
+                settotal_page(res.data?.pagination?.total_pages)
             }
         } catch (error) {
             console.error(error);
@@ -163,8 +171,27 @@ const Catalog = () => {
         setselect_all(!select_all);
     }
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Use 'instant' for immediate jumping without animation
+        });
+    }
+
     return (
         <div className="daj-product-catalog-content">
+            <div className="daj-product-catalog-footer">
+                <div className="daj-product-catalog-share">
+                    <button className="daj-share-catalog-btn" onClick={() => shareSelectedImages()}>Share Selected</button>
+                    <button className="daj-share-catalog-btn" onClick={() => print_selected()}>Print Selected</button>
+                </div>
+                <div className="daj-catalog-pagination">
+                    <span>Page </span>
+                    <input className="daj-catalog-pagination-val" type="number" max={total_page} min={1} value={pagination_val} onChange={(e) => setpagination_val(e.target.value)} />
+                    <span> / {total_page}</span>
+                    <button className="daj-catalog-pagination-btn" onClick={() => { scrollToTop(), fetchProducts(pagination_val) }}>{'Go'}</button>
+                </div>
+            </div>
             <div className="daj-product-list-header">
                 <h2 className="daj-product-list-header-txt">Products</h2>
                 <div className="daj-product-list-header-con">
@@ -193,18 +220,26 @@ const Catalog = () => {
                                 })}
                             </select>
                         }
+                        {size?.length > 0 &&
+                            <select className="daj-catalog-category-filter" value={size_filter} onChange={(e) => setsize_filter(e.target.value)}>
+                                <option value={''}>All Size</option>
+                                {size.map((s_data, index) => {
+                                    return (
+                                        <option value={s_data.id} key={index}>{s_data.size}</option>
+                                    );
+                                })}
+                            </select>
+                        }
                         <button className="daj-catalog-select-all" onClick={() => { select_all_product() }}>{select_all ? 'UnSelect All' : 'Select All'}</button>
                     </div>
                 </div>
             </div>
-            <div className="daj-share-catalog-act">
+            {/* <div className="daj-share-catalog-act">
                 <button className="daj-share-catalog-btn" onClick={() => shareSelectedImages()}>Share Selected</button>
                 <button className="daj-share-catalog-btn" onClick={() => print_selected()}>Print Selected</button>
-            </div>
+            </div> */}
             <div className="daj-product-list-body">
                 {products.length > 0 && products.map((p, index) => {
-                    console.log(p);
-                    
                     let idx = selection.findIndex((data) => data?.id == p?.id);
                     return (
                         <div className="daj-catalog-product-outer" onClick={() => handleSelect(p)} key={index}>

@@ -20,7 +20,7 @@ const Catalogprint = () => {
     return (
         <div className="daj-product-catalog-print">
             <div className="daj-product-list-header">
-                <h2 className="daj-product-list-header-txt">Daj Catalog</h2>
+                <h2 className="daj-product-list-header-txt">GiftDiamond Catalog</h2>
             </div>
             <div className="daj-product-catalog-body">
                 {products.length > 0 && products.map((p, index) => {
@@ -30,7 +30,9 @@ const Catalogprint = () => {
                                 <img className="daj-product-img" src={p.image} draggable />
                             </div>
                             <div className="daj-catalog-product-data">
-                                <span className="daj-catalog-product-info">SKU : {p.sku + "-" + p.production_run}</span>
+                                <span className="daj-catalog-product-info">SKU : {p.sku}</span>
+                                <span className="daj-catalog-product-info">Code : {p.code}</span>
+                                <span className="daj-catalog-product-info">Box : {p.box_name}</span>
                                 {/* <span className="daj-catalog-product-info">Net : {p.net_weight_with_margin.toFixed(2) || "-"}</span> */}
                                 {/* <span className="daj-catalog-product-info">LP : {(Math.round((p.total_labour_with_margin) / 10) * 10)}</span> */}
                             </div>

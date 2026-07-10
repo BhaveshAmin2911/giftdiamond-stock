@@ -30,6 +30,66 @@
         }
     }
 
+    .daj-product-catalog-footer {
+        position: fixed;
+        bottom: 10px;
+        z-index: 10;
+        width: 90%;
+        background-color: #fff;
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid;
+        border-radius: 4px;
+        gap: 10px;
+
+        .daj-product-catalog-share {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .daj-catalog-pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            justify-content: flex-end;
+            font-size: 18px;
+        }
+
+        .daj-catalog-pagination-val {
+            width: 30px;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid;
+        }
+
+        .daj-catalog-pagination-btn {
+            margin-left: 10px;
+            background-color: #000;
+            color: #fff;
+            border-radius: 6px;
+            padding: 7px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .daj-share-catalog-btn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 10px 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    }
+
     .daj-product-list-header {
         display: flex;
         flex-direction: column;
@@ -208,6 +268,20 @@
     @media(max-width:576px) {
         .daj-product-list-body .daj-product-img {
             height: 200px;
+        }
+
+        .daj-product-catalog-footer {
+            flex-direction: column;
+
+            .daj-product-catalog-share {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .daj-catalog-pagination {
+                justify-content: flex-end;
+                width: 100%;
+            }
         }
     }
 }

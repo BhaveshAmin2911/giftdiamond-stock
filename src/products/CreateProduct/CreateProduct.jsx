@@ -116,7 +116,11 @@ const CreateProduct = () => {
         const match = price_diff.find(item => product_code > item.min && product_code <= item.max);
         let price_code = match ? match.id : 0;
 
-        return kargar_name + price_code + cat_code + size + pls_code + clr_code;
+        if (select_category == 6) {
+            return kargar_name + price_code + cat_code + size + pls_code + clr_code;
+        } else {
+            return kargar_name + price_code + cat_code + pls_code + clr_code;
+        }
     }
 
     const get_box_sku = () => {
@@ -330,9 +334,11 @@ const CreateProduct = () => {
                             <span className='daj-product-info-header'>Color</span>
                             <select className='daj-product-info-body' value={pr_data?.color} onChange={(e) => handle_multi_product('color', index, e.target.value)}>
                                 <option value={''} >None</option>
-                                {colors.map((category, index) => {
-                                    return (
-                                        <option value={category.id} key={index}>{category.name}</option>
+                                {colors.map((clr, index) => {
+                                    return (clr.note ?
+                                        <option value={clr.id} key={index}>{clr.name + " ( " + clr.note + " )"}</option>
+                                        :
+                                        <option value={clr.id} key={index}>{clr.name}</option>
                                     );
                                 })
                                 }
