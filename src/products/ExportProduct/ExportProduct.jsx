@@ -144,7 +144,8 @@ const ExportProduct = () => {
                     design_no = design_no + "/" + product?.size;
                 } else {
                     var design_no = product?.design_no ? 'D:' + product?.design_no : '';
-                }                
+                }
+                var desgin_code = design_no ? design_no : box_name;
 
                 let new_obj = {
                     "id": product?.id,
@@ -152,7 +153,7 @@ const ExportProduct = () => {
                     "copies": 1,
                     "code": 'SP-' + product?.code,
                     "box_name": box_name,
-                    "design_no": design_no,
+                    "design_no": desgin_code,
                     "copies": product?.r_quantity,
                 }
 
