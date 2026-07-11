@@ -1,0 +1,45 @@
+@reference "../../index.css";
+
+.dashboard-page {
+    @apply min-h-[75vh] w-full bg-secondary flex items-center justify-center px-4 sm:px-6 lg:px-10 py-10;
+}
+
+.dashboard-container {
+    @apply w-full max-w-4xl flex flex-col items-center;
+}
+
+.dashboard-header {
+    @apply text-center space-y-2;
+}
+
+.dashboard-welcome {
+    @apply uppercase tracking-[4px] text-xs sm:text-sm font-semibold text-text-light;
+}
+
+.dashboard-title {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-text;
+}
+
+.dashboard-user {
+    @apply text-lg sm:text-xl font-medium text-primary;
+}
+
+.dashboard-quote-wrapper {
+    @apply relative mt-12 w-full max-w-3xl;
+}
+
+.dashboard-quote-line {
+    @apply absolute left-0 top-5 bottom-5 w-1 rounded-full bg-primary;
+}
+
+.dashboard-quote-card {
+    @apply bg-primary-light rounded-2xl shadow-xl px-8 py-10 sm:px-10 sm:py-12;
+}
+
+.dashboard-quote-text {
+    @apply text-center italic text-lg sm:text-xl lg:text-2xl leading-9 text-text;
+}
+
+.dashboard-quote-author {
+    @apply mt-6 text-right text-sm sm:text-base font-semibold text-primary;
+}

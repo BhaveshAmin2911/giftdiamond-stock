@@ -1,0 +1,17 @@
+@theme {
+    --color-primary: var(--primary-color);
+    --color-secondary: var(--secondary-color);
+    --color-primary-light: var(--primary-light-color);
+
+    --color-text: var(--text-color);
+    --color-text-light: var(--text-light-color);
+
+    --color-border: var(--border-color);
+
+    --color-white: var(--white-color);
+    --color-black: var(--black-color);
+
+    /* Fonts */
+    --font-default: var(--default-font-family);
+    --font-title: var(--title-font-family);
+}

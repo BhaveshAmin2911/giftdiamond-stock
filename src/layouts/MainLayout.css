@@ -1,0 +1,74 @@
+@reference "../index.css";
+
+.main-layout {
+    @apply min-h-screen bg-secondary;
+}
+
+.main-header {
+    @apply sticky top-0 z-50 bg-white border-b border-border shadow-sm;
+}
+
+.main-header-container {
+    @apply flex items-center justify-between px-6 py-4;
+}
+
+.desktop-menu {
+    @apply hidden lg:flex items-center gap-2 bg-primary-light p-2 rounded-xl;
+}
+
+.menu-link {
+    @apply px-4 py-2 rounded-lg text-base font-semibold transition-all duration-300 bg-white text-primary hover:bg-primary hover:text-white;
+}
+
+.menu-link-active {
+    @apply bg-primary text-white shadow-md;
+}
+
+.mobile-menu {
+    @apply relative lg:hidden;
+}
+
+.mobile-menu-btn {
+    @apply flex items-center justify-center size-12 rounded-xl bg-primary-light hover:bg-primary transition-all duration-300;
+}
+
+.mobile-menu-icon {
+    @apply text-primary text-2xl;
+}
+
+.mobile-dropdown {
+    @apply absolute left-0 mt-3 w-72 bg-white rounded-xl shadow-xl border border-border p-2;
+}
+
+.mobile-link {
+    @apply block rounded-lg px-4 py-3 transition text-text hover:bg-primary-light text-base font-semibold;
+}
+
+.mobile-link-active {
+    @apply bg-primary text-white;
+}
+
+.user-section {
+    @apply flex items-center gap-4;
+}
+
+.user-avatar {
+    @apply flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary bg-primary-light cursor-pointer;
+}
+
+.user-icon {
+    @apply text-primary text-xl;
+}
+
+
+.logout-btn {
+    @apply rounded-lg bg-primary px-5 py-2.5 font-semibold font-title text-base text-white transition hover:opacity-90 cursor-pointer;
+}
+
+.main-body {
+    @apply p-6;
+}
+
+.user-tooltip {
+    @apply !bg-primary text-white !rounded-lg !px-3 !py-2 !text-base !text-lg z-[99999];
+}
