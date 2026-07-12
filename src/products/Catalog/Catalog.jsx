@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
-import "./Catalog.scss"
+import "./Catalog.css"
 import { useSelector } from "react-redux";
+import Select from "react-select";
+import { FiSearch } from "react-icons/fi";
+import noDataImg from "../../assests/img/no-data-img.svg";
+import { FaSpinner } from "react-icons/fa";
+
 
 const Catalog = () => {
     const [products, setProducts] = useState([]);
@@ -178,100 +183,315 @@ const Catalog = () => {
         });
     }
 
-    return (
-        <div className="daj-product-catalog-content">
-            <div className="daj-product-catalog-footer">
-                <div className="daj-product-catalog-share">
-                    <button className="daj-share-catalog-btn" onClick={() => shareSelectedImages()}>Share Selected</button>
-                    <button className="daj-share-catalog-btn" onClick={() => print_selected()}>Print Selected</button>
-                </div>
-                <div className="daj-catalog-pagination">
-                    <span>Page </span>
-                    <input className="daj-catalog-pagination-val" type="number" max={total_page} min={1} value={pagination_val} onChange={(e) => setpagination_val(e.target.value)} />
-                    <span> / {total_page}</span>
-                    <button className="daj-catalog-pagination-btn" onClick={() => { scrollToTop(), fetchProducts(pagination_val) }}>{'Go'}</button>
-                </div>
-            </div>
-            <div className="daj-product-list-header">
-                <h2 className="daj-product-list-header-txt">Products</h2>
-                <div className="daj-product-list-header-con">
-                    <div className="daj-product-search-con">
-                        <div className="daj-product-search-bar">
-                            <input className="daj-product-search-inp" type="search" onKeyDown={(e) => handleKeyDown(e)} value={search_val} placeholder="Search bar" onChange={(e) => setsearch_val(e.target.value)} />
-                            <span className="daj-product-search-btn" onClick={() => { setsearch_btn(!search_btn) }}>{'>'}</span>
-                        </div>
-                        {categories?.length > 0 &&
-                            <select className="daj-catalog-category-filter" value={category_filter} onChange={(e) => setcategory_filter(e.target.value)}>
-                                <option value={''}>All Category</option>
-                                {categories.map((k_data, index) => {
-                                    return (
-                                        <option value={k_data.id} key={index}>{k_data.name}</option>
-                                    );
-                                })}
-                            </select>
-                        }
-                        {colors?.length > 0 &&
-                            <select className="daj-catalog-category-filter" value={color_filter} onChange={(e) => setcolor_filter(e.target.value)}>
-                                <option value={''}>All Colors</option>
-                                {colors.map((k_data, index) => {
-                                    return (
-                                        <option value={k_data.id} key={index}>{k_data.name}</option>
-                                    );
-                                })}
-                            </select>
-                        }
-                        {size?.length > 0 &&
-                            <select className="daj-catalog-category-filter" value={size_filter} onChange={(e) => setsize_filter(e.target.value)}>
-                                <option value={''}>All Size</option>
-                                {size.map((s_data, index) => {
-                                    return (
-                                        <option value={s_data.id} key={index}>{s_data.size}</option>
-                                    );
-                                })}
-                            </select>
-                        }
-                        <button className="daj-catalog-select-all" onClick={() => { select_all_product() }}>{select_all ? 'UnSelect All' : 'Select All'}</button>
-                    </div>
-                </div>
-            </div>
-            {/* <div className="daj-share-catalog-act">
-                <button className="daj-share-catalog-btn" onClick={() => shareSelectedImages()}>Share Selected</button>
-                <button className="daj-share-catalog-btn" onClick={() => print_selected()}>Print Selected</button>
-            </div> */}
-            <div className="daj-product-list-body">
-                {products.length > 0 && products.map((p, index) => {
-                    let idx = selection.findIndex((data) => data?.id == p?.id);
-                    return (
-                        <div className="daj-catalog-product-outer" onClick={() => handleSelect(p)} key={index}>
-                            <input type="checkbox" className='daj-catalog-select' checked={(idx > -1)} value={p.image} readOnly />
-                            <div className="daj-catalog-product-image">
-                                <img className="daj-product-img" src={p.image} draggable />
-                            </div>
-                            <div className="daj-catalog-product-data">
-                                <span className="daj-catalog-product-info">SKU : {p.sku}</span>
-                                <span className="daj-catalog-product-info">SP : {p.code}</span>
-                                {p.category_id == 6 ?
-                                    <span className="daj-catalog-product-info">Size : {p.size}</span>
-                                    :
-                                    <span className="daj-catalog-product-info">Design No : {p.design_no}</span>
-                                }
-                                <span className="daj-catalog-product-info">Box : {p.box_name}</span>
-                            </div>
-                        </div>
-                    );
-                })}
-                {loading &&
-                    <div className="daj-product-not-found">
-                        Loading .....
-                    </div>
-                }
+    const categoryOptions = [
+        { value: "", label: "All Category" },
+        ...categories.map((item) => ({
+            value: item.id,
+            label: item.name,
+        })),
+    ];
 
-                {products.length === 0 && !loading &&
-                    <div className="daj-product-not-found">
-                        No products found.
-                    </div>
-                }
+    const colorOptions = [
+        { value: "", label: "All Colors" },
+        ...colors.map((item) => ({
+            value: item.id,
+            label: item.name,
+        })),
+    ];
+
+    const sizeOptions = [
+        { value: "", label: "All Size" },
+        ...size.map((item) => ({
+            value: item.id,
+            label: item.size,
+        })),
+    ];
+    const selectStyles = {
+        control: (base, state) => ({
+            ...base,
+            minHeight: 42,
+            borderRadius: 8,
+            borderColor: state.isFocused
+                ? "var(--primary-color)"
+                : "var(--border-color)",
+            boxShadow: "none",
+            "&:hover": {
+                borderColor: "var(--primary-color)",
+            },
+            cursor: "pointer"
+        }),
+
+        menu: (base) => ({
+            ...base,
+            borderRadius: 8,
+            overflow: "hidden",
+            zIndex: 9999,
+        }),
+
+        menuPortal: (base) => ({
+            ...base,
+            zIndex: 9999,
+        }),
+
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isSelected
+                ? "var(--primary-color)"
+                : state.isFocused
+                    ? "var(--primary-light-color)"
+                    : "white",
+            color: state.isSelected ? "#fff" : "black",
+            cursor: "pointer",
+        }),
+    };
+    return (
+        <div className="catalog-page">
+
+            {/* Top Toolbar */}
+            <div className="catalog-toolbar">
+
+                <div className="catalog-actions">
+                    <button
+                        onClick={shareSelectedImages}
+                        className="catalog-btn"
+                    >
+                        Share Selected
+                    </button>
+
+                    <button
+                        onClick={print_selected}
+                        className="catalog-btn"
+                    >
+                        Print Selected
+                    </button>
+                </div>
+
+                <div className="catalog-pagination">
+
+                    <span className="text-base">Page</span>
+
+                    <input
+                        type="number"
+                        min={1}
+                        max={total_page}
+                        value={pagination_val}
+                        onChange={(e) => setpagination_val(e.target.value)}
+                        className="catalog-pagination-input"
+                    />
+
+                    <span>/ {total_page}</span>
+
+                    <button
+                        onClick={() => {
+                            scrollToTop();
+                            fetchProducts(pagination_val);
+                        }}
+                        className="catalog-go-btn"
+                    >
+                        Go
+                    </button>
+
+                </div>
+
             </div>
+
+            {/* Header */}
+            <div className="catalog-header">
+
+                <h2 className="catalog-title">
+                    Products
+                </h2>
+
+                <div className="catalog-filter-row">
+
+                    {/* Search */}
+                    <div className="catalog-search">
+
+                        <input
+                            type="search"
+                            value={search_val}
+                            placeholder="Search Products..."
+                            onKeyDown={handleKeyDown}
+                            onChange={(e) => setsearch_val(e.target.value)}
+                            className="catalog-search-input"
+                        />
+
+                        <button
+                            onClick={() => setsearch_btn(!search_btn)}
+                            className="catalog-search-btn"
+                        >
+                            <FiSearch size={22} />
+                        </button>
+
+                    </div>
+
+                    <Select
+                        options={categoryOptions}
+                        value={
+                            categoryOptions.find(
+                                (option) => option.value == category_filter
+                            ) || categoryOptions[0]
+                        }
+                        onChange={(option) => setcategory_filter(option.value)}
+                        styles={selectStyles}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                        isSearchable
+                        className="catalog-select"
+                    />
+
+                    <Select
+                        options={colorOptions}
+                        value={
+                            colorOptions.find(
+                                (option) => option.value == color_filter
+                            ) || colorOptions[0]
+                        }
+                        onChange={(option) => setcolor_filter(option.value)}
+                        styles={selectStyles}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                        isSearchable
+                        className="catalog-select"
+                    />
+
+                    <Select
+                        options={sizeOptions}
+                        value={
+                            sizeOptions.find(
+                                (option) => option.value == size_filter
+                            ) || sizeOptions[0]
+                        }
+                        onChange={(option) => setsize_filter(option.value)}
+                        styles={selectStyles}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                        isSearchable
+                        className="catalog-select"
+                    />
+
+                    <button
+                        onClick={select_all_product}
+                        className="catalog-btn"
+                    >
+                        {select_all ? "UnSelect All" : "Select All"}
+                    </button>
+
+                </div>
+
+            </div>
+
+            {/* Product Grid */}
+            <div className="catalog-grid">
+
+                {products.length > 0 &&
+                    products.map((p) => {
+
+                        const idx = selection.findIndex(
+                            (data) => data?.id === p?.id
+                        );
+
+                        return (
+
+                            <div
+                                key={p.id}
+                                onClick={() => handleSelect(p)}
+                                className="catalog-card"
+                            >
+
+                                <input
+                                    type="checkbox"
+                                    checked={idx > -1}
+                                    value={p.image}
+                                    readOnly
+                                    className="catalog-checkbox"
+                                />
+
+                                <div className="catalog-image-wrapper">
+
+                                    <img
+                                        src={p.image}
+                                        draggable
+                                        alt={p.sku}
+                                        className="catalog-image"
+                                    />
+
+                                </div>
+
+                                <div className="catalog-info">
+
+                                    <p>
+                                        <span className="catalog-label">
+                                            SKU :
+                                        </span>{" "}
+                                        {p.sku}
+                                    </p>
+
+                                    <p>
+                                        <span className="catalog-label">
+                                            SP :
+                                        </span>{" "}
+                                        {p.code}
+                                    </p>
+
+                                    {p.category_id == 6 ? (
+                                        <p>
+                                            <span className="catalog-label">
+                                                Size :
+                                            </span>{" "}
+                                            {p.size}
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            <span className="catalog-label">
+                                                Design :
+                                            </span>{" "}
+                                            {p.design_no}
+                                        </p>
+                                    )}
+
+                                    <p>
+                                        <span className="catalog-label">
+                                            Box :
+                                        </span>{" "}
+                                        {p.box_name}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        );
+                    })}
+
+                {loading && (
+                    <div className="catalog-empty">
+                        <FaSpinner className="catalog-spinner" />
+                    </div>
+                )}
+
+                {!loading && products.length === 0 && (
+                    <div className="catalog-empty">
+
+                        <img
+                            src={noDataImg}
+                            alt="No Data Found"
+                            className="catalog-no-data-img"
+                        />
+
+                        <h3 className="catalog-no-data-title">
+                            No Products Found
+                        </h3>
+
+                        {/* <p className="catalog-no-data-text">
+                            Try changing your search or filters.
+                        </p> */}
+
+                    </div>
+                )}
+
+            </div>
+
         </div>
     );
 }
