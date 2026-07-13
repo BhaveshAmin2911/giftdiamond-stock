@@ -55,14 +55,14 @@ function MainLayout() {
     }
 
     return (
-        <div className="main-layout">
+        <div className="daj-main-layout">
 
-            <header className="main-header">
+            <header className="daj-main-header">
 
-                <div className="main-header-container">
+                <div className="daj-main-header-container">
 
                     {/* Desktop Menu */}
-                    <div className="desktop-menu">
+                    <div className="daj-desktop-menu">
 
                         {menu_array.map((route, idx) => {
 
@@ -74,8 +74,8 @@ function MainLayout() {
                                         <Link
                                             key={idx}
                                             to={route.path}
-                                            className={`menu-link ${location.pathname === route.path
-                                                ? "menu-link-active"
+                                            className={`daj-menu-link ${location.pathname === route.path
+                                                ? "daj-menu-link-active"
                                                 : ""
                                                 }`}
                                         >
@@ -93,30 +93,30 @@ function MainLayout() {
 
                     {/* Mobile Menu */}
 
-                    <div className="mobile-menu">
+                    <div className="daj-mobile-menu">
 
                         <button
-                            className="mobile-menu-btn"
+                            className="daj-mobile-menu-btn"
                             onClick={() => setmenu_open(!menu_open)}
                         >
                             {/* <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="28"
-                                height="22"
-                                fill="none"
-                            >
-                                <path
-                                    d="M0 2h28M0 11h28M0 20h28"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                />
-                            </svg> */}
-                            <FaAlignJustify className="mobile-menu-icon" />
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="28"
+                            height="22"
+                            fill="none"
+                        >
+                            <path
+                                d="M0 2h28M0 11h28M0 20h28"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            />
+                        </svg> */}
+                            <FaAlignJustify className="daj-mobile-menu-icon" />
                         </button>
 
                         {menu_open && (
 
-                            <div className="mobile-dropdown">
+                            <div className="daj-mobile-dropdown">
 
                                 {menu_array.map((route, idx) => {
 
@@ -129,8 +129,8 @@ function MainLayout() {
                                                     key={idx}
                                                     to={route.path}
                                                     onClick={() => setmenu_open(false)}
-                                                    className={`mobile-link ${location.pathname === route.path
-                                                        ? "mobile-link-active"
+                                                    className={`daj-mobile-link ${location.pathname === route.path
+                                                        ? "daj-mobile-link-active"
                                                         : ""
                                                         }`}
                                                 >
@@ -152,21 +152,20 @@ function MainLayout() {
 
                     {/* User */}
 
-                    <div className="user-section">
+                    <div className="daj-user-section">
 
                         <div
                             data-tooltip-id="user-tooltip"
                             data-tooltip-content={userData?.user?.name}
-                            className="user-avatar"
-
+                            className="daj-user-avatar"
                         >
 
-                            <FaUser className="user-icon" />
+                            <FaUser className="daj-user-icon" />
 
                         </div>
 
                         <button
-                            className="logout-btn"
+                            className="daj-logout-btn"
                             onClick={() => {
                                 localStorage.clear();
                                 window.location.href = "/";
@@ -179,21 +178,18 @@ function MainLayout() {
 
                 </div>
 
-            </header >
+            </header>
 
-            <main className="main-body">
+            <main className="daj-main-body">
                 <Outlet />
             </main>
-
 
             <Tooltip
                 id="user-tooltip"
                 place={tooltipPlace}
-                className="user-tooltip"
+                className="daj-user-tooltip"
             />
-        </div >
-
-
+        </div>
     );
 }
 

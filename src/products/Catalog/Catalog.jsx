@@ -245,28 +245,28 @@ const Catalog = () => {
         }),
     };
     return (
-        <div className="catalog-page">
+        <div className="daj-catalog-page">
 
             {/* Top Toolbar */}
-            <div className="catalog-toolbar">
+            <div className="daj-catalog-toolbar">
 
-                <div className="catalog-actions">
+                <div className="daj-catalog-actions">
                     <button
                         onClick={shareSelectedImages}
-                        className="catalog-btn"
+                        className="daj-catalog-btn"
                     >
                         Share Selected
                     </button>
 
                     <button
                         onClick={print_selected}
-                        className="catalog-btn"
+                        className="daj-catalog-btn"
                     >
                         Print Selected
                     </button>
                 </div>
 
-                <div className="catalog-pagination">
+                <div className="daj-catalog-pagination">
 
                     <span className="text-base">Page</span>
 
@@ -276,7 +276,7 @@ const Catalog = () => {
                         max={total_page}
                         value={pagination_val}
                         onChange={(e) => setpagination_val(e.target.value)}
-                        className="catalog-pagination-input"
+                        className="daj-catalog-pagination-input"
                     />
 
                     <span>/ {total_page}</span>
@@ -286,7 +286,7 @@ const Catalog = () => {
                             scrollToTop();
                             fetchProducts(pagination_val);
                         }}
-                        className="catalog-go-btn"
+                        className="daj-catalog-go-btn"
                     >
                         Go
                     </button>
@@ -296,16 +296,16 @@ const Catalog = () => {
             </div>
 
             {/* Header */}
-            <div className="catalog-header">
+            <div className="daj-catalog-header">
 
-                <h2 className="catalog-title">
+                <h2 className="daj-catalog-title">
                     Products
                 </h2>
 
-                <div className="catalog-filter-row">
+                <div className="daj-catalog-filter-row">
 
                     {/* Search */}
-                    <div className="catalog-search">
+                    <div className="daj-catalog-search">
 
                         <input
                             type="search"
@@ -313,12 +313,12 @@ const Catalog = () => {
                             placeholder="Search Products..."
                             onKeyDown={handleKeyDown}
                             onChange={(e) => setsearch_val(e.target.value)}
-                            className="catalog-search-input"
+                            className="daj-catalog-search-input"
                         />
 
                         <button
                             onClick={() => setsearch_btn(!search_btn)}
-                            className="catalog-search-btn"
+                            className="daj-catalog-search-btn"
                         >
                             <FiSearch size={22} />
                         </button>
@@ -337,7 +337,7 @@ const Catalog = () => {
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="catalog-select"
+                        className="daj-catalog-select"
                     />
 
                     <Select
@@ -352,7 +352,7 @@ const Catalog = () => {
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="catalog-select"
+                        className="daj-catalog-select"
                     />
 
                     <Select
@@ -367,12 +367,12 @@ const Catalog = () => {
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="catalog-select"
+                        className="daj-catalog-select"
                     />
 
                     <button
                         onClick={select_all_product}
-                        className="catalog-btn"
+                        className="daj-catalog-btn"
                     >
                         {select_all ? "UnSelect All" : "Select All"}
                     </button>
@@ -382,7 +382,7 @@ const Catalog = () => {
             </div>
 
             {/* Product Grid */}
-            <div className="catalog-grid">
+            <div className="daj-catalog-grid">
 
                 {products.length > 0 &&
                     products.map((p) => {
@@ -396,7 +396,7 @@ const Catalog = () => {
                             <div
                                 key={p.id}
                                 onClick={() => handleSelect(p)}
-                                className="catalog-card"
+                                className="daj-catalog-card"
                             >
 
                                 <input
@@ -404,31 +404,31 @@ const Catalog = () => {
                                     checked={idx > -1}
                                     value={p.image}
                                     readOnly
-                                    className="catalog-checkbox"
+                                    className="daj-catalog-checkbox"
                                 />
 
-                                <div className="catalog-image-wrapper">
+                                <div className="daj-catalog-image-wrapper">
 
                                     <img
                                         src={p.image}
                                         draggable
                                         alt={p.sku}
-                                        className="catalog-image"
+                                        className="daj-catalog-image"
                                     />
 
                                 </div>
 
-                                <div className="catalog-info">
+                                <div className="daj-catalog-info">
 
                                     <p>
-                                        <span className="catalog-label">
+                                        <span className="daj-catalog-label">
                                             SKU :
                                         </span>{" "}
                                         {p.sku}
                                     </p>
 
                                     <p>
-                                        <span className="catalog-label">
+                                        <span className="daj-catalog-label">
                                             SP :
                                         </span>{" "}
                                         {p.code}
@@ -436,14 +436,14 @@ const Catalog = () => {
 
                                     {p.category_id == 6 ? (
                                         <p>
-                                            <span className="catalog-label">
+                                            <span className="daj-catalog-label">
                                                 Size :
                                             </span>{" "}
                                             {p.size}
                                         </p>
                                     ) : (
                                         <p>
-                                            <span className="catalog-label">
+                                            <span className="daj-catalog-label">
                                                 Design :
                                             </span>{" "}
                                             {p.design_no}
@@ -451,7 +451,7 @@ const Catalog = () => {
                                     )}
 
                                     <p>
-                                        <span className="catalog-label">
+                                        <span className="daj-catalog-label">
                                             Box :
                                         </span>{" "}
                                         {p.box_name}
@@ -465,27 +465,27 @@ const Catalog = () => {
                     })}
 
                 {loading && (
-                    <div className="catalog-empty">
-                        <FaSpinner className="catalog-spinner" />
+                    <div className="daj-catalog-empty">
+                        <FaSpinner className="daj-catalog-spinner" />
                     </div>
                 )}
 
                 {!loading && products.length === 0 && (
-                    <div className="catalog-empty">
+                    <div className="daj-catalog-empty">
 
                         <img
                             src={noDataImg}
                             alt="No Data Found"
-                            className="catalog-no-data-img"
+                            className="daj-catalog-no-data-img"
                         />
 
-                        <h3 className="catalog-no-data-title">
+                        <h3 className="daj-catalog-no-data-title">
                             No Products Found
                         </h3>
 
-                        {/* <p className="catalog-no-data-text">
-                            Try changing your search or filters.
-                        </p> */}
+                        {/* <p className="daj-catalog-no-data-text">
+                        Try changing your search or filters.
+                    </p> */}
 
                     </div>
                 )}
