@@ -1,4 +1,11 @@
 .daj-select-print-box {
+
+    input,
+    select {
+        border: 1px solid;
+        border-radius: 4px;
+    }
+
     .daj-product-select-box {
         display: flex;
         flex-direction: column;

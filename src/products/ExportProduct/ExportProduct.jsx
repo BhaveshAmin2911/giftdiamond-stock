@@ -297,7 +297,7 @@ const ExportProduct = () => {
 
                                     return (
                                         <tr className="border-t" key={index}>
-                                            <td className="p-3">{p.sku + '-' + p.production_run}</td>
+                                            <td className="p-3">{p.sku}</td>
                                             <td className="daj-table-img-shell">
                                                 <img className="daj-product-img" src={p.image} />
                                             </td>

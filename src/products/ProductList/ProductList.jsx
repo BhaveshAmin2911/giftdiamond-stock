@@ -479,7 +479,7 @@ function ProductList() {
                                 Add Product
                             </Link>
 
-                            <button
+                            {/* <button
                                 className={`daj-select-print-btn ${print_opt
                                     ? "daj-select-print-btn-active"
                                     : ""
@@ -496,7 +496,7 @@ function ProductList() {
                                 onClick={print_selected}
                             >
                                 Print List
-                            </button>
+                            </button> */}
 
                             {
                                 print_opt && (
