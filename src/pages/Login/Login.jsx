@@ -95,31 +95,32 @@ function Login() {
     };
 
     return (
-        <div className="login-page">
+        <div className="daj-login-page">
 
-            <div className="login-bg-card"></div>
+            <div className="daj-login-bg-card"></div>
 
             <form
                 onSubmit={handleSubmit}
-                className="login-card">
+                className="daj-login-card"
+            >
 
-                <div className="login-logo">
-                    <div className="logo-circle">
+                <div className="daj-login-logo">
+                    <div className="daj-logo-circle">
                         <img
                             src={giftdiamond}
                             alt="Gift Diamond"
-                            className="logo-img"
+                            className="daj-logo-img"
                         />
                     </div>
                 </div>
 
-                <div className="input-group">
-                    <FaEnvelope className="input-icon" />
+                <div className="daj-input-group">
+                    <FaEnvelope className="daj-input-icon" />
 
                     <input
                         type="text"
                         placeholder="Email ID"
-                        className="login-input"
+                        className="daj-login-input"
                         onChange={(e) =>
                             setForm({
                                 ...form,
@@ -129,13 +130,13 @@ function Login() {
                     />
                 </div>
 
-                <div className="input-group">
-                    <FaLock className="input-icon" />
+                <div className="daj-input-group">
+                    <FaLock className="daj-input-icon" />
 
                     <input
                         type="password"
                         placeholder="Password"
-                        className="login-input"
+                        className="daj-login-input"
                         onChange={(e) =>
                             setForm({
                                 ...form,
@@ -145,11 +146,11 @@ function Login() {
                     />
                 </div>
 
-                <div className="remember-box">
-                    <label className="remember-label">
+                <div className="daj-remember-box">
+                    <label className="daj-remember-label">
                         <input
                             type="checkbox"
-                            className="remember-checkbox"
+                            className="daj-remember-checkbox"
                             onChange={(e) =>
                                 setForm({
                                     ...form,
@@ -163,7 +164,7 @@ function Login() {
 
                 <button
                     type="submit"
-                    className="login-btn"
+                    className="daj-login-btn"
                     disabled={loading}
                 >
                     {loading ? "Loading..." : "LOGIN"}
