@@ -1,0 +1,29 @@
+@reference "../../index.css";
+
+.daj-register-page {
+    @apply flex items-center justify-center min-h-[85vh] w-full bg-white px-4;
+}
+
+.daj-register-form {
+    @apply w-full max-w-md rounded-xl border border-border bg-white p-8 shadow-lg;
+}
+
+.daj-register-title {
+    @apply mb-6 text-center font-title text-3xl font-semibold text-primary;
+}
+
+.daj-register-body {
+    @apply flex flex-col gap-4;
+}
+
+.daj-register-input {
+    @apply h-12 w-full rounded-lg border border-border bg-white px-4 font-default text-text outline-none transition-all duration-200;
+}
+
+.daj-register-input:focus {
+    @apply border-primary ring-2 ring-primary-light;
+}
+
+.daj-register-react-select {
+    @apply w-full;
+}

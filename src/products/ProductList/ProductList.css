@@ -1,40 +1,13 @@
 @reference "../../index.css";
 
-.daj-product-list-content {
-    @apply w-full rounded-xl bg-white pb-6 font-default;
-}
-
-.daj-product-list-header {
-    @apply flex flex-col gap-6 rounded-xl border-2 border-primary p-4 bg-white shadow-sm;
-}
 
 .daj-product-list-header-txt {
     @apply font-title text-2xl font-semibold text-primary font-title;
 }
 
-/* Filters */
-
 .daj-product-filter-row {
     @apply flex flex-wrap items-center gap-4;
 }
-
-.daj-search-input {
-    @apply flex overflow-hidden rounded-xl border border-border bg-white;
-}
-
-.daj-product-search-inp {
-    @apply h-11 w-64 border-none px-4 text-text outline-none placeholder:text-text-light;
-}
-
-.daj-search-icon-btn {
-    @apply flex h-11 w-12 items-center justify-center border-l border-border bg-primary text-white transition-all duration-300;
-}
-
-.daj-react-select {
-    @apply min-w-60;
-}
-
-/* Buttons */
 
 .daj-product-action-row {
     @apply flex flex-wrap sm:ml-auto gap-4 w-auto;
@@ -44,39 +17,10 @@
     @apply !justify-center !rounded-lg !border !border-primary !bg-white !px-6 !py-3 !text-primary !transition-all !duration-300 hover:bg-primary hover:text-white !cursor-pointer !font-title font-bold;
 }
 
-.daj-select-print-btn {
-    @apply rounded-lg border border-primary bg-white px-6 py-3 text-primary transition-all duration-300 font-title hover:bg-primary hover:text-white cursor-pointer font-bold;
-}
-
-.daj-select-print-btn-active {
-    @apply bg-primary text-white;
-}
-
-.daj-print-btn {
-    @apply rounded-lg border border-primary bg-white px-6 py-3 text-primary font-title font-bold transition-all duration-300 hover:bg-primary hover:text-white cursor-pointer;
-}
-
 .daj-table-wrapper {
     @apply w-full overflow-x-auto rounded-xl border border-border;
 }
 
-
-.daj-product-img {
-    @apply !size-16 rounded-lg object-cover;
-}
-
 .daj-table-edit-btn {
     @apply flex h-10 w-10 items-center justify-center rounded-lg border border-primary bg-primary-light text-primary transition-all duration-300 hover:bg-primary hover:text-white;
-}
-
-.daj-product-empty {
-    @apply col-span-full flex flex-col items-center justify-center h-60 text-center;
-}
-
-.daj-product-no-data-img {
-    @apply mb-4 w-24;
-}
-
-.daj-product-no-data-title {
-    @apply text-xl font-bold text-primary;
 }

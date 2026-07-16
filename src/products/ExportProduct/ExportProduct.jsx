@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
-import "./ExportProduct.scss"
+import "./ExportProduct.css"
 import { useSelector } from "react-redux";
+import Select from "react-select";
+import { FaSearch } from "react-icons/fa";
+import DataTable from "react-data-table-component";
+import { FaTrash } from "react-icons/fa";
+import { dajDataTableStyles } from "../../Common/dataTableStyles";
+import { dajSelectStyle } from "../../Common/reactSelectStyles";
+import noDataImg from "../../assests/img/no-data-img.svg";
+import { FaSpinner } from "react-icons/fa";
 
 const ExportProduct = () => {
     const [products, setProducts] = useState([]);
@@ -167,183 +175,428 @@ const ExportProduct = () => {
         const res = await api.post("/label/print-list.php", formData);
     }
 
-    return (
-        <div className="daj-product-list-content">
-            <div className="daj-product-list-header">
-                <h2 className="daj-product-list-header-txt">Products</h2>
-                <div className="daj-product-list-header-con">
-                    <div className="daj-product-search-con">
-                        <div className="daj-product-search-bar">
-                            <input className="daj-product-search-inp" type="search" onKeyDown={(e) => handleKeyDown(e)} value={search_val} placeholder="Search bar" onChange={(e) => setsearch_val(e.target.value)} />
-                            <span className="daj-product-search-btn" onClick={() => { setsearch_btn(!search_btn) }}>{'>'}</span>
-                        </div>
-                        {categories?.length > 0 &&
-                            <select className="daj-karigar-search" value={category_filter} onChange={(e) => setcategory_filter(e.target.value)}>
-                                <option value={''}>All Category</option>
-                                {categories.map((k_data, index) => {
-                                    return (
-                                        <option value={k_data.id} key={index}>{k_data.name}</option>
-                                    );
-                                })}
-                            </select>
+
+
+    const displayValue = (value) => {
+        if (value === null || value === undefined || value === "") {
+            return "-";
+        }
+        return value;
+    };
+    const columns = [
+        {
+            name: "Select",
+            width: "90px",
+            cell: (row) => {
+                const idx = selection.findIndex(
+                    (item) => item.id === row.id
+                );
+
+                return (
+                    <label className="daj-checkbox">
+                        <input
+                            type="checkbox"
+                            checked={idx > -1}
+                            onChange={() => handleSelect(row)}
+                        />
+                        <span className="daj-checkbox-mark"></span>
+                    </label>
+                );
+            },
+            center: true,
+        },
+        {
+            name: "SKU",
+            selector: (row) => displayValue(row.sku),
+            sortable: true,
+            center: true,
+            minWidth: "150px",
+        },
+        {
+            name: "Image",
+            minWidth: "200px",
+            cell: (row) => (
+                <div className="daj-table-img-shell">
+                    <img
+                        src={row.image}
+                        alt={row.sku}
+                        className="daj-table-img"
+                    />
+                </div>
+            ),
+
+            center: true,
+        },
+        {
+            name: "Code",
+            selector: (row) => displayValue(row.code),
+            sortable: true,
+            center: true,
+        },
+        {
+            name: "Color",
+            cell: (row) => {
+                const clr = colors.find(
+                    (item) => item.id == row.color_id
+                );
+
+                return clr ? clr.name : "-";
+            },
+            center: true,
+        },
+        {
+            name: "Polish",
+            cell: (row) => {
+                const pol = polish_array.find(
+                    (item) => item.id == row.polish_id
+                );
+
+                return pol ? pol.name : "White";
+            },
+            center: true,
+        },
+        {
+            name: "Updated",
+            selector: (row) => displayValue(formatDateTime(row.updated_at)),
+            sortable: true,
+            minWidth: "200px",
+            center: true,
+        },
+        {
+            name: "Note",
+            grow: 2,
+            cell: (row) => displayValue(`${row.note ?? ""}${row.size ?? ""}`.trim()),
+            center: true,
+        },
+        {
+            name: "Quantity",
+            width: "180px",
+            center: true,
+            cell: (row) => (
+                <div className="flex items-center gap-2">
+
+                    <input
+                        className="w-20 rounded-lg border border-border px-2 py-1 text-center outline-none focus:border-primary"
+                        type="number"
+                        min={1}
+                        max={row.ready_quantity}
+                        value={row.r_quantity ? row.r_quantity : 1}
+                        onChange={(e) =>
+                            handle_quantity(
+                                row.id,
+                                e.target.value
+                            )
                         }
-                    </div>
+                        onBlur={() =>
+                            update_selection(row.id)
+                        }
+                    />
+
+                    <span>
+                        / {row.ready_quantity}
+                    </span>
+
                 </div>
-                <div className="daj-produt-switcher">
-                    <div className="daj-produt-switcher-inner">
-                        <button className={`daj-produt-switcher-btns ${product_filter == 'normal' ? 'daj-active-switcher' : ''}`} onClick={() => { setproduct_filter('normal') }}> All products </button>
-                        <button className={`daj-produt-switcher-btns ${product_filter == 'selected' ? 'daj-active-switcher' : ''}`} onClick={() => { setproduct_filter('selected') }}> View Selection </button>
-                    </div>
+            ),
+        },
+    ];
+    const selectedColumns = [
+        {
+            name: "SKU",
+            selector: (row) => `${row.sku}-${row.production_run}`,
+            sortable: true,
+            center: true,
+            minWidth: "150px",
+        },
+        {
+            name: "Image",
+            minWidth: "200px",
+            cell: (row) => (
+                <div className="daj-table-img-shell">
+                    <img
+                        src={row.image}
+                        alt={row.sku}
+                        className="daj-table-img"
+                    />
                 </div>
+            ),
+            center: true,
+        },
+        {
+            name: "Code",
+            selector: (row) => row.code || "-",
+            sortable: true,
+            center: true,
+        },
+        {
+            name: "Color",
+            cell: (row) => {
+                const clr = colors.find(
+                    (item) => item.id == row.color_id
+                );
+
+                return clr ? clr.name : "-";
+            },
+            center: true,
+        },
+        {
+            name: "Polish",
+            cell: (row) => {
+                const pol = polish_array.find(
+                    (item) => item.id == row.polish_id
+                );
+
+                return pol ? pol.name : "White";
+            },
+            center: true,
+        },
+        {
+            name: "Design No",
+            selector: (row) => row.design_no || "-",
+            sortable: true,
+            center: true,
+        },
+        {
+            name: "Quantity",
+            selector: (row) => row.r_quantity || 1,
+            center: true,
+        },
+        {
+            name: "Action",
+            center: true,
+            width: "90px",
+            cell: (row) => (
+                <button
+                    className="daj-export-remove-btn"
+                    onClick={() => handleSelect(row)}
+                    title="Remove"
+                >
+                    <FaTrash size={18} />
+                </button>
+            ),
+        },
+    ];
+
+    return (
+        <div className="daj-custom-container">
+
+            <div className="daj-custom-header">
+
+                <h2 className="daj-custom-header-title">
+                    Export
+                </h2>
+
+                <div className="daj-export-toolbar">
+
+                    {/* Search */}
+
+                    <div className="daj-search-input">
+                        <input
+                            type="search"
+                            className="daj-product-search-inp"
+                            placeholder="Search Export..."
+                            value={search_val}
+                            onChange={(e) => setsearch_val(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                        />
+
+                        <button
+                            type="button"
+                            className="daj-search-icon-btn"
+                            onClick={() => setsearch_btn(!search_btn)}
+                        >
+                            <FaSearch size={18} />
+                        </button>
+                    </div>
+
+                    {/* Category */}
+
+                    {categories?.length > 0 && (
+                        <div className="daj-export-category-select">
+
+                            <Select
+                                className="daj-react-select"
+                                styles={dajSelectStyle}
+                                placeholder="All Category"
+                                options={[
+                                    {
+                                        value: "",
+                                        label: "All Category",
+                                    },
+                                    ...categories.map((item) => ({
+                                        value: item.id,
+                                        label: item.name,
+                                    })),
+                                ]}
+                                value={[
+                                    {
+                                        value: "",
+                                        label: "All Category",
+                                    },
+                                    ...categories.map((item) => ({
+                                        value: item.id,
+                                        label: item.name,
+                                    })),
+                                ].find(
+                                    (item) => item.value == category_filter
+                                )}
+                                onChange={(e) =>
+                                    setcategory_filter(e.value)
+                                }
+                            />
+
+                        </div>
+                    )}
+
+                    {/* Switch Buttons */}
+
+                    <div className="daj-export-switcher">
+
+                        <div className="daj-export-switcher-inner">
+
+                            <button
+                                className={`daj-export-switcher-btn ${product_filter === "normal"
+                                    ? "daj-export-active-switcher"
+                                    : ""
+                                    }`}
+                                onClick={() =>
+                                    setproduct_filter("normal")
+                                }
+                            >
+                                All Products
+                            </button>
+
+                            <button
+                                className={`daj-export-switcher-btn ${product_filter === "selected"
+                                    ? "daj-export-active-switcher"
+                                    : ""
+                                    }`}
+                                onClick={() =>
+                                    setproduct_filter("selected")
+                                }
+                            >
+                                View Selection
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
             <div className="daj-product-list-body">
-                {product_filter == 'normal' &&
-                    <table className="daj-product-table">
-                        <thead className="daj-product-table-head">
-                            <tr>
-                                <th className="p-3">Select</th>
-                                <th className="p-3">SKU</th>
-                                <th className="p-3">Image</th>
-                                <th className="p-3">Code</th>
-                                <th className="p-3">Color</th>
-                                <th className="p-3">Polish</th>
-                                <th className="p-3">Update</th>
-                                <th className="p-3">Note</th>
-                                <th className="p-3">Quantity</th>
-                                {/* <th className="p-3">Action</th> */}
-                            </tr>
-                        </thead>
-                        <tbody className="daj-product-table-body">
-                            {products.length > 0 && products.map((p, index) => {
-                                var idx = selection.findIndex((data) => data?.id == p?.id);
-                                var color = '-';
-                                var polish = '-';
+                {product_filter === "normal" && (
+                    <div className="daj-export-table-wrapper">
+                        <DataTable
+                            columns={columns}
+                            data={products}
+                            customStyles={dajDataTableStyles}
+                            responsive
+                            highlightOnHover
+                            striped
+                            pagination
+                            persistTableHead
+                            noDataComponent={
+                                <div className="daj-product-empty">
 
-                                let clr_idx = colors.findIndex((kg) => kg.id == p.color_id);
-                                if (clr_idx > -1) {
-                                    color = colors[clr_idx]?.name;
-                                }
+                                    <img
+                                        src={noDataImg}
+                                        alt="No Data Found"
+                                        className="daj-product-no-data-img"
+                                    />
 
-                                let pls_idx = polish_array.findIndex((kg) => kg.id == p.polish_id);
-                                if (pls_idx > -1) {
-                                    polish = polish_array[pls_idx]?.name;
-                                } else {
-                                    polish = "White";
-                                }
+                                    <h3 className="daj-product-no-data-title">
+                                        No Products Found
+                                    </h3>
 
-                                return (
-                                    <tr className="border-t" key={index}>
-                                        <td className="p-3" style={{ cursor: 'pointer' }} onClick={() => handleSelect(p)}>
-                                            <input type="checkbox" checked={(idx > -1)} readOnly />
-                                        </td>
-                                        <td className="p-3">{p.sku}</td>
-                                        <td className="daj-table-img-shell">
-                                            <img className="daj-product-img" src={p.image} />
-                                        </td>
-                                        <td className="p-3">{p.code}</td>
-                                        <td className="p-3">{color}</td>
-                                        <td className="p-3">{polish}</td>
-                                        <td className="p-3">{formatDateTime(p.updated_at)}</td>
-                                        <td className="p-3">{(p?.note ? p.note : '') + (p?.size ? p.size : '')}</td>
-                                        <td className="p-3">
-                                            <input type="number" max={p?.ready_quantity} min={1} value={p?.r_quantity ? p?.r_quantity : 1} onChange={(e) => { handle_quantity(p?.id, e.target.value) }} onBlur={() => { update_selection(p?.id) }} />
-                                            <span>{' / ' + (p?.ready_quantity)}</span>
-                                        </td>
-                                        {/* <td className="p-3">
-                                            <div className="daj-table-action-shell">
-                                                <Link to={`/products/view/${p.id}`} className="daj-table-action" > View </Link>
-                                            </div>
-                                        </td> */}
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-                }
-                {product_filter == 'selected' &&
+
+                                </div>
+                            }
+                            progressPending={loading}
+                            progressComponent={
+                                <div className="daj-product-empty">
+                                    <FaSpinner className="daj-spinner" />
+                                </div>
+                            }
+                        />
+                    </div>
+                )}
+                {product_filter === "selected" && (
                     <>
-                        <table className="daj-product-table">
-                            <thead className="daj-product-table-head">
-                                <tr>
-                                    <th className="p-3">SKU</th>
-                                    <th className="p-3">Image</th>
-                                    <th className="p-3">Code</th>
-                                    <th className="p-3">Color</th>
-                                    <th className="p-3">Polish</th>
-                                    <th className="p-3">Design_no</th>
-                                    <th className="p-3">Quantity</th>
-                                    {/* <th className="p-3">Customer Name</th> */}
-                                    <th className="p-3">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody className="daj-product-table-body">
-                                {selection.length > 0 && selection.map((p, index) => {
+                        <div className="daj-export-table-wrapper">
+                            <DataTable
+                                columns={selectedColumns}
+                                data={selection}
+                                customStyles={dajDataTableStyles}
+                                responsive
+                                highlightOnHover
+                                striped
+                                pagination
+                                persistTableHead
+                                noDataComponent={
+                                    <div className="daj-product-empty">
 
-                                    var color = '-';
-                                    var polish = '-';
+                                        <img
+                                            src={noDataImg}
+                                            alt="No Data Found"
+                                            className="daj-product-no-data-img"
+                                        />
 
-                                    let clr_idx = colors.findIndex((kg) => kg.id == p.color_id);
-                                    if (clr_idx > -1) {
-                                        color = colors[clr_idx]?.name;
-                                    }
+                                        <h3 className="daj-product-no-data-title">
+                                            No Products Found
+                                        </h3>
 
-                                    let pls_idx = polish_array.findIndex((kg) => kg.id == p.polish_id);
-                                    if (pls_idx > -1) {
-                                        polish = polish_array[pls_idx]?.name;
-                                    } else {
-                                        polish = "White";
-                                    }
 
-                                    return (
-                                        <tr className="border-t" key={index}>
-                                            <td className="p-3">{p.sku}</td>
-                                            <td className="daj-table-img-shell">
-                                                <img className="daj-product-img" src={p.image} />
-                                            </td>
-                                            <td className="p-3">{p?.code}</td>
-                                            <td className="p-3">{color}</td>
-                                            <td className="p-3">{polish}</td>
-                                            <td className="p-3">{p?.design_no}</td>
-                                            <td className="p-3">{(p?.r_quantity ? p.r_quantity : 1)}</td>
-                                            {/* <td className="p-3">
-                                                <div className="daj-table-action-shell">
-                                                    <Link to={`/products/view/${p.id}`} className="daj-table-action" > View </Link>
-                                                </div>
-                                            </td> */}
-                                            <td className="p-3">
-                                                <div className="daj-table-action-shell">
-                                                    <button className="daj-table-action" onClick={() => handleSelect(p)}> Remove </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
+                                    </div>
+                                }
+                            />
+                        </div>
 
-                        {selection.length > 0 &&
+
+                        {selection.length > 0 && (
                             <div className="daj-print-sell-export">
-                                <button className="daj-print-export" onClick={() => { submit_selection() }}> Print </button>
-                                <button className="daj-print-export" onClick={() => { print_label() }}> Label Print </button>
-                                <button className="daj-sell-export" onClick={() => { Sell_data() }}> Sell </button>
+                                <button
+                                    className="daj-btn-primary"
+                                    onClick={() => { submit_selection() }}
+                                >
+                                    Print
+                                </button>
+
+                                <button
+                                    className="daj-btn-primary "
+                                    onClick={() => { print_label() }}
+                                >
+                                    Label Print
+                                </button>
+
+                                <button
+                                    className="daj-btn-primary "
+                                    onClick={() => { Sell_data() }}
+                                >
+                                    Sell
+                                </button>
                             </div>
+                        )
                         }
                     </>
-                }
+                )}
 
-                {loading &&
+                {/* {
+                    loading &&
                     <div className="daj-product-not-found">
                         Loading .....
                     </div>
                 }
 
-                {products.length === 0 && !loading &&
+                {
+                    products.length === 0 && !loading &&
                     <div className="daj-product-not-found">
                         No products found.
                     </div>
-                }
-            </div>
+                } */}
+            </div >
         </div >
     );
 }
