@@ -85,7 +85,7 @@ const OrderList = () => {
 
                 return (
                     <button
-                        className="daj-order-view-btn"
+                        className="daj-action-btn-icon"
                         onClick={() =>
                             view_data(
                                 row.product_ids,

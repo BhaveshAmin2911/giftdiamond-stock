@@ -367,7 +367,7 @@ const ExportProduct = () => {
             width: "90px",
             cell: (row) => (
                 <button
-                    className="daj-export-remove-btn"
+                    className="daj-action-btn-icon"
                     onClick={() => handleSelect(row)}
                     title="Remove"
                 >

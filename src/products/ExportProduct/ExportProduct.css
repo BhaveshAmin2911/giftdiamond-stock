@@ -49,14 +49,6 @@
     @apply border-secondary;
 }
 
-.daj-export-remove-btn {
-    @apply flex h-10 w-10 items-center justify-center rounded-lg border border-primary bg-primary-light text-primary transition-all duration-300;
-}
-
-.daj-export-remove-btn:hover {
-    @apply bg-primary text-primary-light shadow-md;
-}
-
 .daj-print-sell-export {
     @apply flex flex-wrap items-center gap-3 mt-4;
 }

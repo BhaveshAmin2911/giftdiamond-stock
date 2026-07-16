@@ -272,7 +272,7 @@ function ProductList() {
                     name: "Action",
                     cell: row => (
                         <Link
-                            className="daj-edit-btn"
+                            className="daj-action-btn-icon"
                             to={`/products/edit/${row.id}`}
                             state={{
                                 category: row.category_id,

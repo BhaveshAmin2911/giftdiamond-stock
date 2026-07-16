@@ -3,19 +3,3 @@
 .daj-order-header {
     @apply flex items-center justify-between;
 }
-
-.daj-order-view-btn {
-    @apply flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white transition-all duration-200 cursor-pointer;
-
-    &:hover {
-        @apply bg-primary-light scale-105 text-primary;
-    }
-
-    &:active {
-        @apply scale-95;
-    }
-
-    svg {
-        @apply text-base;
-    }
-}
