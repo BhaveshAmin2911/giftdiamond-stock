@@ -488,7 +488,7 @@ const ExportProduct = () => {
 
             <div className="daj-product-list-body">
                 {product_filter === "normal" && (
-                    <div className="daj-export-table-wrapper">
+                    <div className="daj-table-wrapper">
                         <DataTable
                             columns={columns}
                             data={products}
@@ -525,7 +525,7 @@ const ExportProduct = () => {
                 )}
                 {product_filter === "selected" && (
                     <>
-                        <div className="daj-export-table-wrapper">
+                        <div className="daj-table-wrapper">
                             <DataTable
                                 columns={selectedColumns}
                                 data={selection}

@@ -46,6 +46,9 @@ body {
 }
 
 /***********************TABLE**************************/
+.daj-table-wrapper {
+    @apply w-full overflow-hidden rounded-xl border border-border bg-white;
+}
 .daj-table-img-shell {
     @apply flex items-center justify-center p-2;
 }

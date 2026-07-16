@@ -17,10 +17,6 @@
     @apply !justify-center !rounded-lg !border !border-primary !bg-white !px-6 !py-3 !text-primary !transition-all !duration-300 hover:bg-primary hover:text-white !cursor-pointer !font-title font-bold;
 }
 
-.daj-table-wrapper {
-    @apply w-full overflow-x-auto rounded-xl border border-border;
-}
-
 .daj-table-edit-btn {
     @apply flex h-10 w-10 items-center justify-center rounded-lg border border-primary bg-primary-light text-primary transition-all duration-300 hover:bg-primary hover:text-white;
 }

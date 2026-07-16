@@ -20,10 +20,6 @@
     @apply bg-primary text-white shadow-sm;
 }
 
-.daj-export-table-wrapper {
-    @apply w-full overflow-hidden rounded-xl border border-border bg-white;
-}
-
 .daj-checkbox {
     @apply relative flex h-5 w-5 cursor-pointer items-center justify-center;
 }
@@ -60,6 +56,7 @@
 .daj-export-remove-btn:hover {
     @apply bg-primary text-primary-light shadow-md;
 }
-.daj-print-sell-export{
-     @apply flex flex-wrap items-center gap-3 mt-4;
+
+.daj-print-sell-export {
+    @apply flex flex-wrap items-center gap-3 mt-4;
 }
