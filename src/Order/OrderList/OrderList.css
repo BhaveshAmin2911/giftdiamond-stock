@@ -1,0 +1,5 @@
+@reference "../../index.css";
+
+.daj-order-header {
+    @apply flex items-center justify-between;
+}

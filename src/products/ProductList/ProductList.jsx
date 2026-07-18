@@ -8,7 +8,8 @@ import { FiSearch } from "react-icons/fi";
 import DataTable from "react-data-table-component";
 import { FaEdit } from "react-icons/fa";
 import noDataImg from "../../assests/img/no-data-img.svg";
-
+import { dajDataTableStyles } from "../../Common/dataTableStyles.js";
+import { dajSelectStyle } from "../../Common/reactSelectStyles";
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -145,49 +146,6 @@ function ProductList() {
             label: item.name
         }))
     ];
-    const dajSelectStyle = {
-        control: (base, state) => ({
-            ...base,
-            minHeight: "44px",
-            borderRadius: "8px",
-            borderColor: state.isFocused
-                ? "var(--primary-color)"
-                : "var(--border-color)",
-            boxShadow: "none",
-            backgroundColor: "var(--white-color)",
-            "&:hover": {
-                borderColor: "var(--primary-color)",
-            },
-        }),
-
-        menu: (base) => ({
-            ...base,
-            zIndex: 9999,
-        }),
-
-        option: (base, state) => ({
-            ...base,
-            backgroundColor: state.isSelected
-                ? "var(--primary-color)"
-                : state.isFocused
-                    ? "var(--primary-light-color)"
-                    : "var(--white-color)",
-            color: state.isSelected
-                ? "var(--white-color)"
-                : "var(--text-color)",
-            cursor: "pointer",
-        }),
-
-        singleValue: (base) => ({
-            ...base,
-            color: "var(--text-color)",
-        }),
-
-        placeholder: (base) => ({
-            ...base,
-            color: "var(--text-light-color)",
-        }),
-    };
 
     //*********************Table*************************** *//
 
@@ -225,21 +183,23 @@ function ProductList() {
         {
             name: "SKU",
             selector: row => displayValue(row.sku),
-            // sortable: true,
+            sortable: true,
             minWidth: "150px",
             center: true,
         },
 
         {
             name: "Image",
+            minWidth: "200px",
             cell: row => (
-                <img
-                    src={row.image}
-                    alt=""
-                    className="daj-product-img"
-                />
+                <div className="daj-table-img-shell">
+                    <img
+                        src={row.image}
+                        alt=""
+                        className="daj-table-img"
+                    />
+                </div>
             ),
-            width: "90px",
             center: true,
         },
 
@@ -255,6 +215,7 @@ function ProductList() {
             selector: row =>
                 colors.find(c => c.id == row.color_id)?.name || "-",
             center: true,
+            minWidth: "150px"
         },
 
         {
@@ -311,7 +272,7 @@ function ProductList() {
                     name: "Action",
                     cell: row => (
                         <Link
-                            className="daj-edit-btn"
+                            className="daj-action-btn-icon"
                             to={`/products/edit/${row.id}`}
                             state={{
                                 category: row.category_id,
@@ -329,46 +290,14 @@ function ProductList() {
             : []),
     ];
 
-    const customStyles = {
 
-        headRow: {
-            style: {
-                backgroundColor: "var(--primary-color)",
-                color: "#fff",
-                fontWeight: 600,
-                minHeight: "56px",
-                fontFamily: "var(--title-font-family)",
-                fontSize: "14px",
-            },
-        },
-
-        rows: {
-            style: {
-                minHeight: "70px",
-            },
-        },
-        cells: {
-            style: {
-                color: "var(--text-color)",
-                fontSize: "14px",
-                display: "flex",
-            },
-        },
-
-        pagination: {
-            style: {
-                borderTop: "1px solid var(--border-color)",
-            },
-        },
-
-    };
 
     return (
-        <div className="daj-product-list-content">
+        <div className="daj-custom-container">
 
-            <div className="daj-product-list-header">
+            <div className="daj-custom-header">
 
-                <h2 className="daj-product-list-header-txt">
+                <h2 className="daj-custom-header-title">
                     Products
                 </h2>
 
@@ -484,6 +413,8 @@ function ProductList() {
                                     ? "daj-select-print-btn-active"
                                     : ""
                                     }`}
+                            <button
+                                className="daj-btn-outline"
                                 onClick={() => {
                                     setprint_opt(!print_opt);
                                     setselect_print([]);
@@ -492,7 +423,7 @@ function ProductList() {
                                 Select for Print
                             </button>
                             <button
-                                className="daj-print-btn"
+                                className="daj-btn-outline"
                                 onClick={print_selected}
                             >
                                 Print List
@@ -501,7 +432,7 @@ function ProductList() {
                             {
                                 print_opt && (
                                     <button
-                                        className="daj-print-btn"
+                                        className="daj-btn-outline"
                                         onClick={print_selected}
                                     >
                                         Print List
@@ -521,9 +452,8 @@ function ProductList() {
                     <DataTable
                         columns={columns}
                         data={products}
-                        customStyles={customStyles}
+                        customStyles={dajDataTableStyles}
                         pagination
-
                         highlightOnHover
                         striped
                         persistTableHead

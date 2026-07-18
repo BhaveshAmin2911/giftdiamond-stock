@@ -164,7 +164,7 @@ function Login() {
 
                 <button
                     type="submit"
-                    className="daj-login-btn"
+                    className="daj-btn daj-btn-primary w-full"
                     disabled={loading}
                 >
                     {loading ? "Loading..." : "LOGIN"}

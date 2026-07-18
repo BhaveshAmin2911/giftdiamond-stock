@@ -1,21 +1,11 @@
 @reference "../../index.css";
 
-/* Page */
-.daj-catalog-page {
-    @apply flex w-full flex-col gap-4 bg-white pb-6 font-default text-text;
-}
-
-/* Toolbar */
 .daj-catalog-toolbar {
     @apply flex flex-col items-center justify-between gap-4 rounded-xl border-primary border-2 border-solid bg-white p-4 shadow-sm md:flex-row;
 }
 
 .daj-catalog-actions {
     @apply flex flex-wrap gap-3;
-}
-
-.daj-catalog-btn {
-    @apply rounded-lg bg-primary px-5 py-2 font-bold text-white transition hover:opacity-90 cursor-pointer;
 }
 
 .daj-catalog-go-btn {
@@ -30,36 +20,8 @@
     @apply w-20 rounded-lg border border-border px-3 py-2 text-center outline-none focus:border-primary;
 }
 
-/* Header */
-
-.daj-catalog-header {
-    @apply flex flex-col gap-5 rounded-xl border-primary border-2 border-solid bg-white p-5 shadow-sm;
-}
-
-.daj-catalog-title {
-    @apply font-title text-2xl font-bold text-primary font-title;
-}
-
 .daj-catalog-filter-row {
     @apply flex flex-wrap items-center gap-4;
-}
-
-/* Search */
-
-.daj-catalog-search {
-    @apply flex min-w-3xs flex-1 overflow-hidden rounded-lg border border-border;
-}
-
-.daj-catalog-search-input {
-    @apply flex-1 bg-transparent px-4 py-2 outline-none;
-}
-
-.daj-catalog-search-btn {
-    @apply flex w-14 items-center justify-center bg-primary text-white transition hover:bg-primary/90;
-}
-
-.daj-catalog-select {
-    @apply min-w-[220px];
 }
 
 .daj-catalog-grid {
@@ -90,24 +52,6 @@
     @apply font-semibold;
 }
 
-/* Empty */
-
-.daj-catalog-spinner {
-    @apply mb-4 text-5xl text-primary animate-spin;
-}
-
 .daj-catalog-empty {
     @apply col-span-full flex flex-col items-center justify-center h-80 text-center;
-}
-
-.daj-catalog-no-data-img {
-    @apply mb-4 w-24;
-}
-
-.daj-catalog-no-data-title {
-    @apply text-xl font-bold text-primary;
-}
-
-.daj-catalog-no-data-text {
-    @apply mt-2 text-sm text-gray-500;
 }

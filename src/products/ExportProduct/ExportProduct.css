@@ -1,0 +1,54 @@
+@reference "../../index.css";
+
+.daj-export-toolbar {
+    @apply flex flex-wrap items-center gap-4;
+}
+
+.daj-export-switcher {
+    @apply flex items-center justify-center ml-auto;
+}
+
+.daj-export-switcher-inner {
+    @apply flex rounded-2xl border border-border bg-primary-light p-1 shadow-sm;
+}
+
+.daj-export-switcher-btn {
+    @apply rounded-xl px-6 py-3 font-default text-base text-primary font-bold duration-300 hover:opacity-90 cursor-pointer;
+}
+
+.daj-export-active-switcher {
+    @apply bg-primary text-white shadow-sm;
+}
+
+.daj-checkbox {
+    @apply relative flex h-5 w-5 cursor-pointer items-center justify-center;
+}
+
+.daj-checkbox input {
+    @apply absolute h-full w-full cursor-pointer opacity-0;
+}
+
+.daj-checkbox-mark {
+    @apply flex h-5 w-5 items-center justify-center rounded-md border-2 border-primary bg-white transition-all duration-200;
+}
+
+.daj-checkbox-mark::after {
+    content: "";
+    @apply hidden h-2.5 w-1.5 rotate-45 border-b-2 border-r-2 border-white;
+}
+
+.daj-checkbox input:checked+.daj-checkbox-mark {
+    @apply bg-primary border-primary;
+}
+
+.daj-checkbox input:checked+.daj-checkbox-mark::after {
+    @apply block;
+}
+
+.daj-checkbox:hover .daj-checkbox-mark {
+    @apply border-secondary;
+}
+
+.daj-print-sell-export {
+    @apply flex flex-wrap items-center gap-3 mt-4;
+}

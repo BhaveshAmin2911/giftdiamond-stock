@@ -6,6 +6,7 @@ import Select from "react-select";
 import { FiSearch } from "react-icons/fi";
 import noDataImg from "../../assests/img/no-data-img.svg";
 import { FaSpinner } from "react-icons/fa";
+import { dajSelectStyle } from "../../Common/reactSelectStyles";
 
 
 const Catalog = () => {
@@ -206,46 +207,9 @@ const Catalog = () => {
             label: item.size,
         })),
     ];
-    const selectStyles = {
-        control: (base, state) => ({
-            ...base,
-            minHeight: 42,
-            borderRadius: 8,
-            borderColor: state.isFocused
-                ? "var(--primary-color)"
-                : "var(--border-color)",
-            boxShadow: "none",
-            "&:hover": {
-                borderColor: "var(--primary-color)",
-            },
-            cursor: "pointer"
-        }),
 
-        menu: (base) => ({
-            ...base,
-            borderRadius: 8,
-            overflow: "hidden",
-            zIndex: 9999,
-        }),
-
-        menuPortal: (base) => ({
-            ...base,
-            zIndex: 9999,
-        }),
-
-        option: (base, state) => ({
-            ...base,
-            backgroundColor: state.isSelected
-                ? "var(--primary-color)"
-                : state.isFocused
-                    ? "var(--primary-light-color)"
-                    : "white",
-            color: state.isSelected ? "#fff" : "black",
-            cursor: "pointer",
-        }),
-    };
     return (
-        <div className="daj-catalog-page">
+        <div className="daj-custom-container">
 
             {/* Top Toolbar */}
             <div className="daj-catalog-toolbar">
@@ -253,14 +217,14 @@ const Catalog = () => {
                 <div className="daj-catalog-actions">
                     <button
                         onClick={shareSelectedImages}
-                        className="daj-catalog-btn"
+                        className="daj-btn-primary"
                     >
                         Share Selected
                     </button>
 
                     <button
                         onClick={print_selected}
-                        className="daj-catalog-btn"
+                        className="daj-btn-primary"
                     >
                         Print Selected
                     </button>
@@ -296,16 +260,16 @@ const Catalog = () => {
             </div>
 
             {/* Header */}
-            <div className="daj-catalog-header">
+            <div className="daj-custom-header">
 
-                <h2 className="daj-catalog-title">
+                <h2 className="daj-custom-header-title">
                     Products
                 </h2>
 
                 <div className="daj-catalog-filter-row">
 
                     {/* Search */}
-                    <div className="daj-catalog-search">
+                    <div className="daj-search-input">
 
                         <input
                             type="search"
@@ -313,12 +277,12 @@ const Catalog = () => {
                             placeholder="Search Products..."
                             onKeyDown={handleKeyDown}
                             onChange={(e) => setsearch_val(e.target.value)}
-                            className="daj-catalog-search-input"
+                            className="daj-product-search-inp"
                         />
 
                         <button
                             onClick={() => setsearch_btn(!search_btn)}
-                            className="daj-catalog-search-btn"
+                            className="daj-search-icon-btn"
                         >
                             <FiSearch size={22} />
                         </button>
@@ -333,11 +297,11 @@ const Catalog = () => {
                             ) || categoryOptions[0]
                         }
                         onChange={(option) => setcategory_filter(option.value)}
-                        styles={selectStyles}
+                        styles={dajSelectStyle}
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="daj-catalog-select"
+                        className="daj-react-select"
                     />
 
                     <Select
@@ -348,11 +312,11 @@ const Catalog = () => {
                             ) || colorOptions[0]
                         }
                         onChange={(option) => setcolor_filter(option.value)}
-                        styles={selectStyles}
+                        styles={dajSelectStyle}
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="daj-catalog-select"
+                        className="daj-react-select"
                     />
 
                     <Select
@@ -363,16 +327,16 @@ const Catalog = () => {
                             ) || sizeOptions[0]
                         }
                         onChange={(option) => setsize_filter(option.value)}
-                        styles={selectStyles}
+                        styles={dajSelectStyle}
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         isSearchable
-                        className="daj-catalog-select"
+                        className="daj-react-select"
                     />
 
                     <button
                         onClick={select_all_product}
-                        className="daj-catalog-btn"
+                        className="daj-btn-primary ml-auto"
                     >
                         {select_all ? "UnSelect All" : "Select All"}
                     </button>
@@ -466,7 +430,7 @@ const Catalog = () => {
 
                 {loading && (
                     <div className="daj-catalog-empty">
-                        <FaSpinner className="daj-catalog-spinner" />
+                        <FaSpinner className="daj-spinner" />
                     </div>
                 )}
 
@@ -476,16 +440,12 @@ const Catalog = () => {
                         <img
                             src={noDataImg}
                             alt="No Data Found"
-                            className="daj-catalog-no-data-img"
+                            className="daj-product-no-data-img"
                         />
 
-                        <h3 className="daj-catalog-no-data-title">
+                        <h3 className="daj-product-no-data-title">
                             No Products Found
                         </h3>
-
-                        {/* <p className="daj-catalog-no-data-text">
-                        Try changing your search or filters.
-                    </p> */}
 
                     </div>
                 )}
