@@ -1,4 +1,4 @@
-.daj-box-print-imgs {
+.daj-box-lable-print {
     position: absolute;
     top: 0;
     left: 0;
@@ -6,17 +6,209 @@
     height: 100%;
     background-color: #fff;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
     gap: 10px;
     z-index: 99;
 
-    img {
-        width: 3cm;
-        height: 3cm;
+    .daj-box-print-imgs {
+
+        img {
+            width: 3cm;
+            height: 3cm;
+        }
+    }
+
+    .daj-box-front-1,
+    .daj-box-side-1 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(1, 6cm);
+
+                img {
+                    width: 6cm;
+                    height: 6cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-front-2,
+    .daj-box-front-3,
+    .daj-box-front-4 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+
+            img {
+                width: 4cm;
+                height: 4cm;
+            }
+        }
+    }
+
+    .daj-box-front-2 .daj-box-pront-left-con .daj-box-print-imgs-con {
+        grid-template-columns: repeat(2, 4cm);
+    }
+
+    .daj-box-front-3 .daj-box-pront-left-con .daj-box-print-imgs-con {
+        grid-template-columns: repeat(3, 4cm);
+    }
+
+    .daj-box-front-4 .daj-box-pront-left-con .daj-box-print-imgs-con {
+        grid-template-columns: repeat(4, 4cm);
+    }
+
+    .daj-box-side-2 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(2, 6cm);
+
+                img {
+                    width: 6cm;
+                    height: 6cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-side-3 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(3, 5cm);
+
+                img {
+                    width: 5cm;
+                    height: 5cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-side-4 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(4, 4cm);
+
+                img {
+                    width: 4cm;
+                    height: 4cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-front-5,
+    .daj-box-front-6,
+    .daj-box-front-7,
+    .daj-box-front-8 {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        margin-bottom: 15px;
+
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(4, 3cm);
+
+                img {
+                    width: 3cm;
+                    height: 3cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-side-5 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(5, 4cm);
+
+                img {
+                    width: 4cm;
+                    height: 4cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-side-6,
+    .daj-box-side-7,
+    .daj-box-side-8 {
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(8, 3cm);
+
+                img {
+                    width: 3cm;
+                    height: 3cm;
+                }
+            }
+        }
+    }
+
+    .daj-box-side-10 {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        margin-bottom: 15px;
+
+        .daj-box-pront-left-con {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+
+            .daj-box-print-imgs-con {
+                grid-template-columns: repeat(8, 3cm);
+
+                img {
+                    width: 3cm;
+                    height: 3cm;
+                }
+            }
+        }
     }
 
     .daj-box-pront-left-con {
+
         .daj-box-print-imgs-con {
             display: grid;
             grid-template-columns: repeat(4, 3cm);

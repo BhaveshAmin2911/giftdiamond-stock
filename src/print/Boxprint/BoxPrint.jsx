@@ -35,11 +35,11 @@ const BoxPrint = () => {
             setbox_name(res?.data?.box_name)
             let total_count = products?.length > 0 ? products.length : 0;
 
-            if (total_count > 4) {
-                setside_view(true);
-            } else {
-                setside_view(false);
-            }
+            setside_view(total_count);
+            // if (total_count > 4) {
+            // } else {
+            //     setside_view(total_count);
+            // }
 
             setproduct_list(products);
 
@@ -50,28 +50,52 @@ const BoxPrint = () => {
     }
 
     return (
-        <div className="daj-box-print-imgs">
-            <div className="daj-box-pront-left-con">
-                {!side_view &&
-                    <div className="daj-box-name-top">{box_name}</div>
-                }
-                <div className="daj-box-print-imgs-con">
-                    {product_list.map((product, rowIndex) => {
-                        return (
-                            <img src={product?.image} key={rowIndex} />
-                        );
-                    })
+        <div className="daj-box-lable-print">
+            <div className={`daj-box-print-imgs daj-box-front-${side_view < 9 ? side_view : 8}`}>
+                <div className="daj-box-pront-left-con">
+                    {side_view <= 4 &&
+                        <div className="daj-box-name-top">{box_name}</div>
                     }
+                    <div className="daj-box-print-imgs-con">
+                        {product_list.map((product, rowIndex) => {
+                            return (
+                                <img src={product?.image} key={rowIndex} />
+                            );
+                        })
+                        }
+                    </div>
                 </div>
+                {side_view > 4 &&
+                    <div className="daj-box-pront-right-con">
+                        <div className="daj-box-name-right">{box_name.slice(0, 2)}</div>
+                        <div className="daj-box-name-right">{box_name.slice(2, 4)}</div>
+                        <div className="daj-box-name-right">{box_name.slice(4)}</div>
+                    </div>
+                }
             </div>
-            {side_view &&
-                <div className="daj-box-pront-right-con">
-                    <div className="daj-box-name-right">{box_name.slice(0, 2)}</div>
-                    <div className="daj-box-name-right">{box_name.slice(2, 4)}</div>
-                    <div className="daj-box-name-right">{box_name.slice(4)}</div>
+            <div className={`daj-box-print-imgs daj-box-side-${side_view}`}>
+                <div className="daj-box-pront-left-con">
+                    {side_view <= 8 &&
+                        <div className="daj-box-name-top">{box_name}</div>
+                    }
+                    <div className="daj-box-print-imgs-con">
+                        {product_list.map((product, rowIndex) => {
+                            return (
+                                <img src={product?.image} key={rowIndex} />
+                            );
+                        })
+                        }
+                    </div>
                 </div>
-            }
-        </div>
+                {side_view > 8 &&
+                    <div className="daj-box-pront-right-con">
+                        <div className="daj-box-name-right">{box_name.slice(0, 2)}</div>
+                        <div className="daj-box-name-right">{box_name.slice(2, 4)}</div>
+                        <div className="daj-box-name-right">{box_name.slice(4)}</div>
+                    </div>
+                }
+            </div>
+        </div >
     );
 }
 

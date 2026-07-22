@@ -92,10 +92,28 @@ export default function BarcodeListener() {
     }
 
     const Sell_data = () => {
-        let id_array = product_list.map(pr => pr.id);
+        const result = Object.values(
+            product_list.reduce((acc, item) => {
+                const key = `${item.id}_${item.sku}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        id: item.id,
+                        sku: item.sku,
+                        quantity: 0
+                    };
+                }
+
+                acc[key].quantity++;
+
+                return acc;
+            }, {})
+        );
+        
+        // let id_array = product_list.map(pr => pr.id);
 
         const key = `scan_${Date.now()}_${Math.random()}`;
-        sessionStorage.setItem(key, JSON.stringify(id_array));
+        sessionStorage.setItem(key, JSON.stringify(result));
         window.open(`/generate/order?key=${key}`, "_blank");
     }
 
