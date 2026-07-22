@@ -1,11 +1,15 @@
 @reference "../../index.css";
 
 .daj-catalog-toolbar {
-    @apply flex flex-col items-center justify-between gap-4 rounded-xl border-primary border-2 border-solid bg-white p-4 shadow-sm md:flex-row;
+    @apply flex flex-col items-center justify-end gap-4 rounded-xl border-primary border-2 border-solid bg-white p-4 shadow-sm md:flex-row;
 }
 
 .daj-catalog-actions {
-    @apply flex flex-wrap gap-3;
+    position: fixed;
+    right: 2px;
+    top: 40%;
+    z-index: 99;
+    @apply flex flex-col flex-wrap gap-3;
 }
 
 .daj-catalog-go-btn {

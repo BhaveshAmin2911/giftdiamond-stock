@@ -4,6 +4,8 @@ import "./Catalog.css"
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { FiSearch } from "react-icons/fi";
+import { SlShare } from "react-icons/sl";
+import { SlPrinter } from "react-icons/sl";
 import noDataImg from "../../assests/img/no-data-img.svg";
 import { FaSpinner } from "react-icons/fa";
 import { dajSelectStyle } from "../../Common/reactSelectStyles";
@@ -73,17 +75,19 @@ const Catalog = () => {
 
                 const sku = checkbox.sku;
                 const lp = checkbox.code;
-                const design_no = checkbox.design_no;
+                // const design_no = checkbox.design_no;
+                const box = checkbox.box_name;
                 const size = checkbox.size;
 
                 // Dynamic text positions
                 ctx.fillText(`SKU: ${sku}`, img.width * 0.03, img.height + fontSize + 5);
-                ctx.fillText(`Code: ${lp}`, img.width * 0.35, img.height + fontSize + 5);
                 if (checkbox.category_id == 6) {
-                    ctx.fillText(`size: ${size}`, img.width * 0.65, img.height + fontSize + 5);
+                    ctx.fillText(`Code: ${lp + " / " + size}`, img.width * 0.35, img.height + fontSize + 5);
+                    // ctx.fillText(`size: ${size}`, img.width * 0.65, img.height + fontSize + 5);
                 } else {
-                    ctx.fillText(`Ds_no: ${design_no}`, img.width * 0.65, img.height + fontSize + 5);
+                    ctx.fillText(`Code: ${lp}`, img.width * 0.35, img.height + fontSize + 5);
                 }
+                ctx.fillText(`Box: ${box}`, img.width * 0.65, img.height + fontSize + 5);
 
                 const newBlob = await new Promise(resolve =>
                     canvas.toBlob(resolve, "image/jpeg", 0.95)
@@ -212,51 +216,9 @@ const Catalog = () => {
         <div className="daj-custom-container">
 
             {/* Top Toolbar */}
-            <div className="daj-catalog-toolbar">
-
-                <div className="daj-catalog-actions">
-                    <button
-                        onClick={shareSelectedImages}
-                        className="daj-btn-primary"
-                    >
-                        Share Selected
-                    </button>
-
-                    <button
-                        onClick={print_selected}
-                        className="daj-btn-primary"
-                    >
-                        Print Selected
-                    </button>
-                </div>
-
-                <div className="daj-catalog-pagination">
-
-                    <span className="text-base">Page</span>
-
-                    <input
-                        type="number"
-                        min={1}
-                        max={total_page}
-                        value={pagination_val}
-                        onChange={(e) => setpagination_val(e.target.value)}
-                        className="daj-catalog-pagination-input"
-                    />
-
-                    <span>/ {total_page}</span>
-
-                    <button
-                        onClick={() => {
-                            scrollToTop();
-                            fetchProducts(pagination_val);
-                        }}
-                        className="daj-catalog-go-btn"
-                    >
-                        Go
-                    </button>
-
-                </div>
-
+            <div className="daj-catalog-actions">
+                <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
+                <button onClick={print_selected} className="daj-btn-primary"><SlPrinter size={18} /></button>
             </div>
 
             {/* Header */}
@@ -398,22 +360,14 @@ const Catalog = () => {
                                         {p.code}
                                     </p>
 
-                                    {p.category_id == 6 ? (
+                                    {p.category_id == 6 &&
                                         <p>
                                             <span className="daj-catalog-label">
                                                 Size :
                                             </span>{" "}
                                             {p.size}
                                         </p>
-                                    ) : (
-                                        <p>
-                                            <span className="daj-catalog-label">
-                                                Design :
-                                            </span>{" "}
-                                            {p.design_no}
-                                        </p>
-                                    )}
-
+                                    }
                                     <p>
                                         <span className="daj-catalog-label">
                                             Box :
@@ -452,6 +406,22 @@ const Catalog = () => {
 
             </div>
 
+            {/* pagination */}
+            <div className="daj-catalog-toolbar">
+                <div className="daj-catalog-pagination">
+                    <span className="text-base">Page</span>
+                    <input
+                        type="number"
+                        min={1}
+                        max={total_page}
+                        value={pagination_val}
+                        onChange={(e) => setpagination_val(e.target.value)}
+                        className="daj-catalog-pagination-input"
+                    />
+                    <span>/ {total_page}</span>
+                    <button onClick={() => { scrollToTop(); fetchProducts(pagination_val); }} className="daj-catalog-go-btn">Go</button>
+                </div>
+            </div>
         </div>
     );
 }
