@@ -25,6 +25,8 @@ const Catalog = () => {
     const [total_page, settotal_page] = useState(0);
     const [loading, setloading] = useState(false);
     const [select_all, setselect_all] = useState(false);
+    const [popup, setpopup] = useState(false);
+    const [popup_data, setpopup_data] = useState();
 
     const categories = useSelector(state => state.category.list);
     const colors = useSelector(state => state.colors.list);
@@ -45,6 +47,8 @@ const Catalog = () => {
             const files = [];
 
             for (let checkbox of selection) {
+                console.log(checkbox);
+
 
                 const imgUrl = checkbox.image;
 
@@ -121,6 +125,163 @@ const Catalog = () => {
 
     };
 
+    const shareCombinedCatalog = async () => {
+
+        let main_data = popup_data;
+        let img_data = main_data.products;
+
+        try {
+
+            if (!img_data.length) {
+                alert("Please select products");
+                return;
+            }
+
+            const PRODUCTS_PER_PAGE = 9;
+            const COLS = 3;
+            const ROWS = 3;
+
+            const CELL_WIDTH = 500;
+            const CELL_HEIGHT = 500;
+
+            // Bottom information bar height
+            const INFO_BAR_HEIGHT = 60;
+
+            const files = [];
+
+            for (let page = 0; page < Math.ceil(img_data.length / PRODUCTS_PER_PAGE); page++) {
+
+                const pageProducts = img_data.slice(
+                    page * PRODUCTS_PER_PAGE,
+                    (page + 1) * PRODUCTS_PER_PAGE
+                );
+
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                canvas.width = COLS * CELL_WIDTH;
+                canvas.height = (ROWS * CELL_HEIGHT) + INFO_BAR_HEIGHT;
+
+                // Background
+                ctx.fillStyle = "#5a2323";
+                ctx.fillRect(0, 0, canvas.width, ROWS * CELL_HEIGHT);
+
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = "high";
+
+                // Draw Images
+                for (let i = 0; i < pageProducts.length; i++) {
+
+                    const product = pageProducts[i];
+
+                    const col = i % COLS;
+                    const row = Math.floor(i / COLS);
+
+                    const x = col * CELL_WIDTH;
+                    const y = row * CELL_HEIGHT;
+
+                    const res = await fetch(product.image);
+                    const blob = await res.blob();
+                    const bitmap = await createImageBitmap(blob);
+
+                    const crop = 2;
+
+                    ctx.drawImage(
+                        bitmap,
+                        crop,
+                        crop,
+                        bitmap.width - crop * 2,
+                        bitmap.height - crop * 2,
+                        x - 1,
+                        y - 1,
+                        CELL_WIDTH + 2,
+                        CELL_HEIGHT + 2
+                    );
+
+                }
+
+                // ==========================
+                // Bottom Information Bar
+                // ==========================
+
+                const infoY = ROWS * CELL_HEIGHT;
+
+                // White Background
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, infoY, canvas.width, INFO_BAR_HEIGHT);
+
+                // Top Border
+                ctx.strokeStyle = "#d5d5d5";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, infoY);
+                ctx.lineTo(canvas.width, infoY);
+                ctx.stroke();
+
+                const product = pageProducts[0];
+
+                // Change these keys according to your API response
+                const details = [
+                    `ID: ${product.id ?? ""}`,
+                    `Code: ${product.code ?? ""}`,
+                    `Box: ${product.box_name ?? product.box ?? ""}`
+                ];
+
+                ctx.fillStyle = "#111";
+                ctx.font = "bold 24px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                const colWidth = canvas.width / details.length;
+
+                details.forEach((text, index) => {
+
+                    ctx.fillText(
+                        text,
+                        (colWidth * index) + (colWidth / 2),
+                        infoY + (INFO_BAR_HEIGHT / 2)
+                    );
+
+                });
+
+                const newBlob = await new Promise(resolve =>
+                    canvas.toBlob(resolve, "image/jpeg", 1)
+                );
+
+                files.push(
+                    new File(
+                        [newBlob],
+                        `Catalog_Page_${page + 1}.jpg`,
+                        {
+                            type: "image/jpeg"
+                        }
+                    )
+                );
+
+            }
+
+            if (navigator.canShare && navigator.canShare({ files })) {
+
+                await navigator.share({
+                    files,
+                    title: "Jewellery Catalog"
+                });
+
+            } else {
+
+                alert("Sharing is not supported on this device.");
+
+            }
+
+        } catch (err) {
+
+            console.error(err);
+            alert("Share failed");
+
+        }
+
+    };
+
     const fetchProducts = async (page = 1) => {
         setloading(true);
 
@@ -134,7 +295,8 @@ const Catalog = () => {
             formData.append("per_page", 60);
             formData.append("current_page", page);
 
-            const res = await api.post("/products/list.php", formData);
+            // const res = await api.post("/products/list.php", formData);
+            const res = await api.post("/products/catalog.php", formData);
             if (res.data.status) {
                 setProducts(res.data.data);
                 settotal_page(res.data?.pagination?.total_pages)
@@ -212,11 +374,99 @@ const Catalog = () => {
         })),
     ];
 
+    const OpenPopup = (data) => {
+        setpopup_data(data);
+        setpopup(true)
+    }
+
+    const Product_popup = () => {
+
+        return (
+            <div className="daj-product-popup">
+                <div className="daj-product-popup-close" onClick={() => { setpopup_data(); setpopup(false) }}>X</div>
+                <div className="daj-product-popup-body daj-catalog-grid">
+                    {popup_data.products.length > 0 &&
+                        popup_data.products.map((p) => {
+
+                            const idx = selection.findIndex(
+                                (data) => data?.id === p?.id
+                            );
+
+                            return (
+
+                                <div
+                                    key={p.id}
+                                    onClick={() => handleSelect(p)}
+                                    className="daj-catalog-card"
+                                >
+
+                                    <input
+                                        type="checkbox"
+                                        checked={idx > -1}
+                                        value={p.id}
+                                        readOnly
+                                        className="daj-catalog-checkbox"
+                                    />
+
+                                    <div className="daj-catalog-image-wrapper">
+
+                                        <img
+                                            src={p.image}
+                                            draggable
+                                            alt={p.id}
+                                            className="daj-catalog-image"
+                                        />
+
+                                    </div>
+
+                                    <div className="daj-catalog-info">
+
+                                        <p>
+                                            <span className="daj-catalog-label">
+                                                SKU :
+                                            </span>{" "}
+                                            {p.sku}
+                                        </p>
+
+                                        <p>
+                                            <span className="daj-catalog-label">
+                                                SP :
+                                            </span>{" "}
+                                            {p.code}
+                                        </p>
+
+                                        {p.category_id == 6 &&
+                                            <p>
+                                                <span className="daj-catalog-label">
+                                                    Size :
+                                                </span>{" "}
+                                                {p.size}
+                                            </p>
+                                        }
+                                        <p>
+                                            <span className="daj-catalog-label">
+                                                Box :
+                                            </span>{" "}
+                                            {popup_data.box}
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            );
+                        })}
+                </div>
+                <button className="daj-create-combine-img" onClick={() => shareCombinedCatalog()}>Share Catalog</button>
+            </div >
+        );
+    }
+
     return (
         <div className="daj-custom-container">
 
             {/* Top Toolbar */}
             <div className="daj-catalog-actions">
+                {/* <button onClick={shareCombinedCatalog} className="daj-btn-primary" ><SlShare size={18} /></button> */}
                 <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
                 <button onClick={print_selected} className="daj-btn-primary"><SlPrinter size={18} /></button>
             </div>
@@ -313,32 +563,32 @@ const Catalog = () => {
                 {products.length > 0 &&
                     products.map((p) => {
 
-                        const idx = selection.findIndex(
-                            (data) => data?.id === p?.id
-                        );
+                        // const idx = selection.findIndex(
+                        //     (data) => data?.production_run === p?.production_run
+                        // );
 
                         return (
 
                             <div
-                                key={p.id}
-                                onClick={() => handleSelect(p)}
+                                key={p.production_run}
+                                // onClick={() => handleSelect(p)}
                                 className="daj-catalog-card"
                             >
 
-                                <input
+                                {/* <input
                                     type="checkbox"
                                     checked={idx > -1}
                                     value={p.image}
                                     readOnly
                                     className="daj-catalog-checkbox"
-                                />
+                                /> */}
 
                                 <div className="daj-catalog-image-wrapper">
 
                                     <img
-                                        src={p.image}
+                                        src={p.products[0].image}
                                         draggable
-                                        alt={p.sku}
+                                        alt={p.production_run}
                                         className="daj-catalog-image"
                                     />
 
@@ -348,16 +598,16 @@ const Catalog = () => {
 
                                     <p>
                                         <span className="daj-catalog-label">
-                                            SKU :
+                                            ID :
                                         </span>{" "}
-                                        {p.sku}
+                                        {p.production_run}
                                     </p>
 
                                     <p>
                                         <span className="daj-catalog-label">
                                             SP :
                                         </span>{" "}
-                                        {p.code}
+                                        {p.products[0].code}
                                     </p>
 
                                     {p.category_id == 6 &&
@@ -372,10 +622,11 @@ const Catalog = () => {
                                         <span className="daj-catalog-label">
                                             Box :
                                         </span>{" "}
-                                        {p.box_name}
+                                        {p.box}
                                     </p>
 
                                 </div>
+                                <button className="daj-product-view-btn" onClick={() => OpenPopup(p)}>View Colors</button>
 
                             </div>
 
@@ -422,6 +673,7 @@ const Catalog = () => {
                     <button onClick={() => { scrollToTop(); fetchProducts(pagination_val); }} className="daj-catalog-go-btn">Go</button>
                 </div>
             </div>
+            {popup && <Product_popup />}
         </div>
     );
 }

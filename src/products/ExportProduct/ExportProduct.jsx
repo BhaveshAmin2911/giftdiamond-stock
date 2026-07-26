@@ -154,6 +154,8 @@ const ExportProduct = () => {
                     var design_no = product?.design_no ? 'D:' + product?.design_no : '';
                 }
                 var desgin_code = design_no ? design_no : box_name;
+                desgin_code = desgin_code + "/ " + product?.note;
+
 
                 let new_obj = {
                     "id": product?.id,

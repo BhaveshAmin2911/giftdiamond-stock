@@ -59,3 +59,48 @@
 .daj-catalog-empty {
     @apply col-span-full flex flex-col items-center justify-center h-80 text-center;
 }
+
+.daj-product-view-btn {
+    padding: 10px;
+    border: 1px solid;
+    margin: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.daj-product-popup {
+    position: fixed;
+    background: #fff;
+    border: 1px solid;
+    padding: 15px;
+    z-index: 99;
+    height: 90%;
+    width: 96%;
+    border-radius: 4px;
+    top: 50px;
+}
+
+.daj-product-popup-body {
+    overflow: auto;
+    max-height: 95%;
+}
+
+.daj-product-popup-close {
+    position: absolute;
+    top: -10px;
+    right: -16px;
+    background: #fff;
+    border: 1px solid;
+    padding: 1px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.daj-create-combine-img {
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 4px;
+    cursor: pointer;
+}
