@@ -5,7 +5,7 @@ import "./Login.css";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { loadMasterData } from "../../store/services/masterDataService";
-import { FaUserCircle, FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUserCircle, FaLock, FaUser } from "react-icons/fa";
 import giftdiamond from "../../assests/img/GiftDiamond-logo.webp";
 import { toast } from "react-toastify";
 
@@ -115,11 +115,11 @@ function Login() {
                 </div>
 
                 <div className="daj-input-group">
-                    <FaEnvelope className="daj-input-icon" />
+                    <FaUser className="daj-input-icon" />
 
                     <input
                         type="text"
-                        placeholder="Email ID"
+                        placeholder="UserName"
                         className="daj-login-input"
                         onChange={(e) =>
                             setForm({

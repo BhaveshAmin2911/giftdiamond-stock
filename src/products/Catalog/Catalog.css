@@ -60,6 +60,10 @@
     @apply col-span-full flex flex-col items-center justify-center h-80 text-center;
 }
 
+.daj-create-combine-img {
+    @apply rounded-lg bg-primary px-5 py-2.5 font-semibold font-title text-base text-white transition hover:opacity-90 cursor-pointer;
+}
+
 .daj-product-view-btn {
     padding: 10px;
     border: 1px solid;
@@ -74,10 +78,11 @@
     border: 1px solid;
     padding: 15px;
     z-index: 99;
-    height: 90%;
+    height: 96%;
     width: 96%;
     border-radius: 4px;
-    top: 50px;
+    top: 2.5%;
+    left: 2.5%;
 }
 
 .daj-product-popup-body {
