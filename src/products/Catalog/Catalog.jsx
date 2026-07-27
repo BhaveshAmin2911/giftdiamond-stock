@@ -479,10 +479,8 @@ const Catalog = () => {
                                                 {" " + p.size}
                                             </p>
                                         }
-
                                     </div>
                                 </div>
-
                             );
                         })}
                 </div>
