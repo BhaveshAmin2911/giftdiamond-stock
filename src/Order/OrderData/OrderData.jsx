@@ -23,7 +23,7 @@ const OrderData = () => {
     useEffect(() => {
         if (product_array?.order_list?.length > 0) {
             get_product(product_array.order_list);
-            get_product(product_array.order_list);
+            setprd_quant(product_array.order_list);
             setcustomer(product_array?.customer);
             setorder_id(product_array?.order_id)
         }
@@ -32,7 +32,10 @@ const OrderData = () => {
     const get_product = async (pr_array) => {
 
         const formData = new FormData();
-        formData.append("product_ids", JSON.stringify(pr_array));
+
+        let id_array = pr_array.map(pr => pr.id);
+
+        formData.append("product_ids", JSON.stringify(id_array));
 
         const res = await api.post("/order/order-products.php", formData);
 

@@ -13,6 +13,7 @@ const EditProduct = () => {
     const colors = useSelector(state => state.colors.list);
     const polish = useSelector(state => state.polish.list);
     const size_list = useSelector(state => state.size.list);
+    const box_list = useSelector(state => state.boxes.list);
 
     const location = useLocation();
 
@@ -36,6 +37,7 @@ const EditProduct = () => {
             let pr_array = result.data?.data?.length > 0 ? result.data.data : [];
             setproduct_array(pr_array);
             setbox_id(pr_array[0]?.box_id);
+            setselect_box(pr_array[0]?.box_id);
         }
 
     }
@@ -64,6 +66,7 @@ const EditProduct = () => {
     const [product_id, setproduct_id] = useState([]);
     const [select_category, setselect_category] = useState();
     const [select_karigar, setselect_karigar] = useState();
+    const [select_box, setselect_box] = useState();
     const [production_run, setproduction_run] = useState();
     const [box_id, setbox_id] = useState();
 
@@ -186,6 +189,10 @@ const EditProduct = () => {
 
             let result = await api.post("/products/update-product.php", formData);
 
+            if (select_box !== box_id) {
+                await update_box()
+            }
+
             if (result.data.status) {
                 navigate('/products/process');
             } else {
@@ -195,6 +202,20 @@ const EditProduct = () => {
         }
 
         setbtn_loading(false);
+    }
+
+    const update_box = async () => {
+        const formData = new FormData();
+
+        formData.append("box_id", select_box);
+        formData.append("production_run", production_run);
+        formData.append("category", select_category);
+
+        let result = await api.post("/boxes/edit-box.php", formData);
+        
+        if(!(result?.data?.status)){
+            alert("box not updated");
+        }
     }
 
     const create_product = () => {
@@ -223,6 +244,18 @@ const EditProduct = () => {
                                         {karigars.map((category, index) => {
                                             return (
                                                 <option value={category.id} key={index}>{category.name}</option>
+                                            );
+                                        })
+                                        }
+                                    </select>
+                                </div>
+                                <div className='daj-product-info-form'>
+                                    <span className='daj-product-info-header'>Update Box</span>
+                                    <select className='daj-product-info-body' value={select_box} onChange={(e) => setselect_box(e.target.value)}>
+                                        <option value={''} >None</option>
+                                        {box_list.map((box, index) => {
+                                            return (
+                                                <option value={box.id} key={index}>{box.name}</option>
                                             );
                                         })
                                         }
