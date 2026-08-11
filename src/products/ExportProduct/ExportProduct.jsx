@@ -22,6 +22,7 @@ const ExportProduct = () => {
     const [category_filter, setcategory_filter] = useState('');
     const [selection, setselection] = useState([]);
     const [loading, setloading] = useState(false);
+    const [loading_print, setloading_print] = useState(false);
 
     const navigate = useNavigate();
 
@@ -142,6 +143,8 @@ const ExportProduct = () => {
 
     const print_label = async () => {
 
+        setloading_print(true);
+
         let product_array = [];
         if (selection?.length > 0) {
 
@@ -175,6 +178,11 @@ const ExportProduct = () => {
         formData.append("product_array", JSON.stringify(product_array));
 
         const res = await api.post("/label/print-list.php", formData);
+        if (res?.data?.status) {
+            setproduct_filter('normal');
+        }
+
+        setloading_print(false);
     }
 
 
@@ -566,19 +574,12 @@ const ExportProduct = () => {
                                     Print
                                 </button>
 
-                                <button
-                                    className="daj-btn-primary "
-                                    onClick={() => { print_label() }}
-                                >
-                                    Label Print
-                                </button>
-
-                                <button
-                                    className="daj-btn-primary "
-                                    onClick={() => { Sell_data() }}
-                                >
-                                    Sell
-                                </button>
+                                {loading_print ?
+                                    <button className="daj-btn-primary">Loading ...</button>
+                                    :
+                                    <button className="daj-btn-primary" onClick={() => { print_label() }}>Label Print</button>
+                                }
+                                <button className="daj-btn-primary" onClick={() => { Sell_data() }} >Sell </button>
                             </div>
                         )
                         }

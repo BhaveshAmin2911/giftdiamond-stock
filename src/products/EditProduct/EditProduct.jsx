@@ -2,10 +2,12 @@ import { Fragment, useEffect, useState } from 'react';
 import './EditProduct.scss'
 import { useSelector } from "react-redux";
 import api from '../../api/axios';
+import Select from "react-select";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ReProcessProduct from '../reProcessProduct/reProcessProduct';
 import ReStockProduct from '../reStockProduct/reStockProduct';
 import ADProduct from '../ADProduct/ADProduct';
+import { dajSelectStyle } from "../../Common/reactSelectStyles";
 
 const EditProduct = () => {
     const karigars = useSelector(state => state.karigars.list);
@@ -204,6 +206,14 @@ const EditProduct = () => {
         setbtn_loading(false);
     }
 
+    const boxOptions = [
+        { value: "", label: "No Box" },
+        ...box_list.map((item) => ({
+            value: item.id,
+            label: item.name,
+        })),
+    ];
+
     const update_box = async () => {
         const formData = new FormData();
 
@@ -212,8 +222,8 @@ const EditProduct = () => {
         formData.append("category", select_category);
 
         let result = await api.post("/boxes/edit-box.php", formData);
-        
-        if(!(result?.data?.status)){
+
+        if (!(result?.data?.status)) {
             alert("box not updated");
         }
     }
@@ -251,7 +261,21 @@ const EditProduct = () => {
                                 </div>
                                 <div className='daj-product-info-form'>
                                     <span className='daj-product-info-header'>Update Box</span>
-                                    <select className='daj-product-info-body' value={select_box} onChange={(e) => setselect_box(e.target.value)}>
+                                    <Select
+                                        options={boxOptions}
+                                        value={
+                                            boxOptions.find(
+                                                (option) => option.value == select_box
+                                            ) || boxOptions[0]
+                                        }
+                                        onChange={(option) => setselect_box(option.value)}
+                                        styles={dajSelectStyle}
+                                        menuPortalTarget={document.body}
+                                        menuPosition="fixed"
+                                        isSearchable
+                                        className="daj-react-select"
+                                    />
+                                    {/* <select className='daj-product-info-body' value={select_box} onChange={(e) => setselect_box(e.target.value)}>
                                         <option value={''} >None</option>
                                         {box_list.map((box, index) => {
                                             return (
@@ -259,7 +283,7 @@ const EditProduct = () => {
                                             );
                                         })
                                         }
-                                    </select>
+                                    </select> */}
                                 </div>
                             </div>
                         </div>

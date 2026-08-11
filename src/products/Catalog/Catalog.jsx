@@ -15,6 +15,7 @@ const Catalog = () => {
     const [products, setProducts] = useState([]);
     const [search_val, setsearch_val] = useState('');
     const [search_btn, setsearch_btn] = useState(true);
+    const [karigar_filter, setkarigar_filter] = useState('');
     const [category_filter, setcategory_filter] = useState('');
     const [color_filter, setcolor_filter] = useState('');
     const [size_filter, setsize_filter] = useState('');
@@ -30,6 +31,7 @@ const Catalog = () => {
     const [user_data, setuser_data] = useState();
 
     const categories = useSelector(state => state.category.list);
+    const karigars = useSelector(state => state.karigars.list);
     const colors = useSelector(state => state.colors.list);
     const size = useSelector(state => state.size.list);
     const userData = useSelector(state => state.auth.data);
@@ -65,7 +67,7 @@ const Catalog = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [search_btn, category_filter, color_filter, current_page, size_filter]);
+    }, [search_btn, category_filter, karigar_filter, color_filter, current_page, size_filter]);
 
     useEffect(() => {
         setuser_data(userData?.user);
@@ -353,6 +355,7 @@ const Catalog = () => {
             formData.append("search", search_val);
             formData.append("quantity_status", 'ready');
             formData.append("category_id", category_filter);
+            formData.append("karigar_id", karigar_filter);
             formData.append("color", color_filter);
             formData.append("size", size_filter);
             formData.append("per_page", 60);
@@ -421,6 +424,14 @@ const Catalog = () => {
         })),
     ];
 
+    const karigarOptions = [
+        { value: "", label: "All Karigar" },
+        ...karigars.map((item) => ({
+            value: item.id,
+            label: item.name,
+        })),
+    ];
+
     const colorOptions = [
         { value: "", label: "All Colors" },
         ...colors.map((item) => ({
@@ -469,6 +480,12 @@ const Catalog = () => {
                                             <span className="daj-catalog-label">SP :</span>
                                             {" " + p.code}
                                         </p>
+                                        {user_data?.role != "customer" &&
+                                            <p>
+                                                <span className="daj-catalog-label">Quantity :</span>
+                                                {" " + p.quantity}
+                                            </p>
+                                        }
                                         <p>
                                             <span className="daj-catalog-label">Box : </span>
                                             {" " + popup_data.box}
@@ -529,6 +546,22 @@ const Catalog = () => {
                         isSearchable
                         className="daj-react-select"
                     />
+                    {user_data?.role != "customer" &&
+                        <Select
+                            options={karigarOptions}
+                            value={
+                                karigarOptions.find(
+                                    (option) => option.value == karigar_filter
+                                ) || karigarOptions[0]
+                            }
+                            onChange={(option) => setkarigar_filter(option.value)}
+                            styles={dajSelectStyle}
+                            menuPortalTarget={document.body}
+                            menuPosition="fixed"
+                            isSearchable
+                            className="daj-react-select"
+                        />
+                    }
                     <Select
                         options={colorOptions}
                         value={

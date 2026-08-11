@@ -66,8 +66,7 @@ export default function BarcodeListener() {
         if (res.data?.status) {
             let old_array = [...product_list];
             if (res?.data?.data) {
-                old_array.push(res.data.data);
-                setproduct_list(old_array);
+                setproduct_list(old_array => [res.data.data, ...old_array]);
                 setBarcode();
             }
         } else {
@@ -109,7 +108,7 @@ export default function BarcodeListener() {
                 return acc;
             }, {})
         );
-        
+
         // let id_array = product_list.map(pr => pr.id);
 
         const key = `scan_${Date.now()}_${Math.random()}`;
