@@ -18,6 +18,7 @@ const GenerateOrder = () => {
     const [product_list, setproduct_list] = useState([]);
     const [selected_customer, setselected_customer] = useState();
     const [loading, setloading] = useState(false);
+    const [price_unit, setprice_unit] = useState(3);
     const [ad_product, setad_product] = useState([]);
     const [prd_quant, setprd_quant] = useState([]);
     const [order_total, setorder_total] = useState(0);
@@ -109,7 +110,7 @@ const GenerateOrder = () => {
 
         let text = 'Are you sure to confirm this order and reduce Quantity ??'
         if (window.confirm(text) == true) {
-            let order_data = { 'order_list': prd_quant, 'customer': selected_customer };
+            let order_data = { 'order_list': prd_quant, 'customer': selected_customer, 'price_unit': price_unit };
 
             const key = `scan_${Date.now()}_${Math.random()}`;
             sessionStorage.setItem(key, JSON.stringify(order_data));
@@ -134,7 +135,7 @@ const GenerateOrder = () => {
                                     })
                                 }
                             </select>
-                            <span className="daj-reload-customer-btn" onClick={() => get_customer()}>{loading ? 'Loading ...' : 'Reload Customer List'}</span>
+                            <span className="daj-reload-customer-btn" onClick={() => get_customer()}>{loading ? 'Loading ...' : 'Reload List'}</span>
                         </div>
                     </div>
                     <div className="daj-order-add-customer">
@@ -220,7 +221,7 @@ const GenerateOrder = () => {
                 <tbody>
                     <tr>
                         <td>
-                            <table border="1" cellSpacing="0" cellPadding="2" width='380'>
+                            <table border="1" cellSpacing="0" cellPadding="2" width='280'>
                                 <tbody>
                                     <tr>
                                         <td colSpan={2} width='50%' style={{ textAlign: 'center' }}>Order Total</td>
@@ -231,7 +232,7 @@ const GenerateOrder = () => {
                                     </tr>
                                     <tr>
                                         <td>Price</td>
-                                        <td>{Math.ceil(order_total / 3)}</td>
+                                        <td>{Math.ceil(order_total / price_unit)}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -240,6 +241,10 @@ const GenerateOrder = () => {
                 </tbody>
             </table>
             <div className="daj-bill-confirm-export">
+                <div className="daj-bill-unit-val">
+                    <span>Enter Unit Value : </span>
+                    <input className="daj-bill-unit-inp" type="number" onChange={(e) => { setprice_unit(e.target.value) }} value={price_unit} />
+                </div>
                 <button className="daj-bill-confirm-export-btn" onClick={() => { final_bill() }}>Generate Bill</button>
             </div>
         </div>

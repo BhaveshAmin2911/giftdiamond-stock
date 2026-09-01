@@ -17,20 +17,25 @@ const BillPrint = () => {
     const [order_id, setorder_id] = useState(213);
     const [prd_quant, setprd_quant] = useState([]);
     const [order_total, setorder_total] = useState(0);
+    const [price_unit, setprice_unit] = useState(3);
 
     useEffect(() => {
         if (product_array?.order_list?.length > 0) {
+            console.log(product_array);
+
             get_product(product_array.order_list);
             setcustomer(product_array?.customer);
             setprd_quant(product_array.order_list);
-            create_order(product_array?.customer?.id, product_array.order_list)
+            setprice_unit(product_array.price_unit);
+            create_order(product_array?.customer?.id, product_array.order_list, product_array?.price_unit)
         }
     }, [product_array])
 
-    const create_order = async (cus_id, id_array) => {
+    const create_order = async (cus_id, id_array, unit) => {
 
         const formData = new FormData();
         formData.append("customer_id", cus_id);
+        formData.append("price_unit", unit);
         formData.append("product_ids", JSON.stringify(id_array));
 
         const res = await api.post("/products/create-order.php", formData);
@@ -190,7 +195,7 @@ const BillPrint = () => {
                 <tbody>
                     <tr>
                         <td>
-                            <table border="1" cellSpacing="0" cellPadding="2" width='380'>
+                            <table border="1" cellSpacing="0" cellPadding="2" width='280'>
                                 <tbody>
                                     <tr>
                                         <td colSpan={2} width='50%' style={{ textAlign: 'center' }}>Order Total</td>
@@ -201,7 +206,7 @@ const BillPrint = () => {
                                     </tr>
                                     <tr>
                                         <td>Price</td>
-                                        <td>{Math.ceil(order_total / 3)}</td>
+                                        <td>{Math.ceil(order_total / price_unit)}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://giftdiamond.in/api",
+  // baseURL: "http://localhost/api",
 });
 
 /* Attach token automatically */

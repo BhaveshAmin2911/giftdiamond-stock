@@ -17,7 +17,8 @@
     gap: 20px;
     z-index: 99;
 
-    input, select{
+    input,
+    select {
         border: 1px solid;
         border-radius: 4px;
     }
@@ -64,6 +65,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        gap: 10px;
         width: 100%;
     }
 
@@ -99,7 +101,11 @@
         cursor: pointer;
     }
 
-    .daj-order-add-customer {}
+    .daj-order-add-customer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
 
     .daj-order-add-customer-btn {
         display: flex;
@@ -164,9 +170,10 @@
 
     .daj-bill-confirm-export {
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-end;
         justify-content: flex-end;
+        gap: 10px;
         width: 100%;
     }
 
@@ -179,8 +186,50 @@
         cursor: pointer;
     }
 
+    .daj-bill-unit-inp {
+        padding: 5px;
+        width: 80px;
+    }
+
     .daj-customer-bill-total {
         text-align: center;
         font-size: 26px;
+    }
+
+    @media(max-width: 768px) {
+        .daj-order-customer-data {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .daj-customer-data-value {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+        }
+
+        .daj-order-customer-select {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .daj-order-customer-drp {
+            width: 175px;
+        }
+
+        .daj-reload-customer-btn,
+        .daj-order-add-customer-btn {
+            padding: 5px 10px;
+        }
+
+        .daj-order-add-customer {
+            width: 100%;
+        }
+    }
+
+    @media(max-width: 576px) {
+        .daj-show-casting-list .daj-show-new-product-table td {
+            min-width: 70px;
+        }
     }
 }

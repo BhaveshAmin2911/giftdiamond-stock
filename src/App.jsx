@@ -116,7 +116,7 @@ function App() {
         <div className="daj-mian-loading-con">
           <img src='https://app.dajdiamond.com/uploads/daj-main-loader.gif' />
           <span>Loadding ...</span>
-        </div> 
+        </div>
 
         <ToastContainer
           position="top-right"

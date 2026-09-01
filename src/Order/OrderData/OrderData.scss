@@ -1,0 +1,22 @@
+.daj-bill-order-con {
+    .daj-bill-item-data {
+        position: relative;
+
+        &:hover .daj-delete-order {
+            display: block;
+        }
+    }
+
+    .daj-delete-order {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        padding: 3px;
+        border: 1px solid;
+        text-align: right;
+        cursor: pointer;
+        padding-top: 5px;
+    }
+}

@@ -28,6 +28,8 @@ function Login() {
         if (token) {
             navigate("/");
         }
+
+        document.querySelector(".daj-mian-loading-con").style.display = "none";
     }, []);
 
     // useEffect(() => {

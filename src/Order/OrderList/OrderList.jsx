@@ -33,9 +33,9 @@ const OrderList = () => {
 
     }
 
-    const view_data = (id_array, customer, id) => {
+    const view_data = (id_array, customer, id, price_unit) => {
         if (id_array?.length > 0) {
-            let order_data = { 'order_list': id_array, 'customer': customer, order_id: id };
+            let order_data = { 'order_list': id_array, 'customer': customer, order_id: id, price_unit: price_unit };
 
             const key = `scan_${Date.now()}_${Math.random()}`;
             sessionStorage.setItem(key, JSON.stringify(order_data));
@@ -90,7 +90,8 @@ const OrderList = () => {
                             view_data(
                                 row.product_ids,
                                 customer,
-                                row.id
+                                row.id,
+                                row.price_unit
                             )
                         }
                     >

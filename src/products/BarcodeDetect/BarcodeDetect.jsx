@@ -7,6 +7,7 @@ export default function BarcodeListener() {
     const [barcode, setBarcode] = useState("");
     const [product_list, setproduct_list] = useState([]);
     const [manual_scan, setmanual_scan] = useState('');
+    const [loading, setloading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,12 +44,13 @@ export default function BarcodeListener() {
     }, []);
 
     useEffect(() => {
-        if (barcode) {
+        if (barcode && !loading) {
             get_product(barcode);
         }
     }, [barcode])
 
     const get_product = async (barcode) => {
+        setloading(true);
         // let scan_array = barcode?.split('-');
         // var pr = 1;
 
@@ -73,6 +75,7 @@ export default function BarcodeListener() {
             let error_message = res?.data?.message ? res.data.message : 'Product not found';
             alert(error_message);
         }
+        setloading(false);
     }
 
     const handleSelect = (idx) => {
@@ -116,6 +119,39 @@ export default function BarcodeListener() {
         window.open(`/generate/order?key=${key}`, "_blank");
     }
 
+    const restock_data = async () => {
+        const result = Object.values(
+            product_list.reduce((acc, item) => {
+                const key = `${item.id}_${item.sku}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        id: item.id,
+                        sku: item.sku,
+                        quantity: 0
+                    };
+                }
+
+                acc[key].quantity++;
+
+                return acc;
+            }, {})
+        );
+
+
+        const formData = new FormData();
+        formData.append("products", JSON.stringify(result));
+
+        const res = await api.post("products/restock-product.php", formData);
+
+        console.log(res);
+        // let id_array = product_list.map(pr => pr.id);
+
+        // const key = `scan_${Date.now()}_${Math.random()}`;
+        // sessionStorage.setItem(key, JSON.stringify(result));
+        // window.open(`/generate/order?key=${key}`, "_blank");
+    }
+
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             setBarcode(manual_scan);
@@ -128,10 +164,15 @@ export default function BarcodeListener() {
             <div className="daj-gun-scanner-header">
                 <div className="daj-manual-scan-bar">
                     <input className="daj-manual-scan-inp" onKeyDown={(e) => handleKeyDown(e)} type="text" value={manual_scan} onChange={(e) => setmanual_scan(e.target.value)} />
-                    <button className="daj-manual-scan-btn" onClick={() => { setBarcode(manual_scan); setmanual_scan(''); }}>{'>'}</button>
+                    {loading ?
+                        <button className="daj-manual-scan-btn" >Loading ...</button>
+                        :
+                        <button className="daj-manual-scan-btn" onClick={() => { setBarcode(manual_scan); setmanual_scan(''); }}>{'>'}</button>
+                    }
                 </div>
                 <span className="daj-scanner-last-val">Last Scan: {barcode}</span>
             </div>
+            <span className="daj-scanner-count-val">{product_list.length}</span>
             <table className="daj-product-table">
                 <thead className="daj-product-table-head">
                     <tr>
@@ -173,6 +214,7 @@ export default function BarcodeListener() {
                 <div className="daj-gun-scanner-opt">
                     <button className="daj-gun-scanner-print-btn" onClick={() => Print_data()}>Print</button>
                     <button className="daj-gun-scanner-print-btn" onClick={() => Sell_data()}>Sell</button>
+                    <button className="daj-gun-scanner-print-btn" onClick={() => restock_data()}>Re-Stock</button>
                 </div>
             }
         </div>
