@@ -21,7 +21,6 @@ const BillPrint = () => {
 
     useEffect(() => {
         if (product_array?.order_list?.length > 0) {
-            console.log(product_array);
 
             get_product(product_array.order_list);
             setcustomer(product_array?.customer);

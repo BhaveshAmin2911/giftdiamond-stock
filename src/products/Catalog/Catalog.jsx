@@ -4,11 +4,13 @@ import "./Catalog.css"
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { FiSearch } from "react-icons/fi";
+import { FaShoppingCart } from "react-icons/fa";
 import { SlShare } from "react-icons/sl";
 import { SlPrinter } from "react-icons/sl";
 import noDataImg from "../../assests/img/no-data-img.svg";
 import { FaSpinner } from "react-icons/fa";
 import { dajSelectStyle } from "../../Common/reactSelectStyles";
+import { Link } from "react-router-dom";
 
 
 const Catalog = () => {
@@ -29,6 +31,8 @@ const Catalog = () => {
     const [popup, setpopup] = useState(false);
     const [popup_data, setpopup_data] = useState();
     const [user_data, setuser_data] = useState();
+    const [cart_count, setcart_count] = useState(0);
+    const [cart_loading, setcart_loading] = useState(-1);
 
     const categories = useSelector(state => state.category.list);
     const karigars = useSelector(state => state.karigars.list);
@@ -235,8 +239,6 @@ const Catalog = () => {
 
                     if (main_data.category_id == 6) {
                         const text = pageProducts[i]?.size;
-                        console.log(text);
-
 
                         ctx.font = "bold 32px Arial";
                         ctx.textAlign = "right";
@@ -365,6 +367,8 @@ const Catalog = () => {
             const res = await api.post("/products/catalog.php", formData);
             if (res.data.status) {
                 setProducts(res.data.data);
+                setselection(res.data.cart_product_ids);
+                setcart_count(res.data.cart_count);
                 settotal_page(res.data?.pagination?.total_pages)
             }
         } catch (error) {
@@ -374,16 +378,32 @@ const Catalog = () => {
         setloading(false);
     };
 
-    const handleSelect = (data) => {
-        let old_array = [...selection];
-        let index = old_array.findIndex((p_data) => p_data?.id == data?.id);
-        if (index > -1) {
-            old_array.splice(index, 1);
+    const add_to_cart = async (id, action, idx) => {
+        setcart_loading(idx);
+        const formData = new FormData();
+
+        formData.append("action", action);
+        formData.append("product_id", id);
+
+        const res = await api.post("/cart/add_to_cart.php", formData);
+
+        if (res.data.status) {
+
+            setcart_count(res.data?.cart_count);
+            let old_array = [...selection];
+            let index = old_array.findIndex((data_id) => data_id == id);
+            if (index > -1) {
+                old_array.splice(index, 1);
+            } else {
+                old_array.push(id);
+            }
+
+            setselection(old_array);
+            setcart_loading(-1);
         } else {
-            old_array.push(data);
+            setcart_loading(-1);
         }
 
-        setselection(old_array);
     }
 
     const handleKeyDown = (e) => {
@@ -460,14 +480,14 @@ const Catalog = () => {
                 <div className="daj-product-popup-close" onClick={() => { setpopup_data(); setpopup(false) }}>X</div>
                 <div className="daj-product-popup-body daj-catalog-grid">
                     {popup_data.products.length > 0 &&
-                        popup_data.products.map((p) => {
-                            const idx = selection.findIndex(
-                                (data) => data?.id === p?.id
-                            );
+                        popup_data.products.map((p, index) => {
+                            const idx = selection.includes(p?.id);
 
                             return (
-                                <div key={p.id} onClick={() => handleSelect(p)} className="daj-catalog-card" >
-                                    <input type="checkbox" checked={idx > -1} value={p.id} readOnly className="daj-catalog-checkbox" />
+                                <div key={p.id} className="daj-catalog-card" >
+                                    {idx &&
+                                        <input type="checkbox" checked={idx} value={p.id} readOnly className="daj-catalog-checkbox" />
+                                    }
                                     <div className="daj-catalog-image-wrapper">
                                         <img className="daj-catalog-image" src={p.image} draggable alt={p.id} />
                                     </div>
@@ -496,12 +516,23 @@ const Catalog = () => {
                                                 {" " + p.size}
                                             </p>
                                         }
+                                        <div className="daj-cart-ations">
+                                            {cart_loading == index ?
+                                                <button className="daj-remove-cart"><FaSpinner className="daj-cart-spinner" /></button>
+                                                :
+                                                (idx ?
+                                                    <button className="daj-remove-cart" disabled={cart_loading > -1} onClick={() => { add_to_cart(p?.id, "remove", index) }}>Remove</button>
+                                                    :
+                                                    <button className="daj-add-cart" disabled={cart_loading > -1} onClick={() => { add_to_cart(p?.id, "add", index) }} >Add To cart</button>
+                                                )}
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })}
                 </div>
-                {user_data?.role != 'customer' &&
+                {
+                    user_data?.role != 'customer' &&
                     <button className="daj-create-combine-img" onClick={() => shareCombinedCatalog()}>Share Catalog</button>
                 }
             </div>
@@ -512,8 +543,12 @@ const Catalog = () => {
         <div className="daj-custom-container">
             {/* Top Toolbar */}
             <div className="daj-catalog-actions">
-                <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
-                <button onClick={print_selected} className="daj-btn-primary"><SlPrinter size={18} /></button>
+                {/* <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
+                <button onClick={print_selected} className="daj-btn-primary"><SlPrinter size={18} /></button> */}
+                <Link to={'/print/catalog/' + userData.user.id} className="daj-btn-primary daj-cart-btn">
+                    <FaShoppingCart size={18} />
+                    <span className="daj-cart-count">{cart_count}</span>
+                </Link>
             </div>
             {/* Header */}
             <div className="daj-custom-header">

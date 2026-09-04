@@ -143,8 +143,6 @@ export default function BarcodeListener() {
         formData.append("products", JSON.stringify(result));
 
         const res = await api.post("products/restock-product.php", formData);
-
-        console.log(res);
         // let id_array = product_list.map(pr => pr.id);
 
         // const key = `scan_${Date.now()}_${Math.random()}`;
