@@ -311,6 +311,7 @@ function ProductList() {
                             className="daj-product-search-inp"
                             placeholder="Search Product"
                             value={search_val}
+                            onKeyDown={handleKeyDown}
                             onChange={(e) => setsearch_val(e.target.value)}
                         />
 
@@ -329,6 +330,7 @@ function ProductList() {
                         <input
                             className="daj-product-search-inp"
                             placeholder="Product Code"
+                            onKeyDown={handleKeyDown}
                             value={p_code}
                             onChange={(e) => setp_code(e.target.value)}
                         />

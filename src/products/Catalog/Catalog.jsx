@@ -412,13 +412,6 @@ const Catalog = () => {
         }
     };
 
-    const print_selected = () => {
-        const key = `scan_${Date.now()}_${Math.random()}`;
-
-        sessionStorage.setItem(key, JSON.stringify(selection));
-        window.open(`/print/catalog?key=${key}`, "_blank");
-    }
-
     const select_all_product = () => {
         if (select_all) {
             setselection([]);
@@ -543,12 +536,13 @@ const Catalog = () => {
         <div className="daj-custom-container">
             {/* Top Toolbar */}
             <div className="daj-catalog-actions">
-                {/* <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
-                <button onClick={print_selected} className="daj-btn-primary"><SlPrinter size={18} /></button> */}
                 <Link to={'/print/catalog/' + userData.user.id} className="daj-btn-primary daj-cart-btn">
                     <FaShoppingCart size={18} />
                     <span className="daj-cart-count">{cart_count}</span>
                 </Link>
+                {userData.user?.role != 'customer' &&
+                    <button onClick={shareSelectedImages} className="daj-btn-primary" ><SlShare size={18} /></button>
+                }
             </div>
             {/* Header */}
             <div className="daj-custom-header">

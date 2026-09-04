@@ -3,20 +3,31 @@ import api from "../../api/axios";
 import './OrderList.css'
 import { useDispatch } from "react-redux";
 import DataTable from "react-data-table-component";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaSearch } from "react-icons/fa";
 import { dajDataTableStyles } from "../../Common/dataTableStyles";
 
 const OrderList = () => {
 
     const [order_list, setorder_list] = useState([]);
     const [customer_list, setcustomer_list] = useState([]);
-
-    const dispatch = useDispatch();
+    const [search_val, setsearch_val] = useState("");
+    const [search_btn, setsearch_btn] = useState(true);
+    const [loading, setloading] = useState(false);
 
     useEffect(() => {
         get_order_data()
         get_customer();
     }, [])
+
+    useEffect(() => {
+        get_order_data()
+    }, [search_btn])
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            setsearch_btn(!search_btn)
+        }
+    };
 
     const get_customer = async () => {
         const res = await api.get("/customers/list.php");
@@ -25,12 +36,19 @@ const OrderList = () => {
     }
 
     const get_order_data = async () => {
-        const res = await api.get("/order/order-list.php");
+        setloading(true);
+
+        let formData = new FormData;
+
+        formData.append("search", search_val);
+
+        const res = await api.post("/order/order-list.php", formData);
 
         if (res?.data?.status && res?.data?.data?.length > 0) {
             setorder_list(res.data.data);
         }
 
+        setloading(false);
     }
 
     const view_data = (id_array, customer, id, price_unit) => {
@@ -110,6 +128,28 @@ const OrderList = () => {
                 </h2>
             </div>
 
+            <div className="daj-product-filter-row">
+
+                <div className="daj-search-input">
+                    <input
+                        type="search"
+                        className="daj-product-search-inp"
+                        placeholder="Search Export..."
+                        value={search_val}
+                        onChange={(e) => setsearch_val(e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(e)}
+                    />
+
+                    <button
+                        type="button"
+                        className="daj-search-icon-btn"
+                        onClick={() => setsearch_btn(!search_btn)}
+                    >
+                        <FaSearch size={18} />
+                    </button>
+                </div>
+            </div>
+
             <div className="daj-table-wrapper">
 
                 <DataTable
@@ -119,6 +159,7 @@ const OrderList = () => {
                     pagination
                     paginationPerPage={10}
                     paginationRowsPerPageOptions={[10, 20, 50, 100]}
+                    progressPending={loading}
                     highlightOnHover
                     striped
                     responsive
