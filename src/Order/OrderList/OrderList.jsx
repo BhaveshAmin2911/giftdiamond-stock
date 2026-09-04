@@ -13,15 +13,16 @@ const OrderList = () => {
     const [search_val, setsearch_val] = useState("");
     const [search_btn, setsearch_btn] = useState(true);
     const [loading, setloading] = useState(false);
+    const [product_total, setproduct_total] = useState(0);
+    const [perpage, setperpage] = useState(10);
 
     useEffect(() => {
-        get_order_data()
         get_customer();
     }, [])
 
     useEffect(() => {
         get_order_data()
-    }, [search_btn])
+    }, [search_btn, perpage])
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -35,20 +36,33 @@ const OrderList = () => {
         setcustomer_list(customer_data);
     }
 
-    const get_order_data = async () => {
+    const get_order_data = async (page = 1) => {
         setloading(true);
 
         let formData = new FormData;
 
         formData.append("search", search_val);
+        formData.append("page", page);
+        formData.append("limit", perpage);
 
         const res = await api.post("/order/order-list.php", formData);
 
         if (res?.data?.status && res?.data?.data?.length > 0) {
+            // console.log(res.data.pagination.total);
+            setproduct_total(res.data.pagination.total);
             setorder_list(res.data.data);
         }
 
         setloading(false);
+    }
+
+    const handlePageChange = (event) => {
+        console.log(event);
+
+    }
+
+    const onChangeRowsPerPage = () => {
+
     }
 
     const view_data = (id_array, customer, id, price_unit) => {
@@ -157,7 +171,11 @@ const OrderList = () => {
                     data={order_list}
                     customStyles={dajDataTableStyles}
                     pagination
-                    paginationPerPage={10}
+                    paginationServer
+                    paginationPerPage={perpage}
+                    paginationTotalRows={product_total}
+                    onChangePage={(e) => { get_order_data(e) }}
+                    onChangeRowsPerPage={(e) => setperpage(e)}
                     paginationRowsPerPageOptions={[10, 20, 50, 100]}
                     progressPending={loading}
                     highlightOnHover
