@@ -22,6 +22,9 @@ const ExportProduct = () => {
     const [category_filter, setcategory_filter] = useState('');
     const [selection, setselection] = useState([]);
     const [loading, setloading] = useState(false);
+    const [perpage, setperpage] = useState(10);
+    const [current_page, setcurrent_page] = useState(1);
+    const [product_total, setproduct_total] = useState(0);
     const [loading_print, setloading_print] = useState(false);
 
     const navigate = useNavigate();
@@ -34,21 +37,23 @@ const ExportProduct = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, [search_btn, category_filter]);
+    }, [search_btn, category_filter, perpage]);
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (page = 1) => {
         setloading(true);
+        setcurrent_page(page);
 
         try {
             const formData = new FormData();
             formData.append("search", search_val);
             formData.append("quantity_status", 'ready');
             formData.append("category_id", category_filter);
-            formData.append("per_page", 300);
+            formData.append("per_page", perpage);
 
             const res = await api.post("/products/list.php", formData);
             if (res.data.status) {
                 setProducts(res.data.data);
+                setproduct_total(res.data.pagination?.total_records);
             }
         } catch (error) {
             console.error(error);
@@ -507,6 +512,12 @@ const ExportProduct = () => {
                             highlightOnHover
                             striped
                             pagination
+                            paginationServer
+                            paginationPerPage={perpage}
+                            paginationTotalRows={product_total}
+                            onChangePage={(e) => { fetchProducts(e) }}
+                            onChangeRowsPerPage={(e) => setperpage(e)}
+                            paginationDefaultPage={current_page}
                             persistTableHead
                             noDataComponent={
                                 <div className="daj-product-empty">
@@ -544,6 +555,12 @@ const ExportProduct = () => {
                                 highlightOnHover
                                 striped
                                 pagination
+                                paginationServer
+                                paginationPerPage={perpage}
+                                paginationTotalRows={product_total}
+                                onChangePage={(e) => { fetchProducts(e) }}
+                                onChangeRowsPerPage={(e) => setperpage(e)}
+                                paginationDefaultPage={current_page}
                                 persistTableHead
                                 noDataComponent={
                                     <div className="daj-product-empty">

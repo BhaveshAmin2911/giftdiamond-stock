@@ -111,7 +111,7 @@ const EditProduct = () => {
         let price_code = match ? match.id : 0;
 
 
-        if (select_category == 6) {
+        if (select_category == 6 || (select_category == 1 && size != 0)) {
             return String(kargar_name) + String(price_code) + (cat_code) + size + pls_code + clr_code + production_run;
         } else {
             return String(kargar_name) + String(price_code) + (cat_code) + pls_code + clr_code + production_run;
@@ -429,6 +429,19 @@ const EditProduct = () => {
                                     {size_list.map((p_size, index) => {
                                         return (
                                             <option value={p_size.id} key={index}>{p_size.size}</option>
+                                        );
+                                    })
+                                    }
+                                </select>
+                            </div>
+                        }
+                        {select_category == 1 &&
+                            <div className='daj-product-info-form'>
+                                <span className='daj-product-info-header'>Ring Size</span>
+                                <select className='daj-product-info-body' value={pr_data?.size} onChange={(e) => handle_multi_product('size', index, e.target.value)}>
+                                    {size_list.map((p_size, index) => {
+                                        return (
+                                            <option value={p_size.id} key={index}>{p_size.r_size}</option>
                                         );
                                     })
                                     }

@@ -23,6 +23,9 @@ function ProductList() {
     const [select_print, setselect_print] = useState([]);
     const [time_order, settime_order] = useState(false);
     const [print_opt, setprint_opt] = useState(false);
+    const [perpage, setperpage] = useState(10);
+    const [current_page, setcurrent_page] = useState(1);
+    const [product_total, setproduct_total] = useState(0);
 
     const workTypes = useSelector(state => state.workTypes.list);
     const karigars = useSelector(state => state.karigars.list);
@@ -40,20 +43,23 @@ function ProductList() {
         if (!loading) {
             fetchProducts();
         }
-    }, [karigar_filter, color_filter, search_btn, category_filter, time_order]);
+    }, [karigar_filter, color_filter, search_btn, category_filter, time_order, perpage]);
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (page = 1) => {
         setloading(true);
+        setcurrent_page(page);
 
         try {
             const formData = new FormData();
             formData.append("search", search_val);
             formData.append("product_code", p_code);
+
             if (userData.user.role == 'karigar' && userData.user.role_id) {
                 formData.append("karigar_id", userData.user.role_id);
             } else {
                 formData.append("karigar_id", karigar_filter);
             }
+
             formData.append("category_id", category_filter);
             formData.append("color", color_filter);
             formData.append("quantity_status", 'process');
@@ -63,11 +69,13 @@ function ProductList() {
             }
 
             formData.append("status", 'in_progress');
-            formData.append("per_page", 300);
+            formData.append("per_page", perpage);
+            formData.append("current_page", page);
 
             const res = await api.post("/products/list.php", formData);
             if (res.data.status) {
                 setProducts(res.data.data);
+                setproduct_total(res.data.pagination?.total_records);
             }
         } catch (error) {
             console.error(error);
@@ -92,19 +100,6 @@ function ProductList() {
             setsearch_btn(!search_btn)
         }
     };
-
-    const handle_print = (data) => {
-        let current_list = [...select_print];
-        let index = current_list.findIndex((p_data) => p_data?.id == data?.id)
-
-        if (index > -1) {
-            current_list.splice(index, 1);
-        } else {
-            current_list.push(data);
-        }
-
-        setselect_print(current_list);
-    }
 
     //*********************SELECT INPUT CODE************************* *//
 
@@ -157,29 +152,6 @@ function ProductList() {
             : "-";
     };
     const columns = [
-        // ...(print_opt
-        //     ? [
-        //         {
-        //             name: "Print",
-        //             cell: (row) => {
-        //                 const checked = select_print.some(
-        //                     (item) => item.id === row.id
-        //                 );
-
-        //                 return (
-        //                     <input
-        //                         type="checkbox"
-        //                         checked={checked}
-        //                         readOnly
-        //                         onClick={() => handle_print(row)}
-        //                     />
-        //                 );
-        //             },
-        //             width: "80px",
-        //         },
-        //     ]
-        //     : []),
-
         {
             name: "SKU",
             selector: row => displayValue(row.sku),
@@ -409,28 +381,6 @@ function ProductList() {
                             >
                                 Add Product
                             </Link>
-
-                            {/* <button
-                                className={`daj-select-print-btn ${print_opt
-                                    ? "daj-select-print-btn-active"
-                                    : ""
-                                    }`}
-                            <button
-                                className="daj-btn-outline"
-                                onClick={() => {
-                                    setprint_opt(!print_opt);
-                                    setselect_print([]);
-                                }}
-                            >
-                                Select for Print
-                            </button>
-                            <button
-                                className="daj-btn-outline"
-                                onClick={print_selected}
-                            >
-                                Print List
-                            </button> */}
-
                             {
                                 print_opt && (
                                     <button
@@ -456,6 +406,12 @@ function ProductList() {
                         data={products}
                         customStyles={dajDataTableStyles}
                         pagination
+                        paginationServer
+                        paginationPerPage={perpage}
+                        paginationTotalRows={product_total}
+                        onChangePage={(e) => { fetchProducts(e) }}
+                        onChangeRowsPerPage={(e) => setperpage(e)}
+                        paginationDefaultPage={current_page}
                         highlightOnHover
                         striped
                         persistTableHead

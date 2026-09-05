@@ -15,6 +15,7 @@ const OrderList = () => {
     const [loading, setloading] = useState(false);
     const [product_total, setproduct_total] = useState(0);
     const [perpage, setperpage] = useState(10);
+    const [current_page, setcurrent_page] = useState(1);
 
     useEffect(() => {
         get_customer();
@@ -38,6 +39,7 @@ const OrderList = () => {
 
     const get_order_data = async (page = 1) => {
         setloading(true);
+        setcurrent_page(page);
 
         let formData = new FormData;
 
@@ -48,21 +50,11 @@ const OrderList = () => {
         const res = await api.post("/order/order-list.php", formData);
 
         if (res?.data?.status && res?.data?.data?.length > 0) {
-            // console.log(res.data.pagination.total);
             setproduct_total(res.data.pagination.total);
             setorder_list(res.data.data);
         }
 
         setloading(false);
-    }
-
-    const handlePageChange = (event) => {
-        console.log(event);
-
-    }
-
-    const onChangeRowsPerPage = () => {
-
     }
 
     const view_data = (id_array, customer, id, price_unit) => {
@@ -174,6 +166,7 @@ const OrderList = () => {
                     paginationServer
                     paginationPerPage={perpage}
                     paginationTotalRows={product_total}
+                    paginationDefaultPage={current_page}
                     onChangePage={(e) => { get_order_data(e) }}
                     onChangeRowsPerPage={(e) => setperpage(e)}
                     paginationRowsPerPageOptions={[10, 20, 50, 100]}
